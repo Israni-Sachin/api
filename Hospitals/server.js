@@ -11,7 +11,7 @@ app.post('/login', loginAuth)
 app.use('/hospital',  routes);
 
 app.use('/', (req, res) => {
-    res.send({ Status: 404, Message: "Not Found" });
+    res.send({ Status: 404, Message: "Hello khana khake jana ho" });
 });
 
 app.listen(port, console.log(`Server is running on ${port} port`));
