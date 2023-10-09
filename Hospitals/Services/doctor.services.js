@@ -32,4 +32,4 @@ async function deleteDoctor(userId) {
     return { status: 200, message: 'OK', data: del };
 }
 
-module.exports = { getDoctor, getDoctorById, addDoctor, updateAll_docDet, updateDoctor, deleteDoctor };
+module.exports = { getDoctor, getDoctorById, addDoctor, updateDoctor, deleteDoctor };

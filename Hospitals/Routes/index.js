@@ -12,7 +12,7 @@ const tokenForPatient = require('../middlewares/patient.middleware')
 const tokenForDoctor = require('../middlewares/doctor.middleware')
 
 
-router.use('/patients', tokenForPatient, patient_routes)
+router.use('/patients', patient_routes)
 // router.use('/doctors', tokenForDoctor, doctor_routes)
 
 module.exports = router;

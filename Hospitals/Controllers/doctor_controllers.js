@@ -57,4 +57,4 @@ async function deleteDoctor(req, res) {
     }
 }
 
-module.exports = { getDoctor, getDoctorById, addDoctor, updateAll_docDet, updateDoctor, deleteDoctor }
+module.exports = { getDoctor, getDoctorById, addDoctor, updateDoctor, deleteDoctor }

@@ -40,4 +40,4 @@ async function deletePatient(userId) {
 }
 
 
-module.exports = { getPatientById, getPatient, addPatient, updatePatient, deletePatient, updateAllPatientDetails }
+module.exports = { getPatientById, getPatient, addPatient, updatePatient, deletePatient }

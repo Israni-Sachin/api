@@ -8,7 +8,7 @@ const loginAuth = require('./Controllers/logging.controllers')
 const verifyToken = require('./middlewares/auth/jwt')
 
 app.post('/login', loginAuth)
-app.use('/hospital', verifyToken.verifyToken, routes);
+app.use('/hospital',  routes);
 
 app.use('/', (req, res) => {
     res.send({ Status: 404, Message: "Not Found" });
