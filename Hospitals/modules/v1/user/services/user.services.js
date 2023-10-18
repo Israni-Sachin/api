@@ -37,11 +37,11 @@ const userUpdate = async (userId, body) => {
 }
 const userDelete = async (userId) => {
 
-    const del = users.filter(v => v.id == userId);
-    const user = users.filter(v => v.id != userId);
-    console.log(user);
-    fs.writeFile('./db/user.json', JSON.stringify(user), (err) => console.log(err,"hello"));
-    return user;
+    // const del = users.filter(v => v.id == userId);
+    users = users.filter(v => v.id != userId);
+    // console.log(user);
+    fs.writeFile('./db/user.json', JSON.stringify(users), (err) => console.log(err,"hello"));
+    return users;
 }
 
 
