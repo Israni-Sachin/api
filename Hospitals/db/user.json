@@ -8,15 +8,7 @@
     "role": "Admin"
   },
   {
-    "id": 10,
-    "fname": "bhaumik",
-    "lname": "panchal",
-    "email": "bhaumikpanchal@gmail.com",
-    "password": "Bhaumik@22",
-    "role": "user"
-  },
-  {
-    "id": 12,
+    "id": 2,
     "fname": "Sachin ",
     "lname": "Israni",
     "email": "sachin@gmail.com",
@@ -24,7 +16,15 @@
     "role": "user"
   },
   {
-    "id": 13,
+    "id": 3,
+    "fname": "bhaumik",
+    "lname": "panchal",
+    "email": "bhaumikpanchal@gmail.com",
+    "password": "Bhaumik@22",
+    "role": "user"
+  },
+  {
+    "id": 4,
     "fname": "Riddhi ",
     "lname": "Prajapati",
     "email": "riddhi@gmail.com",
@@ -32,7 +32,7 @@
     "role": "user"
   },
   {
-    "id": 14,
+    "id": 5,
     "fname": "Prakhar ",
     "lname": "Tripathi",
     "email": "pt@gmail.com",
