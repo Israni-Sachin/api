@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "fname": "Ketan",
+    "lname": "bhai",
+    "email": "ketenbhai@gmail.com",
+    "password": "12345678",
+    "role": "Admin"
+  },
+  {
+    "id": 2,
+    "fname": "Barbra",
+    "lname": "Aime",
+    "email": "baime0@cocolog-nifty.com",
+    "password": 1,
+    "role": "user"
+  },
+  {
+    "id": 3,
+    "fname": "Valera",
+    "lname": "Madgwick",
+    "email": "vmadgwick1@nbcnews.com",
+    "password": 2,
+    "role": "user"
+  },
+  {
+    "id": 4,
+    "fname": "Ebeneser",
+    "lname": "MacCollom",
+    "email": "emaccollom2@google.nl",
+    "password": 3,
+    "role": "user"
+  },
+  {
+    "id": 5,
+    "fname": "Gael",
+    "lname": "Kells",
+    "email": "gkells3@webnode.com",
+    "password": 4,
+    "role": "user"
+  },
+  {
+    "id": 6,
+    "fname": "Worthy",
+    "lname": "Pierri",
+    "email": "wpierri4@addthis.com",
+    "password": 5,
+    "role": "user"
+  },
+  {
+    "id": 7,
+    "fname": "Mikael",
+    "lname": "De Vaar",
+    "email": "mdevaar5@edublogs.org",
+    "password": 6,
+    "role": "user"
+  },
+  {
+    "id": 8,
+    "fname": "Artie",
+    "lname": "Aughton",
+    "email": "aaughton6@alexa.com",
+    "password": 7,
+    "role": "user"
+  },
+  {
+    "id": 9,
+    "fname": "Benjy",
+    "lname": "Ziemke",
+    "email": "bziemke7@prnewswire.com",
+    "password": 8,
+    "role": "user"
+  },
+  {
+    "id": 10,
+    "fname": "bhaumik",
+    "lname": "panchal",
+    "email": "bhaumikpanchal@gmail.com",
+    "password": 94521,
+    "role": "user"
+  }
+]
