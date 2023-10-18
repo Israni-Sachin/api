@@ -14,7 +14,9 @@ console.log(process.env.PORT);
 // -------------------------------- for project 
 
 const apiRoutes = require('./api/v1/index')
-app.use(cors())
+app.use(cors({
+    origin: '*'
+}));
 
 app.use('/', apiRoutes());
 
