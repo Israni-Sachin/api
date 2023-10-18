@@ -1,16 +1,17 @@
 const userControllers = require('../controllers/user.controllers');
+const cors = require('cors');
 
 const userRouter = (app) => {
     app
         .route('/user')
-        .get(userControllers.userGet)
-        .post(userControllers.userAdd)
+        .get(cors(), userControllers.userGet)
+        .post(cors(), userControllers.userAdd)
 
     app
         .route('/user/:id')
-        .get(userControllers.userGetById)
-        .patch(userControllers.userUpdate)
-        .delete(userControllers.userDelete)
+        .get(cors(), userControllers.userGetById)
+        .patch(cors(), userControllers.userUpdate)
+        .delete(cors(), userControllers.userDelete)
 
 }
 
