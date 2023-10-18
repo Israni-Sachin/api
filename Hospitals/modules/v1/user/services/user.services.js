@@ -40,7 +40,7 @@ const userDelete = async (userId) => {
     const del = users.filter(v => v.id == userId);
     const user = users.filter(v => v.id != userId);
     console.log(user);
-    fs.writeFile('./db/user.json', JSON.stringify(user), (err) => console.log(err));
+    fs.writeFile('./db/user.json', JSON.stringify(user), (err) => console.log(err,"hello"));
     return user;
 }
 
