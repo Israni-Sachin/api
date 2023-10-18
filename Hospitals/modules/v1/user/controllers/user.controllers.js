@@ -1,8 +1,9 @@
 const userServices = require('../services/user.services')
-const user = require('../../../../db/user.json')
+const path = require('path')
+let user = require(path.resolve('./db/user.json'))
 const { successResponse, errorResponse } = require('../../../../helper/http_response')
 
-const userGet = async (req,res) => {
+const userGet = async (req, res) => {
     try {
         let result = await userServices.userGet();
         successResponse(res, 'User fetched successfully', result);
@@ -62,7 +63,7 @@ const userDelete = async (req, res) => {
         let includes = user.some(v => v.id === userId);
         if (includes) {
             let result = await userServices.userDelete(userId);
-            successResponse(res, 'User deleted successfully');
+            successResponse(res, 'User deleted successfully',result);
         }
         else res.send({ status: 404, message: 'User Not Found' });
 
