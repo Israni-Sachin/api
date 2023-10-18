@@ -1,11 +1,14 @@
-let users = require('../../../../db/user.json')
+const path=require('path')
+let users = require(path.resolve('./db/user.json'))
 let fs = require('fs');
 
+// console.log("__dir",__dirname)
+// console.log("path",path.resolve('../../../../db/user.json'))
+// console.log("path",path.resolve('./db/user.json'))
 
 const userGet = async () => {
     let data = users;
     return data;
-
 }
 
 const userGetById = async (userId) => {
@@ -26,7 +29,7 @@ const userAdd = async (body) => {
 
 const userUpdate = async (userId, body) => {
 
-    let getIDindex = users.indexOf(users.find(val => val.id == userId));
+    let getIDindex = users.indexOf(users.find(val => val.id == userId)) ;
     const obj = { ...users[getIDindex], ...body, id: userId };
     users[getIDindex] = obj;
     fs.writeFile('./db/user.json', JSON.stringify(users), (err) => console.log(err));
