@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const apiRoutes = require('./api/v1/index')
 const cors = require('cors');
 require('dotenv').config();
 app.use(express.json());
@@ -13,7 +14,6 @@ console.log(process.env.PORT);
 
 // -------------------------------- for project 
 
-const apiRoutes = require('./api/v1/index')
 app.use(cors({
     origin: '*'
 }));
