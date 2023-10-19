@@ -1,42 +1,56 @@
 [
   {
     "id": 1,
-    "fname": "Ketan",
-    "lname": "bhai",
-    "email": "ketenbhai@gmail.com",
-    "password": "12345678",
+    "user_fname": "Ketan",
+    "user_lname": "bhai",
+    "user_phone": "7458963201",
+    "user_email": "ketenbhai@gmail.com",
+    "user_password": "12345678",
     "role": "Admin"
   },
   {
     "id": 2,
-    "fname": "Sachin ",
-    "lname": "Israni",
-    "email": "sachin@gmail.com",
-    "password": "Sachin@22",
+    "user_fname": "Sachin ",
+    "user_lname": "Israni",
+    "user_phone": "7458963201",
+    "user_email": "sachin@gmail.com",
+    "user_password": "Sachin@22",
     "role": "user"
   },
   {
     "id": 3,
-    "fname": "bhaumik",
-    "lname": "panchal",
-    "email": "bhaumikpanchal@gmail.com",
-    "password": "Bhaumik@22",
+    "user_fname": "bhaumik",
+    "user_lname": "panchal",
+    "user_phone": "7458963201",
+    "user_email": "bhaumikpanchal@gmail.com",
+    "user_password": "Bhaumik@22",
     "role": "user"
   },
   {
     "id": 4,
-    "fname": "Riddhi ",
-    "lname": "Prajapati",
-    "email": "riddhi@gmail.com",
-    "password": "Riddhi@22",
+    "user_fname": "Riddhi ",
+    "user_lname": "Prajapati",
+    "user_phone": "7458963201",
+    "user_email": "riddhi@gmail.com",
+    "user_password": "Riddhi@22",
     "role": "user"
   },
   {
     "id": 5,
-    "fname": "Prakhar ",
-    "lname": "Tripathi",
-    "email": "pt@gmail.com",
-    "password": "Prakhar@22",
+    "user_fname": "Prakhar ",
+    "user_lname": "Tripathi",
+    "user_phone": "7458963201",
+    "user_email": "pt@gmail.com",
+    "user_password": "Prakhar@22",
+    "role": "user"
+  },
+  {
+    "id": 6,
+    "user_fname": "asd",
+    "user_lname": "fgh",
+    "user_phone": "7458963201",
+    "user_email": "bcd@gmail.com",
+    "user_password": "98765432",
     "role": "user"
   }
 ]

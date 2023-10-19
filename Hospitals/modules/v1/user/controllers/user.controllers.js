@@ -1,7 +1,7 @@
 const userServices = require('../services/user.services')
 const path = require('path')
 let user = require(path.resolve('./db/user.json'))
-const { successResponse, errorResponse } = require('../../../../helper/http_response')
+const { successResponse, errorResponse } = require('../../../../helpers/http_response')
 
 const userGet = async (req, res) => {
     try {
