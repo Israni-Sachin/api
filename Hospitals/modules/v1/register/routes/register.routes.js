@@ -12,12 +12,12 @@ const schema = Joi.object().keys({
     }),
     user_gender: Joi.string().optional(),
     user_role: Joi.string().optional(),
-    user_password: Joi.string().min(8).required()
+    user_pass: Joi.string().min(8).required()
 }).unknown(false);
 
 const registerRoutes = (app) => {
 
-    app.post('/register', registerControllers);
+    app.post('/register', validator(schema), registerControllers);
 
 }
 

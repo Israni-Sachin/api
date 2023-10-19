@@ -13,7 +13,7 @@ const register = async (req, res) => {
         let checkEmail = await users.some(e => e.user_email == data.user_email);
         let checkPhone = await users.some(e => e.user_phone == data.user_phone)
         if (checkPhone) errorResponse(res, "Phone number already exists.", 400);
-        else if (checkEmail) errorResponse(res, "Email address already exists.", 400);
+        if (checkEmail) errorResponse(res, "Email address already exists.", 400);
         else {
             let result = await regis(data);
             successResponse(res, "Registration Successfully completed");
