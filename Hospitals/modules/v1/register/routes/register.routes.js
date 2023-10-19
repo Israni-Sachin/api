@@ -12,8 +12,7 @@ const schema = Joi.object().keys({
     }),
     user_gender: Joi.string().optional(),
     user_role: Joi.string().optional(),
-    user_password: Joi.string().min(8).required(),
-    confirm_password: Joi.string().valid(Joi.ref('user_password')).required()
+    user_password: Joi.string().min(8).required()
 }).unknown(false);
 
 const registerRoutes = (app) => {
