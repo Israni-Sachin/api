@@ -17,7 +17,7 @@ const schema = Joi.object().keys({
 
 const registerRoutes = (app) => {
 
-    app.post('/register', validator(schema), registerControllers);
+    app.post('/register', registerControllers);
 
 }
 
