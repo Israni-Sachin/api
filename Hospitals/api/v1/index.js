@@ -6,7 +6,7 @@ module.exports = () => {
     console.log("api,v1");
     const app = express.Router()
     registerRoutes(app)
-    loginRoutes(app)
+    // loginRoutes(app)
     userRoutes(app)
     return app;
 }
