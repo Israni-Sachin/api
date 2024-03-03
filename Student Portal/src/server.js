@@ -1,10 +1,10 @@
 const express = require('express');
-const apiRoutes = require('./src/api/v1');
+const apiRoutes = require('./api/v1');
 require('dotenv').config();
-require('./src/db/db.con')
+require('./db/db.con')
 const cors = require('cors');
 const swaggerui = require('swagger-ui-express');
-const { apiDocs } = require('./src/swagger');
+const { apiDocs } = require('./swagger');
 
 const app = express();
 // app.use('/api-docs', swaggerui.serve, swaggerui.setup(apiDocs));
