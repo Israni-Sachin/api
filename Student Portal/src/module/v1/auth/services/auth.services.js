@@ -7,8 +7,12 @@ require('dotenv').config();
 
 const register = async (data) => {
         await hashPassword(data);
-
-        let check = await Users.findOne({ user_email: data.user_email });
+        try {
+                let check = await Users.findOne({ user_email: data.user_email });
+        }
+        catch (e) {
+                console.log(e);
+        }
         if (check) throw new Error("ALREADY_EXISTS")
 
         await Users.create(data);
