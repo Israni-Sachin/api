@@ -7,8 +7,9 @@ require('dotenv').config();
 
 const register = async (data) => {
         await hashPassword(data);
+        let check;
         try {
-                let check = await Users.findOne({ user_email: data.user_email });
+                check = await Users.findOne({ user_email: data.user_email });
         }
         catch (e) {
                 console.log(e);
