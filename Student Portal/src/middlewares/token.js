@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { errorResponse } = require('../helpers/http-response');
 
 const createToken = (userData) => {
-    let token = jwt.sign(userData, process.env.SECRET_KEY, { expiresIn: '7d' });
+    let token = jwt.sign(userData, process.env.SECRET_KEY || 'ffsfk23nknfbae451fnsdbjddmps4nfodjfew5f8kcsdiblwe3if', { expiresIn: '7d' });
 
     return token;
 }
@@ -13,7 +13,7 @@ const verifyToken = (req, res, next) => {
 
         const auth = req.headers.authorization.split("Bearer ")[1];
 
-        jwt.verify(auth, process.env.SECRET_KEY, (err,decodedData) => {
+        jwt.verify(auth, process.env.SECRET_KEY, (err, decodedData) => {
             if (err) {
                 return res.status(403).json({ status: 403, message: "Invalid Token" });
             }

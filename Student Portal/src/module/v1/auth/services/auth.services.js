@@ -35,7 +35,13 @@ const login = async (data) => {
         if (!check) throw new Error("INVALID_CREDENTIALS");
 
         let userData = { ...user._doc, user_pass: undefined };
-        let encodedData = createToken({ id: user._id, role: user.user_role });
+        let encodedData;
+        try {
+                encodedData = createToken({ id: user._id, role: user.user_role });
+        }
+        catch (e) {
+                console.log(e);
+        }
 
         return { userData, encodedData };
 }
