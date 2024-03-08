@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const noteSchema = new mongoose.Schema({
     nts_id: {
         type: String,
-        default: uuid
+        default: 'jj' //uuid
     },
     nts_subject_name: {
         type: String,

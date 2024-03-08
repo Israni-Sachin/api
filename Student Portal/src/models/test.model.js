@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const testSchema = new mongoose.Schema({
     test_id: {
         type: String,
-        default: uuid
+        default: 'jj' //uuid
     },
     test_subject: {
         type: String

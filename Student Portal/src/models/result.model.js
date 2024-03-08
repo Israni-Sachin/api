@@ -5,7 +5,7 @@ const { testSchema } = require("./common.model");
 const resultSchema = new mongoose.Schema({
     res_id: {
         type: String,
-        default: uuid
+        default: 'jj' //uuid
     },
     res_subject: {
         type: String

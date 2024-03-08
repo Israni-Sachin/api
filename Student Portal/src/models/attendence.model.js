@@ -5,7 +5,7 @@ const { userSchema } = require('./common.model');
 const attendenceSchema = new mongoose.Schema({
     atten_id: {
         type: String,
-        default: uuid
+        default: 'jj' //uuid
     },
     atten_fk_user_id: {
         type: userSchema
