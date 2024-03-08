@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
+    user_id: {
+        type: String,
+        default: uuid
+    },
     user_fname: {
         type: String,
         required: true,
@@ -32,8 +36,7 @@ const userSchema = new mongoose.Schema({
     user_class: {
         type: String
     },
-}
-    , { timestamps: true });
+}, { timestamps: true });
 
 const Users = mongoose.model('User', userSchema);
 
