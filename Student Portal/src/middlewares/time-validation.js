@@ -1,4 +1,4 @@
-const timer = require('../models/timer.model');
+const timer = require('../models/attendence.model');
 const moment = require('moment-timezone');
 
 const timeValidation = async (req, res, next) => {
