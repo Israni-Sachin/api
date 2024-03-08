@@ -1,4 +1,4 @@
-const Timer = require('../../../../models/timer.model');
+const Timer = require('../../../../models/attendence.model');
 
 const timerGet = async () => {
     

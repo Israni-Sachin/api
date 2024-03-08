@@ -1,4 +1,4 @@
-const Cart = require('../../../../models/cart.model');
+const Cart = require('../../../../models/attendence.model');
 
 const cartGet = async (user) => {
 
