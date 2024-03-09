@@ -15,7 +15,7 @@ module.exports = () => {
    // ordersRoutes(api);
    // orderHistoryRoutes(api);
    // cartRoutes(api);
-   // userRoutes(api);
+   userRoutes(api);
    // timerRoutes(api);
 
    return api;
