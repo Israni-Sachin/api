@@ -15,17 +15,21 @@ const testSchema = new mongoose.Schema({
     test_time: {
         type: String,
         required: true,
-        example:'30 mins'
     },
-    tes_total_marks:{
+    test_duration: {
+        type: String,
+        required: true,
+        example: '30 mins'
+    },
+    test_total_marks: {
         type: Number,
         required: true,
     },
-    test_passing_marks:{
+    test_passing_marks: {
         type: Number,
         required: true,
     },
-    test_class:{
+    test_class: {
         type: String,
         required: true,
     }

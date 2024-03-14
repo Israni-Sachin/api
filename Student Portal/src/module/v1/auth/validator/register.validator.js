@@ -3,6 +3,8 @@ const joi = require('joi');
 const registerSchema = joi.object({
     user_fname: joi.string().required(),
     user_lname: joi.string().required(),
+    user_class: joi.string().required(),
+    user_stream: joi.string(),
     user_email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'in'] } }).required()
         .messages({
             'string.email': `Email must be a valid email`,

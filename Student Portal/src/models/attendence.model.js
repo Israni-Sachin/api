@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const { userSchema } = require('./common.model');
+const { userIdSchema } = require('./common.model');
 
 const attendenceSchema = new mongoose.Schema({
     atten_id: {
@@ -8,24 +8,15 @@ const attendenceSchema = new mongoose.Schema({
         default: 'jj' //uuid
     },
     atten_fk_user_id: {
-        type: userSchema
+        type: userIdSchema
     },
     atten_date: {
-        type: Date,
-        default: Date.now()
+        type: String
     },
-    atten_frmt_date: {
-        type: String,
-        default: String(Date.now())
-    },
-    atten_punch_in: {
-        type: String,
-        required: true
-    },
-    atten_punch_out: {
-        type: String,
-        required: true
-    },
+    atten_isPresent: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true });
 
 

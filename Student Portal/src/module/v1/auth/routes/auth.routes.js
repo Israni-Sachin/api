@@ -12,4 +12,5 @@ const registerRoutes = async (app) => {
     
     app.post('/reset-pass/:token', resetPass) */
 }
+
 module.exports = registerRoutes;

@@ -34,8 +34,13 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     user_class: {
-        type: String
+        type: String,
+        required: true
     },
+    user_stream: {
+        type: String,
+        required: true
+    }
 }, { timestamps: true });
 
 const Users = mongoose.model('User', userSchema);

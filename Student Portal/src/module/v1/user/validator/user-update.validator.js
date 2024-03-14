@@ -23,6 +23,7 @@ const userUpdateSchema = joi.object({
             'string.pattern.base': `user_phone number can only contain numbers and must be 10 digits`,
             'string.empty': `user_phone number cannot be an empty field`
         }),
+    user_dob:joi.date()
 });
 
 module.exports = userUpdateSchema;

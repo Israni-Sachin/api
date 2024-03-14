@@ -1,6 +1,13 @@
 const { Schema } = require('mongoose');
 
 
+const userIdSchema = new Schema({
+    user_id: {
+        type: String,
+        trim: true
+    },
+}, { _id: false });
+
 const userSchema = new Schema({
     user_id: {
         type: String,
@@ -58,6 +65,8 @@ const testSchema = new Schema({
         required: true,
     }
 })
+
+// tution timing , review about student by teacher
 module.exports = {
-    userSchema, testSchema
+    userSchema, userIdSchema,testSchema
 }
