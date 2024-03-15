@@ -8,6 +8,8 @@ const attendenceRoutes = (app) => {
 
     app.get('/attendence', verifyToken, roleValidator(['user']), controllers.attendenceGet);
 
+    app.post('/attendence-list', verifyToken, roleValidator(['teacher']), controllers.attendenceList)
+
     // app.post('/attendence', verifyToken, roleValidator(['teacher']), validator(attendenceAddSchema), controllers.attendenceAdd);
     app.post('/attendence', verifyToken, roleValidator(['teacher']), validator(attendenceAddSchema), controllers.attendenceAdd);
 

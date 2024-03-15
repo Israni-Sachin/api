@@ -1,10 +1,20 @@
 const Attendence = require('../../../../models/attendence.model');
+const Users = require('../../../../models/user.model');
 
 const attendenceGet = async (user) => {
 
     let attendence = await Attendence.findOne({ 'atten_fk_user_id.user_id': user.id })
 
-    if (!response) throw new Error("DATA_NOT_FOUND");
+    if (!attendence) throw new Error("DATA_NOT_FOUND");
+
+    return attendence;
+}
+
+const attendenceList = async (body) => {
+
+    let attendence = await Users.find({ 'user_class': body.user_class })
+
+    if (!attendence) throw new Error("DATA_NOT_FOUND");
 
     return attendence;
 }
@@ -19,7 +29,7 @@ const attendenceAdd = async (body, user) => {
         bulkData.push({ insertOne: { "document": { 'atten_fk_user_id.user_id': stud.id, atten_isPresent: stud.isPresent, atten_date: body.atten_date } } });
 
     }
-    
+
     return await Attendence.bulkWrite(bulkData);
 }
 
@@ -44,7 +54,4 @@ const attendenceDelete = async (user, data) => {
         .populate('attendence_items.attendenceitm_fk_prd_id', 'prd_name prd_price prd_img');
 
 }
-module.exports = { attendenceGet, attendenceAdd, attendenceUpdate, attendenceDelete };
-
-
-
+module.exports = { attendenceGet, attendenceAdd, attendenceUpdate, attendenceDelete, attendenceList };

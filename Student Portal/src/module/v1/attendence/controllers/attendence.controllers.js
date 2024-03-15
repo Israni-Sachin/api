@@ -10,6 +10,15 @@ const attendenceGet = async (req, res) => {
     }
 }
 
+const attendenceList = async (req, res) => {
+    try {
+        const attendence = await attendenceServices.attendenceList(req.body);
+        successResponse({ res, message: 'Success', data: attendence });
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
 const attendenceAdd = async (req, res) => {
     try {
         await attendenceServices.attendenceAdd(req.body, req.user);
@@ -38,4 +47,4 @@ const attendenceDelete = async (req, res) => {
 }
 
 
-module.exports = { attendenceGet, attendenceAdd, attendenceUpdate, attendenceDelete };
+module.exports = { attendenceGet, attendenceAdd, attendenceUpdate, attendenceDelete, attendenceList };
