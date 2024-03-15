@@ -3,7 +3,7 @@ const Users = require('../../../../models/user.model');
 
 const attendenceGet = async (user) => {
 
-    let attendence = await Attendence.findOne({ 'atten_fk_user_id.user_id': user.id })
+    let attendence = await Attendence.find({ 'atten_fk_user_id.user_id': user.id })
 
     if (!attendence) throw new Error("DATA_NOT_FOUND");
 

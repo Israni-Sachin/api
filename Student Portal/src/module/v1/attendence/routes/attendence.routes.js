@@ -6,7 +6,7 @@ const roleValidator = require('../../../../middlewares/role-validator');
 
 const attendenceRoutes = (app) => {
 
-    app.get('/attendence', verifyToken, roleValidator(['user']), controllers.attendenceGet);
+    app.get('/attendence', verifyToken, roleValidator(['student']), controllers.attendenceGet);
 
     app.post('/attendence-list', verifyToken, roleValidator(['teacher']), controllers.attendenceList)
 
