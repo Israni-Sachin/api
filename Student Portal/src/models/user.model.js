@@ -36,10 +36,6 @@ const userSchema = new mongoose.Schema({
     user_class: {
         type: String,
         required: true
-    },
-    user_stream: {
-        type: String,
-        required: true
     }
 }, { timestamps: true });
 
