@@ -1,6 +1,6 @@
 require('dotenv').config();
 const authSwagger = require('../module/v1/auth/swagger/auth.swagger');
-const productSwagger = require('../module/v1/product/swagger/product.swagger');
+const productSwagger = require('../module/v1/exam/swagger/product.swagger');
 const orderSwagger = require('../module/v1/order/swagger/order.swagger');
 const orderHistorySwagger = require('../module/v1/order-history/swagger/order-history.swagger');
 const cartSwagger = require('../module/v1/attendence/swagger/cart.swagger');

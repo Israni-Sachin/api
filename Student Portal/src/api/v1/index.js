@@ -1,6 +1,6 @@
 const express = require('express');
 const authRoutes = require('../../module/v1/auth/routes/auth.routes');
-const productRoutes=require('../../module/v1/product/routes/product.routes');
+const examRoutes=require('../../module/v1/exam/routes/exam.routes');
 const ordersRoutes = require('../../module/v1/order/routes/order.routes');
 const orderHistoryRoutes = require('../../module/v1/order-history/routes/order-history.routes');
 const attendenceRoutes = require('../../module/v1/attendence/routes/attendence.routes');
@@ -13,7 +13,7 @@ module.exports = () => {
    authRoutes(api);
    userRoutes(api);
    attendenceRoutes(api);
-   // productRoutes(api);
+   examRoutes(api);
    // ordersRoutes(api);
    // orderHistoryRoutes(api);
    // timerRoutes(api);

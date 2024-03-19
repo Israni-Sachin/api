@@ -23,8 +23,6 @@ const login = async (req, res) => {
     }
 }
 
-module.exports = { register, login };
-
 /* const resetPassLinkMailer = async(req, res) => {
     try{
         if(!req.body) return errorResponse({res, message:"Request body is required",status:400});
@@ -35,16 +33,24 @@ module.exports = { register, login };
         console.log(error);
         errorResponse({res, message:'Internal server error', status:500});
     }
+}*/
+
+const resetPass = async (req, res) => {
+    try {
+        
+        if (!req.body) return errorResponse({ res, message: "Request body is required", status: 400 });
+        
+        const result = await authServices.resetPass({ ...req.body });
+        
+        successResponse({ res, message: "Success" });
+
+    } catch (error) {
+        
+        console.log(error);
+        
+        errorResponse({ res, message: 'Internal server error', status: 500 });
+        
+    }
 }
 
-const resetPass = async(req, res) => {
-    try{
-        if(!req.body) return errorResponse({res, message:"Request body is required",status:400});
-        const result = await authServices.resetPass({ ...req.body, token: req.params.token});
-        if(result == "LinkExpired") return errorResponse({res, message:"Link expired", status:400});
-        successResponse({res, message:"Success"});
-    }catch(error){
-        console.log(error);
-        errorResponse({res, message:'Internal server error', status:500});
-    }
-} */
+module.exports = { register, login, resetPass };

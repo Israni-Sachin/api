@@ -1,40 +1,38 @@
+
 const mongoose = require("mongoose");
 
-const testSchema = new mongoose.Schema({
-    test_id: {
+const examSchema = new mongoose.Schema({
+    exam_subject: {
         type: String,
-        default: 'jj' //uuid
+        required: true
     },
-    test_subject: {
-        type: String
-    },
-    test_date: {
-        type: Date,
-        required: true,
-    },
-    test_time: {
+    exam_date: {
         type: String,
         required: true,
     },
-    test_duration: {
+    exam_time: {
+        type: String,
+        required: true,
+    },
+    exam_duration: {
         type: String,
         required: true,
         example: '30 mins'
     },
-    test_total_marks: {
+    exam_total_marks: {
         type: Number,
         required: true,
     },
-    test_passing_marks: {
+    exam_passing_marks: {
         type: Number,
         required: true,
     },
-    test_class: {
+    exam_class: {
         type: String,
         required: true,
     }
 })
 
-const test = mongoose.model('test', testSchema);
+const exam = mongoose.model('exam', examSchema);
 
-module.exports = test;
+module.exports = exam;

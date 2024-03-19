@@ -1,6 +1,7 @@
 const Users = require("../../../../models/user.model");
 const { createToken } = require("../../../../middlewares/token");
 const { hashPassword, comparePassword } = require("../../../../common/hash-password");
+const { decryptLink } = require('../../../../common/reset-pass-link')
 require('dotenv').config();
 // const mailer = require("../../../../common/mailer");
 // const {gererateLink, decryptLink} = require("../../../../common/resetpasslink");
@@ -47,20 +48,20 @@ const login = async (data) => {
 }
 
 
-module.exports = { login, register };
-
 /* const resetPassLinkMailer = async (data) => {
         let user = await Users.findOne({ user_email: data.user_email });
         if (!user) return "NotFound";
         let link = await gererateLink({...data, iat: Date.now(), exp: Date.now() + 600000});
         mailer(user.user_email, link);
 }
+*/
 
 const resetPass = async (data) => {
         const decodedData = await decryptLink(data.token);
         console.log(decodedData);
-        if(Date.now() > decodedData.exp) return "LinkExpired";
-        await hashPassword(data);
-        await Users.findOneAndUpdate({user_email: decodedData.user_email}, {user_pass: data.user_pass});
+        if (Date.now() > decodedData.exp) return "LinkExpired";
+        new_pass = await hashPassword(data.new_pass);
+        await Users.findOneAndUpdate({ _id: decodedData._id }, { user_pass: new_pass });
 }
- */
+
+module.exports = { register, login, resetPass };
