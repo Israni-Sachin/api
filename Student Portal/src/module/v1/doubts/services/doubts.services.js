@@ -3,7 +3,7 @@ const Users = require('../../../../models/user.model');
 
 const doubtsGet = async (user) => {
 
-    let doubts = await Doubts.find({ 'dt_fk_user_id.user_id': user.id })
+    let doubts = await Doubts.find({ 'dt_fk_user_id.user_id': user.user_id })
 
     if (!doubts) throw new Error("DATA_NOT_FOUND");
 
