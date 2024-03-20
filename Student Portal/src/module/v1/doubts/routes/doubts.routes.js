@@ -6,16 +6,16 @@ const roleValidator = require('../../../../middlewares/role-validator');
 
 const doubtsRoutes = (app) => {
 
-    app.get('/doubts', verifyToken, roleValidator(['user']), controllers.doubtsGet);
+    app.get('/doubts', verifyToken, roleValidator(['student']), controllers.doubtsGet);
     app.get('/doubtst', verifyToken, roleValidator(['teacher']), controllers.doubtsGett);
 
     // app.post('/doubts-list', verifyToken, roleValidator(['teacher']), controllers.doubtsList)
 
     // app.post('/doubts', verifyToken, roleValidator(['teacher']), validator(doubtsAddSchema), controllers.doubtsAdd);
-    app.post('/doubts', verifyToken, roleValidator(['user']), validator(doubtsAddSchema), controllers.doubtsAdd);
+    app.post('/doubts', verifyToken, roleValidator(['student']), validator(doubtsAddSchema), controllers.doubtsAdd);
     app.post('/doubtst', verifyToken, roleValidator(['teacher']), validator(doubtsAddSchema), controllers.doubtsAddt);
 
-    app.put('/doubts', verifyToken, roleValidator(['user']), validator(doubtsAddSchema), controllers.doubtsUpdate);
+    app.put('/doubts', verifyToken, roleValidator(['student']), validator(doubtsAddSchema), controllers.doubtsUpdate);
     app.put('/doubtst', verifyToken, roleValidator(['teacher']), validator(doubtsAddSchema), controllers.doubtsUpdatet);
 
     // app.delete('/doubts', verifyToken, roleValidator(['user']), validator(doubtsDelSchema), controllers.doubtsDelete);
