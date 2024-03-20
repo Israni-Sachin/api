@@ -1,4 +1,4 @@
-const attendenceAddSchema = require('./attendence-add.validator');
-const attendenceDelSchema = require('./attendence-delete.validator');
+const doubtsAddSchema = require('./doubts-add.validator');
+const doubtsDelSchema = require('./doubts-delete.validator');
 
-module.exports = { attendenceAddSchema, attendenceDelSchema };
+module.exports = { doubtsAddSchema, doubtsDelSchema };
