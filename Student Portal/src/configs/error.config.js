@@ -43,6 +43,11 @@ const ERRORS = {
     'CODE': 13,
     'DEFAULT_MESSAGE': 'Invalid data.',
     'HTTP_CODE': 422,
+  },
+  'BODY_IS_EMPTY': {
+    'CODE': 14,
+    'DEFAULT_MESSAGE': 'Body cannot be empty.',
+    'HTTP_CODE': 406,
   }
 
 }

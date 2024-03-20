@@ -4,6 +4,9 @@ const hashPassword = async (data) => {
     let salt = await bcrypt.genSalt(10);
 
     data.user_pass = await bcrypt.hash(data.user_pass, salt);
+
+    return data;
+    
 }
 
 const comparePassword = async (data, hash) => {

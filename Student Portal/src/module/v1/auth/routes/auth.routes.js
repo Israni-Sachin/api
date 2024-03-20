@@ -1,6 +1,7 @@
 const { register, login, resetPassLinkMailer, resetPass } = require('../controllers/auth.controllers');
 const validator = require('../../../../middlewares/validator');
 const { loginSchema, registerSchema } = require('../validator');
+const { verifyToken } = require('../../../../middlewares/token');
 
 const registerRoutes = async (app) => {
 
@@ -10,7 +11,7 @@ const registerRoutes = async (app) => {
 
     // app.post('/reset-pass', resetPassLinkMailer);
 
-    app.post('/reset-pass', resetPass)
+    app.post('/reset-pass', verifyToken, resetPass)
 }
 
 module.exports = registerRoutes;

@@ -57,11 +57,17 @@ const login = async (data) => {
 */
 
 const resetPass = async (data) => {
-        const decodedData = await decryptLink(data.token);
-        console.log(decodedData);
-        if (Date.now() > decodedData.exp) return "LinkExpired";
-        new_pass = await hashPassword(data.new_pass);
-        await Users.findOneAndUpdate({ _id: decodedData._id }, { user_pass: new_pass });
+        let user = await Users.findOne({ _id: data.id });
+        if (!user) throw new Error("DATA_NOT_FOUND");
+
+        let check = await comparePassword(data.cur_password, user.user_pass);
+        if (!check) throw new Error("INVALID_CREDENTIALS");
+
+        if (Date.now() > data.exp) return "LinkExpired";
+
+        new_pass = await hashPassword({ user_pass: data.new_password });
+
+        let a = await Users.findOneAndUpdate({ _id: data.id }, { user_pass: new_pass.new_pass });
 }
 
 module.exports = { register, login, resetPass };
