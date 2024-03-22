@@ -13,7 +13,7 @@ const doubtsRoutes = (app) => {
 
     // app.post('/doubts', verifyToken, roleValidator(['teacher']), validator(doubtsAddSchema), controllers.doubtsAdd);
     app.post('/doubts', verifyToken, roleValidator(['student']), validator(doubtsAddSchema), controllers.doubtsAdd);
-    app.post('/doubtst', verifyToken, roleValidator(['teacher']), validator(doubtsAddSchema), controllers.doubtsAddt);
+    app.post('/doubtst', verifyToken, roleValidator(['teacher']), validator(doubtsAnswerSchema), controllers.doubtsAddt);
 
     app.put('/doubts', verifyToken, roleValidator(['student']), validator(doubtsAddSchema), controllers.doubtsUpdate);
     app.put('/doubtst', verifyToken, roleValidator(['teacher']), validator(doubtsAnswerSchema), controllers.doubtsUpdatet);
