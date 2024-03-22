@@ -5,6 +5,7 @@ require('./db/db.con')
 const cors = require('cors');
 const swaggerui = require('swagger-ui-express');
 const { apiDocs } = require('./swagger');
+const Users = require('./models/user.model');
 
 const app = express();
 // app.use('/api-docs', swaggerui.serve, swaggerui.setup(apiDocs));
@@ -14,6 +15,8 @@ const port = 3000;
 
 app.use(express.json());
 app.use(cors({ origin: '*' }));
+
+
 
 app.use('/', apiRoutes());
 

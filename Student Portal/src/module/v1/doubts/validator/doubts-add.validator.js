@@ -1,6 +1,7 @@
 const joi = require('joi');
 
 const doubtsAddSchema = joi.object({
+    _id: joi.string().optional(),
     dt_topic: joi.string().required()
         .messages({
             'string.base': 'id must be a string'
