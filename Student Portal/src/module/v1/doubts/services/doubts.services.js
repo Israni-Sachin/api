@@ -51,7 +51,7 @@ const doubtsAddt = async (body, user) => {
     //     bulkData.push({ insertOne: { "document": { 'dt_fk_user_id.user_id': stud.id, atten_isPresent: stud.isPresent, atten_date: body.atten_date } } });
 
     // }
-    let updatedata = await Doubts.findOneAndUpdate({ _id: body._id }, body);
+    let updatedata = await Doubts.findOneAndUpdate({ _id: body.dt_id }, body);
 
     if (!updatedata) throw new Error("DATA_NOT_FOUND");
 
@@ -70,7 +70,7 @@ const doubtsUpdatet = async (body, user) => {
     // console.log(bulkData);
     // return await Doubts.bulkWrite(bulkData);
 
-    let updatedata = await Doubts.findOneAndUpdate({ _id: body._id }, body);
+    let updatedata = await Doubts.findOneAndUpdate({ _id: body.dt_id }, body);
 
     if (!updatedata) throw new Error("DATA_NOT_FOUND");
 
