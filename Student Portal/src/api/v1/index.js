@@ -9,10 +9,6 @@ const Users = require('../../models/user.model');
 module.exports = () => {
    const api = express.Router();
 
-   api.get('/users', (req, res) => {
-      return Users.find({});
-   })
-
    authRoutes(api);
    userRoutes(api);
    attendenceRoutes(api);

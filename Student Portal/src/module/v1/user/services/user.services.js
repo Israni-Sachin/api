@@ -7,10 +7,17 @@ const userGet = async (user) => {
     return data;
 }
 
+const usersGet = async (user) => {
+
+    let data = await Users.find({})
+    data.user_pass = undefined;
+    return data;
+}
+
 const userUpdate = async (body, user) => {
 
     await Users.updateOne({ _id: user.id }, body);
 
 }
 
-module.exports = { userUpdate, userGet }
+module.exports = { userUpdate, userGet, usersGet }

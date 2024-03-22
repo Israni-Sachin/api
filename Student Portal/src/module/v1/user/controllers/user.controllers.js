@@ -14,6 +14,19 @@ const userGet = async (req, res) => {
 
 }
 
+const usersGet = async (req, res) => {
+
+    try {
+
+        let data = await userServices.usersGet(req.user);
+        successResponse({ res, message: "User fetched successfully", data });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+
+}
+
 const userUpdate = async (req, res) => {
     try {
 
@@ -25,4 +38,4 @@ const userUpdate = async (req, res) => {
     }
 }
 
-module.exports = { userUpdate, userGet }
+module.exports = { userUpdate, userGet,usersGet }
