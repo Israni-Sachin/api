@@ -55,4 +55,13 @@ const doubtsUpdatet = async (req, res) => {
     }
 }
 
-module.exports = { doubtsGet, doubtsGett, doubtsAdd, doubtsAddt, doubtsUpdate, doubtsUpdatet };
+const doubtsDelete = async (req, res) => {
+    try {
+        await doubtsServices.doubtsDelete(req.body);
+        successResponse({ res, message: 'Success' });
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
+module.exports = { doubtsGet, doubtsGett, doubtsAdd, doubtsAddt, doubtsUpdate, doubtsUpdatet, doubtsDelete };

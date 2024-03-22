@@ -78,4 +78,12 @@ const doubtsUpdatet = async (body, user) => {
 
 }
 
-module.exports = { doubtsGet, doubtsAdd, doubtsUpdate, doubtsGett, doubtsAddt, doubtsUpdatet };
+const doubtsDelete = async (body, user) => {
+
+    let doubt = await Doubts.deleteOne({ _id: body._id });
+
+    if (!doubt) throw new Error("DATA_NOT_FOUND");
+
+}
+
+module.exports = { doubtsGet, doubtsAdd, doubtsUpdate, doubtsGett, doubtsAddt, doubtsUpdatet,doubtsDelete };

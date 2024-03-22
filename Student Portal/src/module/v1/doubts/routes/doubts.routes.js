@@ -18,7 +18,7 @@ const doubtsRoutes = (app) => {
     app.put('/doubts', verifyToken, roleValidator(['student']), validator(doubtsAddSchema), controllers.doubtsUpdate);
     app.put('/doubtst', verifyToken, roleValidator(['teacher']), validator(doubtsAddSchema), controllers.doubtsUpdatet);
 
-    // app.delete('/doubts', verifyToken, roleValidator(['user']), validator(doubtsDelSchema), controllers.doubtsDelete);
+    app.delete('/doubts', verifyToken, roleValidator(['user']), validator(doubtsDelSchema), controllers.doubtsDelete);
 }
 
 module.exports = doubtsRoutes;
