@@ -27,6 +27,19 @@ const usersGet = async (req, res) => {
 
 }
 
+const attenGet = async (req, res) => {
+
+    try {
+
+        let data = await userServices.attenGet(req.user);
+        successResponse({ res, message: "User fetched successfully", data });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+
+}
+
 const userUpdate = async (req, res) => {
     try {
 
@@ -38,4 +51,4 @@ const userUpdate = async (req, res) => {
     }
 }
 
-module.exports = { userUpdate, userGet,usersGet }
+module.exports = { userUpdate, userGet,usersGet ,attenGet}

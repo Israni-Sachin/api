@@ -1,3 +1,4 @@
+const exam = require('../../../../models/exam.model');
 const Users = require('../../../../models/user.model')
 
 const userGet = async (user) => {
@@ -14,10 +15,16 @@ const usersGet = async (user) => {
     return data;
 }
 
+const attenGet = async (user) => {
+
+    let data = await exam.find({})
+    return data;
+}
+
 const userUpdate = async (body, user) => {
 
     await Users.updateOne({ _id: user.id }, body);
 
 }
 
-module.exports = { userUpdate, userGet, usersGet }
+module.exports = { userUpdate, userGet, usersGet,attenGet }
