@@ -5,9 +5,10 @@ const { verifyToken } = require('../../../../middlewares/token');
 
 const registerRoutes = async (app) => {
 
-    app.post('/register',  register);
+    app.post('/register', register);
 
-    app.post('/login', validator(loginSchema), login);
+    // app.post('/login', validator(loginSchema), login);
+    app.post('/login', login);
 }
 
 module.exports = registerRoutes;
