@@ -34,19 +34,14 @@ const ERRORS = {
     'DEFAULT_MESSAGE': 'authorization token not found.',
     'HTTP_CODE': 401
   },
-  'MAX_QTY_EXCEEDED': {
-    'CODE': 12,
-    'DEFAULT_MESSAGE': 'Maximum quantity exceeded.',
-    'HTTP_CODE': 400
-  },
-  'INVALID_DATA': {
-    'CODE': 13,
-    'DEFAULT_MESSAGE': 'Invalid data.',
-    'HTTP_CODE': 422,
-  },
   'BODY_IS_EMPTY': {
-    'CODE': 14,
+    'CODE': 12,
     'DEFAULT_MESSAGE': 'Body cannot be empty.',
+    'HTTP_CODE': 406,
+  },
+  'PRODUCT_NOT_FETCH': {
+    'CODE': 12,
+    'DEFAULT_MESSAGE': 'Error while fetching the products.',
     'HTTP_CODE': 406,
   }
 
