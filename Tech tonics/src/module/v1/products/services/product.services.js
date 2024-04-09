@@ -68,7 +68,6 @@ const productGet = async () => {
 }
 
 const productGetById = async (body) => {
-        console.log(body);
         return await Products.findById(body.id)
 }
 

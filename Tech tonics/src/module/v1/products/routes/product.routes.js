@@ -15,7 +15,7 @@ const productRoutes = async (app) => {
 
     app.delete('/product/:id', verifyToken, productDelete);
 
-    app.delete('/product/all', verifyToken, productDeleteMany);
+    app.delete('/products', verifyToken, productDeleteMany);
 
 }
 
