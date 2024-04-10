@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SVG from "react-inlinesvg"
 
-const links = ["Home", "About Us", "Blogs", "Contact Us"];
+const links = [{ name: "Home", href: "#" }, { name: "Blogs", href: "#blogs" }];
 
-function Header({ isDark, setIsDark }) {
+function Header({ isDark, setIsDark, search, setSearch }) {
     const [isNavbarOpen, setIsNavbarOpen] = useState(false);
     const [scrolling, setScrolling] = useState(0);
 
@@ -39,27 +39,30 @@ function Header({ isDark, setIsDark }) {
                             </Link>
                         </nav>
                     </div>
-                    <div className="flex items-center">
-                        <ul className="hidden space-x-2 md:flex md:space-x-8">
-                            {links.map((ele, index) => (
-                                <li key={index} className={`${isDark ? "text-gray-100" : "text-gray-800"}`} >
-                                    <a href="#">{ele}</a>
-                                </li>
-                            ))}
-                        </ul>
-                        {/* <li> */}
-                        <button
-                            onClick={() => {
-                                setIsDark((pre) => !pre)
-                                localStorage.setItem("theme", isDark ? "light" : "dark")
-                            }}
-                            aria-hidden="true"
-                            className={`${isDark ? "bg-white" : "bg-gray-800"} h-10 w-10 ms-3 group p-2 transition-colors duration-200 rounded-full shadow-md text-gray-900 focus:outline-none flex justify-center items-center`}
-                        >
-                            {/* {isDark ? <SVG src='/assets/icons/star.svg' /> : <SVG src='/assets/icons/night.svg' />} */}
-                            <i className={`fa-solid fa-circle-half-stroke ${isDark ? "text-black" : "text-white"}`}></i>
-                        </button>
-                        {/* </li> */}
+                    <div className="flex">
+                        <div className="hidden bg-white rounded sm:flex items-center w-full max-w-xl mr-4 p-2 shadow-sm border border-gray-200">
+                            <button className="outline-none focus:outline-none">
+                                <i className="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                            <input
+                                type="search"
+                                onChange={(e) => setSearch(e.target.value)}
+                                value={search}
+                                name=""
+                                id=""
+                                placeholder="Search"
+                                className="w-full pl-3 text-sm text-black outline-none focus:outline-none bg-transparent"
+                            />
+                        </div>
+                        <div className="flex items-center">
+                            <ul className="hidden space-x-2 md:flex md:space-x-8">
+                                {links.map((ele, index) => (
+                                    <li key={index} className={`${isDark ? "text-gray-100" : "text-gray-800"}`} >
+                                        <a href={ele.href}>{ele.name}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
                     <div className="block md:hidden">

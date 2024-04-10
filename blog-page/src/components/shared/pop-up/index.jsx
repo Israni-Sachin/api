@@ -14,6 +14,9 @@ const DescriptionPopUp = ({ setShow, data, isDark }) => {
                             <div className='grid grid-cols-1 sm:grid-cols-2 gap-5 items-center'>
                                 <img
                                     src={data.img}
+                                    onError={(e) => {
+                                        e.target.src = 'assets/images/default.png';
+                                    }}
                                     alt={data.title}
                                     className="h-60 object-contain"
                                 />
@@ -34,7 +37,8 @@ const DescriptionPopUp = ({ setShow, data, isDark }) => {
                                             <p className={`text-red-600 inline-block hover:scale-x-105 duration-200 font-bold text-xl pt-5 py-3`}>
                                                 {feature.title}
                                             </p>
-                                            {Object.keys(feature.features_desc).map((e, i) => (
+                                            {feature.features_desc && Object.keys(feature.features_desc).map((e, i) => (
+                                                e !== "" &&
                                                 <div key={index} className="flex">
                                                     <div className='w-1/3'>{e}</div>
                                                     <div className=''>

@@ -8,6 +8,31 @@ import Blogs from '../blogs';
 
 const MainLayout = () => {
     const [isDark, setIsDark] = useState(false);
+    const [search, setSearch] = useState("")
+    const [searchProducts, setSearchProducts] = useState([]);
+    const [productData, setProductData] = useState([])
+
+    function searchProductsByName(data, searchQuery) {
+        const results = [];
+        for (const category in data) {
+            for (const subcategory in data[category]) {
+                data[category][subcategory].forEach(product => {
+                    if (product.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+                        results.push(product);
+                    }
+                });
+            }
+        }
+        return results;
+    }
+
+    useEffect(() => {
+        let timer = setTimeout(() => {
+            const searchResults = searchProductsByName(productData, search);
+            setSearchProducts(searchResults)
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [search])
 
     useEffect(() => {
         let theme = localStorage.getItem('theme');
@@ -16,10 +41,24 @@ const MainLayout = () => {
 
     return (
         <>
-            <Header isDark={isDark} setIsDark={setIsDark} />
+            <Header isDark={isDark} setIsDark={setIsDark} search={search} setSearch={setSearch} />
 
             <div className={`${isDark ? "bg-gray-800" : "bg-white"} ${isDark ? "text-white" : "text-black"} ${isDark ? "dark" : "light"}-mode pt-[80px]`}>
                 <div className='w-[90vw] mx-auto block md:flex gap-5'>
+                    <div className="flex bg-white rounded sm:hidden items-center w-full max-w-xl mr-4 p-2 shadow-sm border border-gray-200">
+                        <button className="outline-none focus:outline-none">
+                            <i className="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        <input
+                            type="search"
+                            onChange={(e) => setSearch(e.target.value)}
+                            value={search}
+                            name=""
+                            id=""
+                            placeholder="Search"
+                            className="w-full pl-3 text-sm text-black outline-none focus:outline-none bg-transparent"
+                        />
+                    </div>
                     <div className='w-full md:w-9/12'>
                         <div className={`${isDark ? "bg-gray-800" : "bg-gray-50"} py-8 md:py-12 lg:py-16 xl:py-20`}>
                             <div className="text-center space-y-4 lg:col-span-2 xl:col-span-1">
@@ -47,7 +86,12 @@ const MainLayout = () => {
 
                             <DropDownMenu isDark={isDark} />
 
-                            <Blogs isDark={isDark} />
+                            <Blogs
+                                search={search}
+                                searchProducts={searchProducts}
+                                productData={productData}
+                                setProductData={setProductData}
+                                isDark={isDark} />
 
                         </div>
 
