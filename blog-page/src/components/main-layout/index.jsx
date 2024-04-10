@@ -7,7 +7,7 @@ import Blogs from '../blogs';
 
 
 const MainLayout = () => {
-    const [isDark, setIsDark] = useState(false);
+    const [isDark, setIsDark] = useState(true);
     const [search, setSearch] = useState("")
     const [searchProducts, setSearchProducts] = useState([]);
     const [productData, setProductData] = useState([])
@@ -34,10 +34,10 @@ const MainLayout = () => {
         return () => clearTimeout(timer);
     }, [search])
 
-    useEffect(() => {
-        let theme = localStorage.getItem('theme');
-        setIsDark(theme === "dark" ? true : false);
-    }, []);
+    // useEffect(() => {
+    //     let theme = localStorage.getItem('theme');
+    //     setIsDark(theme === "dark" ? true : false);
+    // }, []);
 
     return (
         <>
