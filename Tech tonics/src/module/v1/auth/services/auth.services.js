@@ -44,4 +44,19 @@ const login = async (data) => {
         return { userData, encodedData };
 }
 
-module.exports = { register, login};
+const changePass = async (data) => {
+        let user = await Users.findOne({ _id: data.id });
+        console.log(data);
+        if (!user) throw new Error("DATA_NOT_FOUND");
+
+        let check = await comparePassword(data.user_cur_pass, user.user_pass);
+        if (!check) throw new Error("INVALID_CREDENTIALS");
+
+        // if (Date.now() > data.exp) return "LinkExpired";
+
+        new_pass = await hashPassword({ user_pass: data.user_new_pass });
+
+        let a = await Users.findOneAndUpdate({ _id: data.id }, { user_pass: new_pass.user_pass });
+}
+
+module.exports = { register, login, changePass };

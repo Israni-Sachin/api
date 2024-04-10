@@ -23,4 +23,23 @@ const login = async (req, res) => {
     }
 }
 
-module.exports = { register, login};
+const changePass = async (req, res) => {
+    try {
+
+        // if (!req.body) return errorResponse({ res, message: "Request body is required", status: 400 });
+        if (!req.body) throw new Error("BODY_IS_EMPTY")
+
+        const result = await authServices.changePass({ ...req.body, ...req.user });
+
+        successResponse({ res, message: "Success" });
+
+    } catch (error) {
+
+        console.log(error);
+
+        errorResponse(res, error);
+
+    }
+}
+
+module.exports = { register, login, changePass };
