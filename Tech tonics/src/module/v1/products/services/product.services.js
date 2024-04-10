@@ -27,6 +27,7 @@ const productGet = async () => {
 
         // const populatedData = populateDataWithCategories(products);
         // return populatedData;
+        
         try {
                 const result = await Products.aggregate([
                         {
@@ -59,7 +60,37 @@ const productGet = async () => {
                         });
                 });
 
-                return categories;
+                // Sort the categories object alphabetically by keys
+                const sortedCategories = Object.keys(categories).sort((a, b) => a.localeCompare(b))
+                        .reduce((acc, key) => {
+                                acc[key] = categories[key];
+                                return acc;
+                        }, {});
+
+                // Function to sort sub-categories alphabetically for each category
+                const sortSubCategories = (data) => {
+                        const sortedData = {};
+
+                        for (const [category, subCategories] of Object.entries(data)) {
+                                sortedData[category] = {};
+
+                                const sortedSubCategories = Object.entries(subCategories)
+                                        .sort(([a], [b]) => a.localeCompare(b))
+                                        .reduce((obj, [key, value]) => {
+                                                obj[key] = value;
+                                                return obj;
+                                        }, {});
+
+                                sortedData[category] = sortedSubCategories;
+                        }
+
+                        return sortedData;
+                };
+
+                // Call the function to get the sorted data
+                const sortedData = sortSubCategories(sortedCategories);
+                return sortedData;
+                // return categories;
         } catch (error) {
                 console.error(error);
                 throw new Error("PRODUCT_NOT_FETCH");
