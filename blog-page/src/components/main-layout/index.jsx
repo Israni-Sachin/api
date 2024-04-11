@@ -4,6 +4,7 @@ import Footer from '../footer';
 import DropDownMenu from '../dropdown-menu';
 // import AdSense from 'react-adsense';
 import Blogs from '../blogs';
+import AdsComponent from '../google-adsense';
 
 
 const MainLayout = () => {
@@ -116,8 +117,9 @@ const MainLayout = () => {
                             slot='1234567890'
                             style={{ width: 300, height: 250, float: 'left' }}
                             format=''
-                        /> */}
-                            <div className="bg-white rounded-lg overflow-hidden border border-gray-300 shadow-md">
+                            /> */}
+
+                            {/* <div className="bg-white rounded-lg overflow-hidden border border-gray-300 shadow-md">
                                 <img
                                     src="https://static.vecteezy.com/system/resources/previews/022/721/557/original/google-logo-for-search-site-free-png.png"
                                     alt="image"
@@ -142,7 +144,10 @@ const MainLayout = () => {
                                         View Ad
                                     </a>
                                 </div>
-                            </div>
+                            </div> */}
+
+                            {/* <AdsComponent dataAdSlot='X7XXXXXX5X' /> */}
+
                         </div>
                     </div>
                 </div>

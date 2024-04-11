@@ -40,9 +40,9 @@ const DescriptionPopUp = ({ setShow, data, isDark }) => {
                                             {feature.features_desc && Object.keys(feature.features_desc).map((e, i) => (
                                                 e !== "" &&
                                                 <div key={index} className="flex">
-                                                    <div className='w-1/3'>{e}</div>
-                                                    <div className=''>
-                                                        <span className='pr-5'>:</span>
+                                                    <div className='w-1/3 overflow-hidden'>{e.replaceAll("_", " ")}</div>
+                                                    <span className=''>:</span>
+                                                    <div className='ps-5'>
                                                         {feature.features_desc[e]}</div>
                                                 </div>
                                             ))}

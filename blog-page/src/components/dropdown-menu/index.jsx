@@ -64,7 +64,8 @@ const DropDownMenu = ({ isDark }) => {
         >
             <div className='grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3'>
                 {category.map((ele, index) => (
-                    <button
+                    <a
+                        href={`#${ele.name.toLowerCase()}`}
                         key={index}
                         className={`relative ${isDark ? "bg-gray-700" : "bg-gray-300"} ${isDark ? "text-gray-200" : "text-gray-700"} font-semibold py-2 px-4 rounded inline-flex items-center`}
                         onMouseMove={() => {
@@ -83,7 +84,7 @@ const DropDownMenu = ({ isDark }) => {
                                     {data.data.map((e, i) => (
                                         <a
                                             key={i}
-                                            href={`#${e.toLowerCase()}`}
+                                            href={`#${(ele.name + e).toLowerCase()}`}
                                             onClick={() => setData({ data: [], isOpen: false, index: -1 })}
                                             className={`px-4 py-2 flex w-full justify-between ${isDark ? "text-gray-200" : "text-gray-800"} ${isDark ? "hover:bg-gray-600" : "hover:bg-gray-200"}`}
                                         >
@@ -94,7 +95,7 @@ const DropDownMenu = ({ isDark }) => {
                                 </div>
                             </div>
                         )}
-                    </button>
+                    </a>
                 ))}
             </div>
         </div>

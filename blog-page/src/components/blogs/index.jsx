@@ -29,7 +29,7 @@ const Blogs = ({ isDark, productData, setProductData, searchProducts, search }) 
         <>
             <section id='blogs' className={`${isDark ? "bg-gray-800" : "bg-white"} py-10 lg:pb-20 `}>
                 {loading ? (
-                    <div className='w-[90vw] mx-auto flex justify-center'>
+                    <div className='container mx-auto flex justify-center'>
                         <div
                             aria-label="Orange and tan hamster running in a metal wheel"
                             role="img"
@@ -54,7 +54,7 @@ const Blogs = ({ isDark, productData, setProductData, searchProducts, search }) 
                         </div>
                     </div>
                 ) : (
-                    <div className="w-[90vw] mx-auto px-4">
+                    <div className="mx-auto px-4">
                         {search.trim() !== "" ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-1">
                                 {searchProducts.map((post, index3) => (
@@ -75,11 +75,11 @@ const Blogs = ({ isDark, productData, setProductData, searchProducts, search }) 
                                                 className="w-full h-60 object-contain"
                                             />
                                             <div className='absolute w-full bottom-0 text-center bg-gray-400/25'>
-                                                <h3 className="text-lg lg:text-xl font-semibold mb-4">
+                                                <div className="text-lg lg:text-xl font-semibold mb-4">
                                                     <h2 className="text-black hover:text-primary hover:scale-125 duration-300 transition">
                                                         {post.name}
                                                     </h2>
-                                                </h3>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -93,7 +93,7 @@ const Blogs = ({ isDark, productData, setProductData, searchProducts, search }) 
                                             <p className={`${isDark ? "text-white" : "text-black"} inline-block hover:scale-x-125 duration-300`}>{gadget}</p>
                                         </h2>
                                         {Object.keys(productData[gadget]).map((subcategory, index2) => (
-                                            <div id={subcategory.toLowerCase()} key={index2} className="pt-6">
+                                            <div id={(gadget + subcategory).toLowerCase()} key={index2} className="pt-6">
                                                 <h2 className="text-xl lg:text-2xl font-semibold py-3">
                                                     <p className={`inline-block hover:scale-y-125 duration-300 ${isDark ? "text-gray-100" : "text-gray-800"}`}>{subcategory}</p>
                                                 </h2>
@@ -116,11 +116,11 @@ const Blogs = ({ isDark, productData, setProductData, searchProducts, search }) 
                                                                 className="w-full h-60 object-contain"
                                                             />
                                                             <div className='absolute w-full bottom-0 text-center bg-gray-400/25'>
-                                                                <h3 className="text-lg lg:text-xl font-semibold mb-4">
-                                                                    <h2 className="text-dark hover:text-primary hover:scale-125 duration-300 transition">
+                                                                <div className="text-lg lg:text-xl font-semibold mb-4">
+                                                                    <h2 className="text-black hover:text-primary hover:scale-125 duration-300 transition">
                                                                         {post.name}
                                                                     </h2>
-                                                                </h3>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     ))}
