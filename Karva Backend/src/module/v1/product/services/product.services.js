@@ -6,7 +6,7 @@ const productGet = async (body, user) => {
         prd_name: { $regex: new RegExp(body.search, "i") },
     }
 
-    if (user.role == "user") conditions.prd_is_visible = true;
+    if (user.role == "user" || undefined || "") conditions.prd_is_visible = true;
 
     let products = await Products.find(conditions)
         .select('prd_name prd_price prd_img prd_is_visible')
