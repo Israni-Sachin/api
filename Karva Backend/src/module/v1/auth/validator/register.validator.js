@@ -1,6 +1,21 @@
 const joi = require('joi');
 
 const registerSchema = joi.object({
+    user_fname: joi.string().required()
+        .messages({
+            'string.base': 'user_fname must be a string',
+            'string.empty': `user_fname  cannot be an empty field`,
+        }),
+    user_lname: joi.string().required()
+        .messages({
+            'string.base': 'user_lname must be a string',
+            'string.empty': `user_lname  cannot be an empty field`,
+        }),
+    user_address: joi.string().required()
+        .messages({
+            'string.base': 'user_lname must be a string',
+            'string.empty': `user_lname  cannot be an empty field`,
+        }),
     user_email: joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'in'] } }).required()
         .messages({
             'string.email': `Email must be a valid email`,
