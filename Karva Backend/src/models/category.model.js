@@ -13,7 +13,7 @@ const categorySchema = new mongoose.Schema({
     description: { type: String, required: true },
     imageUrl: { type: String, required: true },
     subcategories: [subcategorySchema]  // Embedded subcategories array
-});
+}, { timestamps: true });
 
 const categorys = mongoose.model('category', categorySchema);
 module.exports = categorys

@@ -11,6 +11,10 @@ const BlogsSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    image: {
+        type: String,
+        unique: true
+    },
     content: {
         type: String,
         required: true
@@ -19,7 +23,7 @@ const BlogsSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-});
+}, { timestamps: true });
 
 BlogsSchema.pre('save', function (next) {
     if (this.isModified('title')) {
