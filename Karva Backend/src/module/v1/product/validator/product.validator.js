@@ -12,6 +12,14 @@ const productGetSchema = joi.object({
     sub_category: joi.string().allow(null, '').optional()
         .messages({
             'string.base': 'search must be a string'
+        }),
+    slug: joi.string().allow(null, '').optional()
+        .messages({
+            'string.base': 'search must be a string'
+        }),
+    gender: joi.string().allow(null, '').optional()
+        .messages({
+            'string.base': 'search must be a string'
         })
 });
 

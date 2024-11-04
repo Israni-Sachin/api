@@ -5,8 +5,6 @@ const { productGetSchema, productAddSchema, productUpdateSchema,productGetBySlug
 const validator = require('../../../../middlewares/validator');
 
 const productRoutes = async (app) => {
-
-    // app.get('/product/:prd_slug', productGetBySlug);
     
     app.post('/product/all', validator(productGetSchema), productGet);
 

@@ -3,6 +3,8 @@ const authRoutes = require('../../module/v1/auth/routes/auth.routes');
 const userRoutes = require('../../module/v1/user/routes/user.routes');
 const blogRoutes = require('../../module/v1/blogs/routes/blog.routes');
 const productRoutes = require('../../module/v1/product/routes/product.routes');
+const categoryRoutes = require('../../module/v1/category/routes/category.routes');
+const imageUploadRoutes = require('../../module/v1/image upload/routes/imageUpload.routes');
 
 module.exports = () => {
    const api = express.Router();
@@ -11,7 +13,9 @@ module.exports = () => {
    userRoutes(api);
    blogRoutes(api);
    productRoutes(api);
-   
+   categoryRoutes(api);
+   imageUploadRoutes(api);
+
    return api;
 }
 

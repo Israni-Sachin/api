@@ -2,17 +2,39 @@ const mongoose = require('mongoose');
 
 // Define subcategory schema as an embedded subdocument
 const subcategorySchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    description: { type: String, required: true },
-    imageUrl: { type: String, required: true }
+    sub_cat_name: {
+        type: String,
+        required: true
+    },
+    sub_cat_description: {
+        type: String,
+        required: true
+    },
+    sub_cat_imageUrl: {
+        type: String,
+        required: true
+    }
 });
 
 // Define category schema with subcategories
 const categorySchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    description: { type: String, required: true },
-    imageUrl: { type: String, required: true },
+    cat_name: {
+        type: String,
+        required: true
+    },
+    cat_slug: {
+        type: String
+    },
+    cat_description: {
+        type: String,
+        required: true
+    },
+    cat_imageUrl: {
+        type: String,
+        required: true
+    },
     subcategories: [subcategorySchema]  // Embedded subcategories array
+
 }, { timestamps: true });
 
 const categorys = mongoose.model('category', categorySchema);

@@ -15,6 +15,9 @@ const productsSchema = new mongoose.Schema({
     prd_category: {
         type: String,
     },
+    prd_gender: {
+        type: String,
+    },
     prd_sub_category: {
         type: String,
     },

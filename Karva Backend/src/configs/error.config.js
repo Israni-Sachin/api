@@ -43,7 +43,12 @@ const ERRORS = {
     'CODE': 13,
     'DEFAULT_MESSAGE': 'Invalid data.',
     'HTTP_CODE': 422,
-  }
+  },
+  'CATEGORY_NOT_FOUND': {
+    'CODE': 14,
+    'DEFAULT_MESSAGE': 'Category not found.',
+    'HTTP_CODE': 400
+  },
 
 }
 
