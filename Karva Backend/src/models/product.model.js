@@ -1,10 +1,15 @@
 
 const mongoose = require("mongoose");
+const { imageSchema } = require("../common/common-functions");
 
 const productsSchema = new mongoose.Schema({
     prd_name: {
         type: String,
         required: true,
+    },
+    prd_brand_name:{
+        type: String,
+        required: true
     },
     prd_slug: {
         type: String,
@@ -41,7 +46,7 @@ const productsSchema = new mongoose.Schema({
         type: [String],
     },
     prd_img: {
-        type: [String],
+        type: [imageSchema],
     },
     prd_gst_charges: {
         type: String,
@@ -53,7 +58,7 @@ const productsSchema = new mongoose.Schema({
         type: Boolean
     }
 }
-, { timestamps: true });
+    , { timestamps: true });
 
 const Products = mongoose.model('Product', productsSchema);
 

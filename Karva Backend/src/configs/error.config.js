@@ -9,15 +9,35 @@ const ERRORS = {
     'DEFAULT_MESSAGE': 'Data is not found',
     'HTTP_CODE': 404
   },
-  'ALREADY_EXISTS': {
+  'ALREADY_EXISTS_EMAIL': {
     'CODE': 2,
-    'DEFAULT_MESSAGE': 'Already exists.',
+    'DEFAULT_MESSAGE': 'Email Address Already exists.',
     'HTTP_CODE': 409
   },
   'SERVER_ERROR': {
     'CODE': 3,
     'DEFAULT_MESSAGE': 'Server error. Please try again after some time.',
     'HTTP_CODE': 500
+  },
+  'ALREADY_EXISTS_NUMBER': {
+    'CODE': 4,
+    'DEFAULT_MESSAGE': 'Phone Number Already exists.',
+    'HTTP_CODE': 409
+  },
+  'ALREADY_ADMIN': {
+    'CODE': 5,
+    'DEFAULT_MESSAGE': 'User is already admin.',
+    'HTTP_CODE': 409
+  },
+  'ALREADY_EXISTS': {
+    'CODE': 6,
+    'DEFAULT_MESSAGE': 'Already exists.',
+    'HTTP_CODE': 409
+  },
+  'USER_NOT_FOUND': {
+    'CODE': 7,
+    'DEFAULT_MESSAGE': 'User not found',
+    'HTTP_CODE': 404
   },
   'INVALID_CREDENTIALS': {
     'CODE': 9,

@@ -5,16 +5,18 @@ const blogRoutes = require('../../module/v1/blogs/routes/blog.routes');
 const productRoutes = require('../../module/v1/product/routes/product.routes');
 const categoryRoutes = require('../../module/v1/category/routes/category.routes');
 const imageUploadRoutes = require('../../module/v1/image upload/routes/imageUpload.routes');
+const brandRoutes = require('../../module/v1/brand/routes/brand.routes');
 
 module.exports = () => {
    const api = express.Router();
 
    authRoutes(api);
-   userRoutes(api);
+   userRoutes(api); // user main image rakhni hai?
    blogRoutes(api);
-   productRoutes(api);
-   categoryRoutes(api);
+   productRoutes(api); // search functionality pending
+   categoryRoutes(api); // update remaining categories and subcategories
    imageUploadRoutes(api);
+   brandRoutes(api);
 
    return api;
 }

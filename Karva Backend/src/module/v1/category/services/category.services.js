@@ -8,6 +8,13 @@ const categoryGet = async (body, user) => {
 
 }
 
+const subCategoryGet = async (data) => {
+
+    let category = await categorys.findOne({ cat_name: data.cat_name });
+    return category;
+
+}
+
 const categoryGetBySearch = async (body, user) => {
 
     let conditions = {
@@ -43,6 +50,10 @@ const subCategoryAdd = async (data) => {
     if (!category)
         throw new Error("CATEGORY_NOT_FOUND");
 
+    // if (category)
+    //     throw new Error("ALREADY_EXISTS");
+    //sub cat check for same sub cat pending
+
     category.subcategories.push(data.subCategory);
     await category.save();
 
@@ -69,9 +80,20 @@ const categoryUpdate = async (data, params) => {
 
 const categoryDelete = async (data) => {
 
-    await categorys.findOneAndDelete({ _id: data.prd_id })  // soft delete or hard delete
+    await categorys.findOneAndDelete({ _id: data.cat_id })
 
 }
 
-module.exports = { categoryGet, categoryAdd, categoryUpdate, categoryDelete, subCategoryAdd };
+const subCategoryDelete = async (data) => {
+
+    const result = await categorys.findOneAndUpdate(
+        { _id: data.cat_id },
+        { $pull: { subcategories: { _id: data.subcat_id } } },
+        { new: true } // Return the updated document
+    );
+    return result;
+
+}
+
+module.exports = { categoryGet, categoryAdd, categoryUpdate, categoryDelete, subCategoryAdd, subCategoryGet, subCategoryDelete };
 

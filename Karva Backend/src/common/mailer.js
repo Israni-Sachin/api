@@ -13,10 +13,10 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const mailer = (email,link) =>{
+const mailer = (email, link) => {
 
     const mailOptions = {
-        from: 'orderify143@gmail.com',
+        from: 'sachinisrani56@gmail.com',
         to: email,
         subject: 'Reset Password',
         text: `Reset Password Link - ${link}`
@@ -30,4 +30,23 @@ const mailer = (email,link) =>{
         }
     });
 }
-module.exports = mailer;
+
+const passChangeMail = (email) => {
+
+    const mailOptions = {
+        from: 'sachinisrani56@gmail.com',
+        to: email,
+        subject: 'Password Changed',
+        text: `Your password has been changed.If not you please change your password again`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
+
+module.exports = { mailer, passChangeMail };

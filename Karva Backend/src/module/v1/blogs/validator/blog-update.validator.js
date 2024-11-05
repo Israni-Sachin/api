@@ -13,7 +13,7 @@ const blogAddSchema = joi.object({
             'string.empty': 'content  cannot be an empty field',
             'any.required': 'content is required'
         }),
-    image: joi.string()
+    image: joi.any()
         .messages({
             'string.base': 'image must be a string',
             'string.empty': 'image  cannot be an empty field',

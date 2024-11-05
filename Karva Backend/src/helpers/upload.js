@@ -12,7 +12,11 @@ cloudinary.config({
 const uploadFile = async (filepath) => {
     try {
         const result = await cloudinary.uploader.upload(filepath);
-        return result.secure_url;
+        res = {
+            secure_url: result.secure_url,
+            public_id: result.public_id
+        }
+        return res;
     } catch (error) {
         console.error(error.message);
         throw error.message;
@@ -20,5 +24,5 @@ const uploadFile = async (filepath) => {
 }
 
 module.exports = {
-    uploadFile
+    uploadFile, cloudinary
 };

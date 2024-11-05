@@ -11,7 +11,7 @@ const register = async (req, res) => {
         });
 
     } catch (err) {
-        errorResponse( res, err);
+        errorResponse(res, err);
     }
 }
 
@@ -23,34 +23,40 @@ const login = async (req, res) => {
             res, data: result.userData,
             message: "Logged in successfully", token: result.encodedData
         });
-        
+
     } catch (err) {
-        errorResponse( res, err);
+        errorResponse(res, err);
     }
 }
 
-module.exports = { register, login };
 
-/* const resetPassLinkMailer = async(req, res) => {
-    try{
-        if(!req.body) return errorResponse({res, message:"Request body is required",status:400});
+const resetPassLinkMailer = async (req, res) => {
+    try {
+
+        if (!req.body) return errorResponse({ res, message: "Request body is required", status: 400 });
+
         let result = await authServices.resetPassLinkMailer(req.body);
-        if(result == "NotFound") return errorResponse({res, message:"User does not exist", status:404});
-        successResponse({res, message:"Success"});
-    }catch(error){
+
+        successResponse({ res, message: "Success", data: result });
+
+    } catch (error) {
         console.log(error);
-        errorResponse({res, message:'Internal server error', status:500});
+        // errorResponse({ res, message: 'Internal server error', status: 500 });
+        errorResponse(res, error);
+
     }
 }
 
-const resetPass = async(req, res) => {
-    try{
-        if(!req.body) return errorResponse({res, message:"Request body is required",status:400});
-        const result = await authServices.resetPass({ ...req.body, token: req.params.token});
-        if(result == "LinkExpired") return errorResponse({res, message:"Link expired", status:400});
-        successResponse({res, message:"Success"});
-    }catch(error){
+const resetPass = async (req, res) => {
+    try {
+        if (!req.body) return errorResponse({ res, message: "Request body is required", status: 400 });
+        const result = await authServices.resetPass({ ...req.body, token: req.params.token });
+        if (result == "LinkExpired") return errorResponse({ res, message: "Link expired", status: 400 });
+        successResponse({ res, message: "Success" });
+    } catch (error) {
         console.log(error);
-        errorResponse({res, message:'Internal server error', status:500});
+        errorResponse({ res, message: 'Internal server error', status: 500 });
     }
-} */
+}
+
+module.exports = { register, login, resetPassLinkMailer, resetPass };

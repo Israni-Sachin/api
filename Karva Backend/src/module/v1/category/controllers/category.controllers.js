@@ -11,6 +11,16 @@ const categoryGet = async (req, res) => {
     }
 }
 
+const subCategoryGet = async (req, res) => {
+    try {
+        let result = await categorysServices.subCategoryGet(req.params);
+        successResponse({ res, message: 'Subcategory fetched successfully', data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
 // const categoryGetBySlug = async (req, res) => {
 //     try {
 //         let result = await categorysServices.categoryGetBySlug(req.params);
@@ -63,4 +73,14 @@ const categoryDelete = async (req, res) => {
     }
 }
 
-module.exports = { categoryGet, categoryAdd, categoryUpdate, categoryDelete, subCategoryAdd };
+const subCategoryDelete = async (req, res) => {
+    try {
+        let result = await categorysServices.subCategoryDelete(req.body);
+        successResponse({ res, message: "Subcategory deleted successfully", data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
+module.exports = { categoryGet, categoryAdd, categoryUpdate, categoryDelete, subCategoryAdd, subCategoryGet, subCategoryDelete };

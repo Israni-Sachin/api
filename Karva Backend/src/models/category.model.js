@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { imageSchema } = require('../common/common-functions');
 
 // Define subcategory schema as an embedded subdocument
 const subcategorySchema = new mongoose.Schema({
@@ -11,8 +12,7 @@ const subcategorySchema = new mongoose.Schema({
         required: true
     },
     sub_cat_imageUrl: {
-        type: String,
-        required: true
+        type: imageSchema
     }
 });
 
@@ -30,8 +30,7 @@ const categorySchema = new mongoose.Schema({
         required: true
     },
     cat_imageUrl: {
-        type: String,
-        required: true
+        type: imageSchema
     },
     subcategories: [subcategorySchema]  // Embedded subcategories array
 

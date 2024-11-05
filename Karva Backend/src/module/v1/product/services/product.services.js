@@ -2,33 +2,59 @@ const Products = require("../../../../models/product.model");
 
 const productGet = async (body, user) => {
 
+    // Set default values for page and limit if not provided in request
+    const page = parseInt(body.page) || 1; // Default to page 1
+    const limit = parseInt(body.limit) || 10; // Default to 10 items per page
+    const sort = body.sort || { createdAt: -1 }; // Default sort by creation date descending
+    const filters = body.filters || {}; // Optional filters
 
-    // if (user.role == "admin") conditions.prd_out_of_stock = true;
-    let products = ""   
-    if (body.category) products = await Products.find({ prd_category: body.category });
-    else if (body.sub_category) products = await Products.find({ prd_sub_category: body.sub_category });
-    else if (body.gender) products = await Products.find({ prd_gender: body.gender });
-    else if (body.price) products = await Products.find({ prd_gender: body.gender }); // start and end object remaining
-    else if (body.slug) products = await Products.find({ prd_slug: body.slug });
-    // else products = await Products.find(conditions);
-    else products = await Products.find();
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * limit;
 
-    return products;
+    if (body.filters) {
 
-}
+        if (body.filters.end_price) {
+            filters.prd_price = { $gte: body.filters.start_price, $lte: body.filters.end_price }
+            delete filters.start_price
+            delete filters.end_price
+        }
 
-const productGetBySearch = async (body, user) => {
-
-    let conditions = {
-        prd_name: { $regex: new RegExp(body.search, "i") },
+        if (body.filters.selected_colors) {
+            filters.prd_colors = { $all: body.filters.selected_colors };
+            delete filters.selected_colors
+        }
     }
 
-    console.log(conditions);
+    // Find and paginate products with optional filters and sorting
+    const products = await Products.find(filters)
+        .sort(sort)
+        .skip(skip)
+        .limit(limit);
 
-    let products = await Products.find(conditions)
 
+    // Count total documents matching the filters for total pages calculation
+    const totalProducts = await Products.countDocuments(filters);
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    return {
+        currentPage: page,
+        totalPages,
+        totalProducts,
+        products
+    };
 
 }
+
+// const productGetBySearch = async (body, user) => {
+
+//     let conditions = {
+//         prd_name: { $regex: new RegExp(body.search, "i") },
+//     }
+
+//     console.log(conditions);
+
+//     let products = await Products.find(conditions)
+// }
 
 // const productGetBySlug = async (data) => {
 //     return await Products.findOne({ prd_slug: data.prd_slug });
@@ -39,6 +65,7 @@ const productAdd = async (data) => {
     let check = await Products.findOne({ prd_name: data.prd_name });
     if (check)
         throw new Error("ALREADY_EXISTS");
+
     data.prd_slug = data.prd_name.toLowerCase().replaceAll(" ", "-");
 
     await Products.create(data);
@@ -47,14 +74,17 @@ const productAdd = async (data) => {
 
 const productUpdate = async (data, params) => {
 
-    let count = await Products.countDocuments({ _id: params.prd_id });
-    if (count == 0)
+    let details = await Products.findOne({ _id: params.prd_id });
+    if (!details){
         throw new Error("DATA_NOT_FOUND");
+    }
 
-    // let check = await Products.countDocuments({ _id: { $ne: data.prd_id }, prd_name: data.prd_name, prd_price: data.prd_price });
-    // if (check)
-    //     throw new Error("ALREADY_EXISTS");
-    if (data.prd_name) {
+    let check = await Products.findOne({ _id: { $ne: params.prd_id }, prd_name: data.prd_name });
+    if (check){
+        throw new Error("ALREADY_EXISTS");
+    }
+
+    if (data.prd_name != details.prd_name) {
         data.prd_slug = data.prd_name.toLowerCase().replaceAll(" ", "-")
     }
 

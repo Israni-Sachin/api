@@ -8,8 +8,8 @@ const registerRoutes = async (app) => {
 
     app.post('/login', validator(loginSchema), login);
 
-    /* app.post('/reset-pass', resetPassLinkMailer);
+    app.post('/reset-pass', resetPassLinkMailer);
     
-    app.post('/reset-pass/:token', resetPass) */
+    app.post('/reset-pass/:token', resetPass) 
 }
 module.exports = registerRoutes;

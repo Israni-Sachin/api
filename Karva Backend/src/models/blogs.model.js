@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const { imageSchema } = require('../common/common-functions');
 
 const BlogsSchema = new mongoose.Schema({
     title: {
@@ -12,8 +13,7 @@ const BlogsSchema = new mongoose.Schema({
         unique: true
     },
     image: {
-        type: String,
-        unique: true
+        type: imageSchema
     },
     content: {
         type: String,

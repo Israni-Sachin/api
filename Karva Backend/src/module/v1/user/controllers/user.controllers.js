@@ -1,6 +1,32 @@
 const userServices = require('../services/user.services');
 const { successResponse, errorResponse } = require('../../../../helpers/http-response');
 
+const userGetAll = async (req, res) => {
+
+    try {
+
+        let data = await userServices.userGetAll();
+        successResponse({ res, message: "All User fetched successfully", data });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+
+}
+
+const userGiveAdminAccess = async (req, res) => {
+
+    try {
+
+        let data = await userServices.userGiveAdminAccess(req.body);
+        successResponse({ res, message: "User Role Updated successfully", data });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+
+}
+
 const userGet = async (req, res) => {
 
     try {
@@ -25,4 +51,4 @@ const userUpdate = async (req, res) => {
     }
 }
 
-module.exports = { userUpdate, userGet }
+module.exports = { userUpdate, userGet, userGetAll, userGiveAdminAccess }
