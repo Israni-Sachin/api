@@ -64,7 +64,7 @@ const productUpdate = async (data, params) => {
 
 const productDelete = async (data) => {
 
-    await Products.findOneAndDelete({ _id: data.prd_id })  // soft delete or hard delete
+    await Products.findOneAndDelete({ _id: data.prd_id });
 
 }
 
