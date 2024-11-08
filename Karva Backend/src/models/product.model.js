@@ -1,13 +1,78 @@
 
 const mongoose = require("mongoose");
-const { imageSchema } = require("../common/common-functions");
+const { imageSchema } = require("../common/common-schemas");
+
+const reviewSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    prd: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
+    },
+    rating: {
+        type: Number,
+        min: 1,
+        max: 5,
+        required: true,
+    },
+    title: {
+        type: String,
+    },
+    description: {
+        type: String,
+    },
+    created_at: {
+        type: Date,
+        default: Date.now,
+    },
+}, { timestamps: true });
+
+const sizeSchema = new mongoose.Schema({
+    number: {
+        type: Number,
+    },
+    quantity: {
+        type: Number,
+    },
+    // price: {
+    //     type: Number,
+    // },
+    // discount_percentage: {
+    //     type: String,
+    // },
+    // discount_price: {
+    //     type: Number,
+    // },
+    ou_of_stock: {
+        type: Boolean
+    }
+}, { _id: false });
+
+const colorSchema = new mongoose.Schema({
+    color_name: {
+        type: String,
+    },
+    color_code: {
+        type: String,
+    },
+    ou_of_stock: {
+        type: Boolean,
+    },
+    image: {
+        type: [imageSchema],
+    }
+}, { _id: false });
 
 const productsSchema = new mongoose.Schema({
     prd_name: {
         type: String,
         required: true,
     },
-    prd_brand_name:{
+    prd_brand_name: {
         type: String,
         required: true
     },
@@ -28,7 +93,6 @@ const productsSchema = new mongoose.Schema({
     },
     prd_price: {
         type: Number,
-        required: true,
     },
     prd_discount_percentage: {
         type: String,
@@ -36,14 +100,14 @@ const productsSchema = new mongoose.Schema({
     prd_discount_price: {
         type: Number,
     },
-    prd_quantity: {
-        type: Number,
+    prd_overall_quantity: {
+        type: Number
     },
     prd_sizes: {
-        type: [Number],
+        type: [sizeSchema],
     },
     prd_colors: {
-        type: [String],
+        type: [colorSchema],
     },
     prd_img: {
         type: [imageSchema],
@@ -56,10 +120,32 @@ const productsSchema = new mongoose.Schema({
     },
     prd_out_of_stock: {
         type: Boolean
+    },
+    // prd_reviews: {
+    //     type: [reviewSchema]
+    // },
+    prd_overall_ratings: {
+        type: Number,
     }
-}
-    , { timestamps: true });
+}, { timestamps: true });
 
 const Products = mongoose.model('Product', productsSchema);
 
-module.exports = Products;
+async function updateOverallQuantity(data) {
+    let product;
+    if (data.prd_id) {
+        product = await Products.findById(data.prd_id);
+    }
+    else {
+        product = data
+    }
+    // if (product) {
+    product.prd_overall_quantity = product.prd_sizes.reduce((total, size) => total + (size.quantity || 0), 0);
+    // await Products.save();
+    return product;
+    // }
+}
+
+module.exports = { Products, updateOverallQuantity };
+
+// module.exports = Products;

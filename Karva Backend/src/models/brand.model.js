@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { imageSchema } = require('../common/common-functions');
+const { imageSchema } = require('../common/common-schemas');
 
 // Define category schema with subcategories
 const brandSchema = new mongoose.Schema({

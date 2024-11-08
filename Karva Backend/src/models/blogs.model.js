@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const { imageSchema } = require('../common/common-functions');
+const { imageSchema } = require('../common/common-schemas');
 
 const BlogsSchema = new mongoose.Schema({
     title: {

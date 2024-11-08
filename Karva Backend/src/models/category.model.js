@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { imageSchema } = require('../common/common-functions');
+const { imageSchema } = require('../common/common-schemas');
 
 // Define subcategory schema as an embedded subdocument
 const subcategorySchema = new mongoose.Schema({

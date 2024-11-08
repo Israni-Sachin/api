@@ -27,6 +27,17 @@ const userSchema = new mongoose.Schema({
     },
     user_address : {
         type: String
+    },
+    user_srch_history:{
+        type: [String],
+        default: []
+    },
+    user_restPassLink_last_applyed:{
+        type: Date
+    },
+    user_pass_limit:{
+        type: Number,
+        default: 0
     }
 }
 , {timestamps: true});

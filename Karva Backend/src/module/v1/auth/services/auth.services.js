@@ -51,7 +51,7 @@ const resetPassLinkMailer = async (data) => {
         if (!user) throw new Error("USER_NOT_FOUND")
 
         let link = await gererateLink({ ...data, iat: Date.now(), exp: Date.now() + 600000 });
-
+        //fe link / reset-pass / token
         mailer(user.user_email, link); // pending front end link will be added and sent
 }
 
@@ -64,4 +64,18 @@ const resetPass = async (data) => {
         passChangeMail(decodedData.user_email) // pending front end link will be added and sent
 }
 
-module.exports = { login, register, resetPassLinkMailer, resetPass };
+const changePass = async (data) => {
+
+        let user = await Users.findOne({ _id: data.id });
+        if (!user) throw new Error("DATA_NOT_FOUND");
+
+        let check = await comparePassword(data.cur_password, user.user_pass);
+        if (!check) throw new Error("INVALID_CREDENTIALS");
+
+        new_pass = await hashPassword({ user_pass: data.new_password });
+
+        let a = await Users.findOneAndUpdate({ _id: data.id }, { user_pass: new_pass });
+
+}
+
+module.exports = { login, register, resetPassLinkMailer, resetPass, changePass };

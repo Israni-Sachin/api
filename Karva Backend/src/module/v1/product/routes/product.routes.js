@@ -1,13 +1,14 @@
-const { productGet, productAdd, productUpdate, productDelete } = require('../controllers/product.controllers');
+const { productGet, productAdd, productUpdate, productDelete, productGetBySearch } = require('../controllers/product.controllers');
 const { verifyToken } = require('../../../../middlewares/token');
 const roleValidator = require('../../../../middlewares/role-validator');
-const { productGetSchema, productAddSchema, productUpdateSchema, productGetBySlug } = require('../validator/index');
+// const { productGetSchema, productAddSchema, productUpdateSchema, productGetBySlug } = require('../validator/index');
 const validator = require('../../../../middlewares/validator');
 
 const productRoutes = async (app) => {
 
-    // app.post('/product/all', validator(productGetSchema), productGet); 
     app.post('/product/all', productGet);
+
+    app.post('/product/search', productGetBySearch);
 
     app.post('/product', verifyToken, roleValidator(['admin']), productAdd);
 

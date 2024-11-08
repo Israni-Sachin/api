@@ -11,7 +11,7 @@ const userUpdateSchema = joi.object({
             'string.base': 'user_lname must be a string',
             'string.empty': `user_lname  cannot be an empty field`,
         }),
-    user_address: joi.string().required()
+    user_address: joi.string()
         .messages({
             'string.base': 'user_lname must be a string',
             'string.empty': `user_lname  cannot be an empty field`,

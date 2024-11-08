@@ -55,8 +55,22 @@ const resetPass = async (req, res) => {
         successResponse({ res, message: "Success" });
     } catch (error) {
         console.log(error);
-        errorResponse({ res, message: 'Internal server error', status: 500 });
+        errorResponse(res, error);
     }
 }
 
-module.exports = { register, login, resetPassLinkMailer, resetPass };
+const changePass = async (req, res) => {
+    try {
+        if (!req.body) return errorResponse({ res, message: "Request body is required", status: 400 });
+
+        const result = await authServices.changePass({ ...req.body, ...req.user });
+
+        successResponse({ res, message: "Success" });
+
+    } catch (err) {
+
+        errorResponse(res, err);
+    }
+}
+
+module.exports = { register, login, resetPassLinkMailer, resetPass, changePass };
