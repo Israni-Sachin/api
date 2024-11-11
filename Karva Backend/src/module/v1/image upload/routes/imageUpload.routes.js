@@ -13,8 +13,8 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, 'public')));
 const upload = multer({
-    storage: multer.diskStorage({}),
-    limits: { fileSize: 500000 }
+    storage: multer.diskStorage({})
+    // limits: { fileSize: 500000 }
 });
 
 const imageUploadRoutes = async (app) => {
