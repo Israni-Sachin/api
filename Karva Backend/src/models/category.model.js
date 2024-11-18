@@ -7,10 +7,10 @@ const subcategorySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    sub_cat_description: {
-        type: String,
-        required: true
-    },
+    // sub_cat_description: {
+    //     type: String,
+    //     required: true
+    // },
     sub_cat_imageUrl: {
         type: imageSchema
     }
@@ -25,10 +25,10 @@ const categorySchema = new mongoose.Schema({
     cat_slug: {
         type: String
     },
-    cat_description: {
-        type: String,
-        required: true
-    },
+    // cat_description: {
+    //     type: String,
+    //     required: true
+    // },
     cat_imageUrl: {
         type: imageSchema
     },

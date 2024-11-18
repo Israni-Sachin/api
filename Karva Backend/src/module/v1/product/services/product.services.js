@@ -52,13 +52,20 @@ async function parseSearchQuery(query) {
 
     // Extract the brand names (nike, puma)
     const brandName = await Products.distinct('prd_brand_name');
-    const brandRegex = new RegExp(brandName.join('|'), 'gi')
+    console.log(brandName);
+    
+    // const brandRegex = new RegExp(`/(${brandName.join('|')})/`, 'gi')
+    const brandRegex = new RegExp(`\\b(${brandName.join('|')})\\b`, 'gi');
+    console.log(brandRegex);
     // const brands = query.match(/(nike|puma|adidas|reebok)/gi); // Add more brands as needed
     const brands = query.match(brandRegex);
+    console.log(brands)
     if (brands) {
         const brandRegexes = brands.map(name => new RegExp(`^${name}$`, 'i'));
         filters.prd_brand_name = { $in: brandRegexes };
     }
+    // filters.prd_brand_name = brandName.filter(v => v.includes(inputValue.toLowerCase()))
+    // console.log(filters);
 
     // Extract the product names
     const prdName = await Products.distinct('prd_name');
@@ -167,10 +174,11 @@ async function parseSearchQuery(query) {
 const productGetBySearch = async (body) => {
 
     let filters = await parseSearchQuery(body.query)
+    console.log(filters);
 
     if (body.id) {
         let user = await Users.find({ _id: body.id });
-        if(!user[0].user_srch_history.includes(body.query)){
+        if (!user[0].user_srch_history.includes(body.query)) {
             user[0].user_srch_history.push(body.query);
             newData = user[0].user_srch_history
             await Users.updateOne({ _id: body.id }, { user_srch_history: newData });

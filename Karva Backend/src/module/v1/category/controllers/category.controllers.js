@@ -62,6 +62,17 @@ const categoryUpdate = async (req, res) => {
     }
 }
 
+const subCategoryUpdate = async (req, res) => {
+    try {
+        let body = req.body;
+        await categorysServices.subCategoryUpdate(body,);
+        successResponse({ res, message: "Sub Category updated successfully" });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
 const categoryDelete = async (req, res) => {
     try {
         let body = req.params;
@@ -83,4 +94,4 @@ const subCategoryDelete = async (req, res) => {
     }
 }
 
-module.exports = { categoryGet, categoryAdd, categoryUpdate, categoryDelete, subCategoryAdd, subCategoryGet, subCategoryDelete };
+module.exports = { categoryGet, categoryAdd, categoryUpdate, categoryDelete, subCategoryAdd, subCategoryGet, subCategoryDelete,subCategoryUpdate };

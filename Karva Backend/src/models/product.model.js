@@ -6,18 +6,18 @@ const reviewSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true,
+        required: true
     },
     prd: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
-        required: true,
+        required: true
     },
     rating: {
         type: Number,
         min: 1,
         max: 5,
-        required: true,
+        required: true
     },
     title: {
         type: String,
@@ -70,7 +70,7 @@ const colorSchema = new mongoose.Schema({
 const productsSchema = new mongoose.Schema({
     prd_name: {
         type: String,
-        required: true,
+        required: true
     },
     prd_brand_name: {
         type: String,
@@ -81,6 +81,7 @@ const productsSchema = new mongoose.Schema({
     },
     prd_desc: {
         type: String,
+        required: true
     },
     prd_category: {
         type: String,

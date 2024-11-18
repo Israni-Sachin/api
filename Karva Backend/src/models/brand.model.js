@@ -10,10 +10,10 @@ const brandSchema = new mongoose.Schema({
     brand_slug: {
         type: String
     },
-    brand_description: {
-        type: String,
-        required: true
-    },
+    // brand_description: {
+    //     type: String,
+    //     required: true
+    // },
     brand_imageUrl: {
         type: imageSchema
     }

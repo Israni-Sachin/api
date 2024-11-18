@@ -15,18 +15,18 @@ const subCategoryGet = async (data) => {
 
 }
 
-const categoryGetBySearch = async (body, user) => {
+// const categoryGetBySearch = async (body, user) => {
 
-    let conditions = {
-        prd_name: { $regex: new RegExp(body.search, "i") },
-    }
+//     let conditions = {
+//         prd_name: { $regex: new RegExp(body.search, "i") },
+//     }
 
-    console.log(conditions);
+//     console.log(conditions);
 
-    let categorys = await categorys.find(conditions)
+//     let categorys = await categorys.find(conditions)
 
 
-}
+// }
 
 // const categoryGetBySlug = async (data) => {
 //     return await categorys.findOne({ prd_slug: data.prd_slug });
@@ -63,18 +63,40 @@ const subCategoryAdd = async (data) => {
 
 const categoryUpdate = async (data, params) => {
 
-    let count = await categorys.countDocuments({ _id: params.prd_id });
+    let count = await categorys.countDocuments({ _id: params.cat_id });
     if (count == 0)
         throw new Error("DATA_NOT_FOUND");
 
-    // let check = await categorys.countDocuments({ _id: { $ne: data.prd_id }, prd_name: data.prd_name, prd_price: data.prd_price });
-    // if (check)
-    //     throw new Error("ALREADY_EXISTS");
-    if (data.prd_name) {
-        data.prd_slug = data.prd_name.toLowerCase().replaceAll(" ", "-")
+    if (data.cat_name) {
+        data.cat_slug = data.cat_name.toLowerCase().replaceAll(" ", "-")
     }
 
-    await categorys.updateOne({ _id: params.prd_id }, { ...data });
+    await categorys.updateOne({ _id: params.cat_id }, { ...data });
+
+}
+
+const subCategoryUpdate = async (data) => {
+
+    let count = await categorys.findOne({ _id: data.cat_id });
+    if (count == 0)
+        throw new Error("DATA_NOT_FOUND");
+
+    if (data.data.subcat_name) {
+        data.data.subcat_slug = data.data.subcat_name.toLowerCase().replaceAll(" ", "-")
+    }
+
+    result = count.subcategories.map((v, i, arr) => {
+        if (v._id == data.sub_cat_id) {
+            v.sub_cat_name=data.data.sub_cat_name;
+            // v.sub_cat_description=data.data.sub_cat_description;
+            v.sub_cat_imageUrl=data.data.sub_cat_imageUrl;
+        }
+        return v;
+    })
+    console.log(count);
+    console.log(result);
+    
+    await categorys.updateOne({ _id: data.cat_id }, count);
 
 }
 
@@ -95,5 +117,5 @@ const subCategoryDelete = async (data) => {
 
 }
 
-module.exports = { categoryGet, categoryAdd, categoryUpdate, categoryDelete, subCategoryAdd, subCategoryGet, subCategoryDelete };
+module.exports = { categoryGet, categoryAdd, categoryUpdate, categoryDelete, subCategoryAdd, subCategoryGet, subCategoryDelete, subCategoryUpdate };
 
