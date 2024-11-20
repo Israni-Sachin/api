@@ -23,27 +23,44 @@ const login = async (req, res) => {
     }
 }
 
-/* const resetPassLinkMailer = async(req, res) => {
-    try{
-        if(!req.body) return errorResponse({res, message:"Request body is required",status:400});
+const resetPassLinkMailer = async (req, res) => {
+    try {
+
+        if (!req.body) return errorResponse({ res, message: "Request body is required", status: 400 });
+
         let result = await authServices.resetPassLinkMailer(req.body);
-        if(result == "NotFound") return errorResponse({res, message:"User does not exist", status:404});
-        successResponse({res, message:"Success"});
-    }catch(error){
+
+        successResponse({ res, message: "Success", data: result });
+
+    } catch (error) {
         console.log(error);
-        errorResponse({res, message:'Internal server error', status:500});
+        // errorResponse({ res, message: 'Internal server error', status: 500 });
+        errorResponse(res, error);
+
     }
-}*/
+}
 
 const resetPass = async (req, res) => {
+    try {
+        if (!req.body) return errorResponse({ res, message: "Request body is required", status: 400 });
+        const result = await authServices.resetPass({ ...req.body, token: req.params.token });
+        if (result == "LinkExpired") return errorResponse({ res, message: "Link expired", status: 400 });
+        successResponse({ res, message: "Success" });
+    } catch (error) {
+        console.log(error);
+        errorResponse(res, error);
+    }
+}
+
+const changePass = async (req, res) => {
     try {
 
         // if (!req.body) return errorResponse({ res, message: "Request body is required", status: 400 });
         if (!req.body) throw new Error("BODY_IS_EMPTY")
 
-        const result = await authServices.resetPass({ ...req.body, ...req.user });
+        const result = await authServices.changePass({ ...req.body, ...req.user });
 
-        successResponse({ res, message: "Success" });
+        successResponse({ res, message: "Success", data: result });
 
     } catch (error) {
 
@@ -54,4 +71,4 @@ const resetPass = async (req, res) => {
     }
 }
 
-module.exports = { register, login, resetPass };
+module.exports = { register, login, resetPass, resetPassLinkMailer, changePass };

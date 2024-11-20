@@ -17,4 +17,3 @@ const decryptLink = async(token) => {
 
 module.exports = {gererateLink, decryptLink};
 
- 

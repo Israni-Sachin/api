@@ -24,6 +24,11 @@ const ERRORS = {
     'DEFAULT_MESSAGE': 'Invalid credentials.',
     'HTTP_CODE': 400
   },
+  'INVALID_PASSWORD': {
+    'CODE': 4,
+    'DEFAULT_MESSAGE': 'Invalid Password.',
+    'HTTP_CODE': 400
+  },
   'UNAUTHORIZED': {
     'CODE': 10,
     'DEFAULT_MESSAGE': 'Unauthorized.',
