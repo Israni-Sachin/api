@@ -44,5 +44,5 @@ const examDelete = async (data) => {
 
 }
 
-module.exports = { examGet, examAdd, examUpdate, examDelete };
+module.exports = { examGet, examAdd, examUpdate, examDelete, examGetAll };
 
