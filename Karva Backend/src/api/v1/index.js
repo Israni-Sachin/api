@@ -6,6 +6,7 @@ const productRoutes = require('../../module/v1/product/routes/product.routes');
 const categoryRoutes = require('../../module/v1/category/routes/category.routes');
 const imageUploadRoutes = require('../../module/v1/image upload/routes/imageUpload.routes');
 const brandRoutes = require('../../module/v1/brand/routes/brand.routes');
+const addressRoutes = require('../../module/v1/address/routes/address.routes');
 
 module.exports = () => {
    const api = express.Router();
@@ -17,6 +18,7 @@ module.exports = () => {
    categoryRoutes(api); // update remaining categories and subcategories
    imageUploadRoutes(api);
    brandRoutes(api);
+   addressRoutes(api);
 
    return api;
 }

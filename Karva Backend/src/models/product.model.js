@@ -141,7 +141,7 @@ async function updateOverallQuantity(data) {
         product = data
     }
     // if (product) {
-    product.prd_overall_quantity = product.prd_sizes.reduce((total, size) => total + (size.quantity || 0), 0);
+    product.prd_overall_quantity = product.prd_sizes.reduce((total, size) => total + (size.quantity || 0), 0) || product.prd_quantity;
     // await Products.save();
     return product;
     // }
