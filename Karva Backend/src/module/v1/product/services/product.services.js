@@ -53,7 +53,7 @@ async function parseSearchQuery(query) {
     // Extract the brand names (nike, puma)
     const brandName = await Products.distinct('prd_brand_name');
     console.log(brandName);
-    
+
     // const brandRegex = new RegExp(`/(${brandName.join('|')})/`, 'gi')
     const brandRegex = new RegExp(`\\b(${brandName.join('|')})\\b`, 'gi');
     console.log(brandRegex);
@@ -241,7 +241,25 @@ const productDelete = async (data) => {
 
 }
 
-module.exports = { productGet, productAdd, productUpdate, productDelete, productGetBySearch };
+const productSuggest = async (data) => {
+
+    let data2 = await Products.find({
+        // prd_category: data.prd_category, prd_sub_category: data.prd_sub_category
+    })
+    if (!data2) {
+        throw new Error("DATA_NOT_FOUND");
+    }
+    // Filter products where the name includes the query
+    const suggestedProducts = data2.filter(product =>
+        product.prd_name.toLowerCase().includes(data.prd_name.toLowerCase()));
+    // );
+
+return suggestedProducts;
+    // await Products.findOneAndDelete({ _id: data.prd_id });
+
+}
+
+module.exports = { productGet, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest };
 
 
 // function parseSearchQuery(query) {

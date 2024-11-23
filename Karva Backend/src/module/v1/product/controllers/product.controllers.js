@@ -21,6 +21,16 @@ const productGetBySearch = async (req, res) => {
     }
 }
 
+const productSuggest = async (req, res) => {
+    try {
+        let result = await productsServices.productSuggest(req.body);
+        successResponse({ res, message: 'Product fetched successfully', data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
 const productAdd = async (req, res) => {
     try {
         await productsServices.productAdd(req.body);
@@ -53,4 +63,4 @@ const productDelete = async (req, res) => {
     }
 }
 
-module.exports = { productGet, productAdd, productUpdate, productDelete, productGetBySearch };
+module.exports = { productGet, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest };
