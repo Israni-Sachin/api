@@ -39,6 +39,11 @@ const ERRORS = {
     'DEFAULT_MESSAGE': 'User not found',
     'HTTP_CODE': 404
   },
+  'CART_NOT_FOUND': {
+    'CODE': 8,
+    'DEFAULT_MESSAGE': 'Cart not found',
+    'HTTP_CODE': 404
+  },
   'INVALID_CREDENTIALS': {
     'CODE': 9,
     'DEFAULT_MESSAGE': 'Invalid credentials.',
@@ -67,6 +72,11 @@ const ERRORS = {
   'CATEGORY_NOT_FOUND': {
     'CODE': 14,
     'DEFAULT_MESSAGE': 'Category not found.',
+    'HTTP_CODE': 400
+  },
+  'EMAIL_NOT_FOUND': {
+    'CODE': 14,
+    'DEFAULT_MESSAGE': 'Email address not found.',
     'HTTP_CODE': 400
   },
 

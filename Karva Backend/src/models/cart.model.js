@@ -7,8 +7,10 @@ const cartItemSchema = new mongoose.Schema({
         required: true
     },
     cartitm_prd_qty: {
-        type: Number,
-        required: true
+        type: Number
+    },
+    cartitm_prd_qty_amount: {
+        type: Number
     }
 }, { _id: false });
 
@@ -19,7 +21,10 @@ const cartSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    cart_items: [cartItemSchema]
+    cart_items: [cartItemSchema],
+    cart_total_amount: {
+        type: Number
+    }
 }, { timestamps: true });
 
 

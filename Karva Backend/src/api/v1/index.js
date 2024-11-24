@@ -7,6 +7,7 @@ const categoryRoutes = require('../../module/v1/category/routes/category.routes'
 const imageUploadRoutes = require('../../module/v1/image upload/routes/imageUpload.routes');
 const brandRoutes = require('../../module/v1/brand/routes/brand.routes');
 const addressRoutes = require('../../module/v1/address/routes/address.routes');
+const cartRoutes = require('../../module/v1/cart/routes/cart.routes');
 
 module.exports = () => {
    const api = express.Router();
@@ -19,6 +20,7 @@ module.exports = () => {
    imageUploadRoutes(api);
    brandRoutes(api);
    addressRoutes(api);
+   cartRoutes(api);
 
    return api;
 }

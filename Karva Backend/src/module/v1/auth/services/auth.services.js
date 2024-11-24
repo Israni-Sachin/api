@@ -9,7 +9,7 @@ const login = async (data) => {
         let user = await Users.findOne({ user_email: data.user_email });
 
         if (!user)
-                throw new Error("INVALID_CREDENTIALS");
+                throw new Error("EMAIL_NOT_FOUND");
 
         let check = await comparePassword(data.user_pass, user.user_pass);
 

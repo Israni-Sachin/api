@@ -6,11 +6,11 @@ const roleValidator = require('../../../../middlewares/role-validator');
 
 const cartRoutes = (app) => {
 
-    app.get('/cart', verifyToken, roleValidator(['customer']), controllers.cartGet);
+    app.get('/cart', verifyToken, controllers.cartGet);
 
-    app.post('/cart', verifyToken, roleValidator(['customer']), validator(cartAddSchema), controllers.cartAdd);
+    app.post('/cart', verifyToken, controllers.cartAdd);
 
-    app.delete('/cart', verifyToken, roleValidator(['customer']), validator(cartDelSchema), controllers.cartDelete);
+    app.delete('/cart', verifyToken,  controllers.cartDelete);
 }
 
 module.exports = cartRoutes;
