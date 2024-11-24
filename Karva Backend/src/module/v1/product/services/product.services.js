@@ -254,7 +254,7 @@ const productSuggest = async (data) => {
         product.prd_name.toLowerCase().includes(data.prd_name.toLowerCase()));
     // );
 
-return suggestedProducts;
+    return suggestedProducts;
     // await Products.findOneAndDelete({ _id: data.prd_id });
 
 }
