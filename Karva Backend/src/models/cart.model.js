@@ -11,6 +11,11 @@ const cartItemSchema = new mongoose.Schema({
     },
     cartitm_prd_qty_amount: {
         type: Number
+    },
+    additional_info: {
+        type: Map,
+        of: mongoose.Schema.Types.Mixed,
+        default: {}
     }
 }, { _id: false });
 

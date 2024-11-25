@@ -47,7 +47,7 @@ const sizeSchema = new mongoose.Schema({
     // discount_price: {
     //     type: Number,
     // },
-    ou_of_stock: {
+    out_of_stock: {
         type: Boolean
     }
 }, { _id: false });
@@ -59,7 +59,7 @@ const colorSchema = new mongoose.Schema({
     color_code: {
         type: String,
     },
-    ou_of_stock: {
+    out_of_stock: {
         type: Boolean,
     },
     image: {
@@ -141,7 +141,7 @@ async function updateOverallQuantity(data) {
         product = data
     }
     // if (product) {
-    product.prd_overall_quantity = product.prd_sizes.reduce((total, size) => total + (size.quantity || 0), 0) || product.prd_quantity;
+    product.prd_overall_quantity = product.prd_sizes.reduce((total, size) => total + (Number(size.quantity) || 0), 0) || Number(product.prd_quantity);
     // await Products.save();
     return product;
     // }

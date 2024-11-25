@@ -15,6 +15,7 @@ const cartGet = async (user) => {
 
     // filter cart items which are not null
     cart.cart_items = cart.cart_items.filter(item => item.cartitm_fk_prd_id != null);
+    cart.cart_items = cart.cart_items.filter(item => item.cartitm_prd_qty != 0);
 
     // giving cart total amount
     cart.cart_total_amount = cart.cart_items.reduce((total, cartItem) => total + cartItem.cartitm_prd_qty * cartItem.cartitm_fk_prd_id.prd_price, 0);
@@ -74,7 +75,8 @@ const cartAdd = async (body, user) => {
             cart.cart_items.push({
                 cartitm_fk_prd_id: item.cartitm_fk_prd_id,
                 cartitm_prd_qty: item.cartitm_prd_qty,
-                cartitm_prd_qty_amount: item.price * item.cartitm_prd_qty
+                cartitm_prd_qty_amount: item.price * item.cartitm_prd_qty,
+                additional_info:item.additional_info
             });
         }
     });

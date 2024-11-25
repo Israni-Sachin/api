@@ -19,14 +19,26 @@ const addressItemSchema = new mongoose.Schema({
     flat_no: {
         type: String,
     },
-    landmark: {
-        type: String
-    },
     type_of_address: {
         type: String
     },
     default_address: {
         type: Boolean
+    },
+    first_name:{
+        type:String
+    },
+    last_name:{
+        type:String
+    },
+    email:{
+        type:String
+    },
+    mobile_number:{
+        type:String
+    },
+    street_area:{
+        type:String
     }
 });
 

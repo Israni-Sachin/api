@@ -24,8 +24,6 @@ const login = async (data) => {
 }
 
 const register = async (data) => {
-        await hashPassword(data);
-
         let check = await Users.findOne({ user_email: data.user_email });
         let check2 = await Users.findOne({ user_phone: data.user_phone });
         if (check)
@@ -34,6 +32,7 @@ const register = async (data) => {
         if (check2)
                 throw new Error("ALREADY_EXISTS_NUMBER")
 
+        data.user_pass = await hashPassword(data);
         await Users.create(data);
 
         const user = await Users.findOne({ user_email: data.user_email });
@@ -59,7 +58,7 @@ const resetPass = async (data) => {
         const decodedData = await decryptLink(data.token);
         console.log(decodedData);
         if (Date.now() > decodedData.exp) return "LinkExpired";
-        await hashPassword(data);
+        data.user_pass = await hashPassword(data);
         await Users.findOneAndUpdate({ user_email: decodedData.user_email }, { user_pass: data.user_pass });
         passChangeMail(decodedData.user_email) // pending front end link will be added and sent
 }
@@ -73,8 +72,9 @@ const changePass = async (data) => {
         if (!check) throw new Error("INVALID_CREDENTIALS");
 
         new_pass = await hashPassword({ user_pass: data.new_password });
+        // console.log(new_pass);
 
-        let a = await Users.findOneAndUpdate({ _id: data.id }, { user_pass: new_pass });
+        await Users.findOneAndUpdate({ _id: data.id }, { user_pass: new_pass });
 
 }
 
