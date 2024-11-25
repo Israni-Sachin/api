@@ -250,9 +250,30 @@ const productSuggest = async (data) => {
         throw new Error("DATA_NOT_FOUND");
     }
     // Filter products where the name includes the query
-    const suggestedProducts = data2.filter(product =>
-        product.prd_name.toLowerCase().includes(data.prd_name.toLowerCase()));
-    // );
+    let suggestedProducts = data2.filter(product =>
+        product.prd_name.toLowerCase().includes(data.prd_name.toLowerCase())
+    );
+
+    if (!suggestedProducts) {
+        suggestedProducts = data2.filter(product =>
+            product.prd_category.toLowerCase().includes(data.prd_category.toLowerCase()) && product.prd_sub_category.includes(data.prd_sub_category.toLowerCase())
+        );
+    }
+
+    // Filter products where the name starts with the query
+    // const suggestedProducts = data2.filter(product =>
+    //     product.prd_name.toLowerCase().startsWith(data.prd_name.toLowerCase()));
+    // // Sort products by price in ascending order
+    // suggestedProducts.sort((a, b) => a.prd_price - b.prd_price);
+    // // Limit the number of products to 10
+    // suggestedProducts.slice(0, 10);
+    // // Remove duplicate products
+    // suggestedProducts = [...new Set(suggestedProducts)];
+    // // Remove products that are already in the user's wishlist
+    // const user = await Users.find({ _id: data.user_id });
+    // suggestedProducts = suggestedProducts.filter(product =>!user[0].user_wish_list.includes(product._id));
+    // // Remove products that are out of stock
+    // suggestedProducts = suggestedProducts.filter(product => product.prd_quantity > 0);
 
     return suggestedProducts;
     // await Products.findOneAndDelete({ _id: data.prd_id });
