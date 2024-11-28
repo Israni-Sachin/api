@@ -16,6 +16,10 @@ const cartItemSchema = new mongoose.Schema({
         type: Map,
         of: mongoose.Schema.Types.Mixed,
         default: {}
+    },
+    isSelected:{
+        type:Boolean,
+        default:true
     }
 }, { _id: false });
 

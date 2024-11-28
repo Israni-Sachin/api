@@ -11,6 +11,7 @@ const cartRoutes = (app) => {
     app.post('/cart', verifyToken, controllers.cartAdd);
 
     app.delete('/cart', verifyToken,  controllers.cartDelete);
+    app.put("/cart/select",verifyToken,controllers.cartProductSelect)
 }
 
 module.exports = cartRoutes;
