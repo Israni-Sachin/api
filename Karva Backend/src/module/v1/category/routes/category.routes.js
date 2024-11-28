@@ -12,7 +12,7 @@ const categoryRoutes = async (app) => {
     app.get('/category', categoryGet);
     app.get('/subCategory/:cat_name', subCategoryGet);
 
-    //get by id update and delete
+    //get by id
 
     app.put('/category/:cat_id', verifyToken, roleValidator(['admin']), categoryUpdate);
     app.put('/subCategory', verifyToken, roleValidator(['admin']), subCategoryUpdate);

@@ -14,7 +14,7 @@ app.use(cors({ origin: '*' }));
 app.use('/', apiRoutes());
 
 app.use('*', (req, res) => {
-    res.status(404).send('404 Not found');
+    res.status(404).send('Route Not found');
 });
 
 app.listen(port, () => {

@@ -75,9 +75,14 @@ const ERRORS = {
     'HTTP_CODE': 400
   },
   'EMAIL_NOT_FOUND': {
-    'CODE': 14,
+    'CODE': 15,
     'DEFAULT_MESSAGE': 'Email address not found.',
     'HTTP_CODE': 400
+  },
+  'TITLE_ALREADY_EXISTS': {
+    'CODE': 16,
+    'DEFAULT_MESSAGE': 'Title already exists.',
+    'HTTP_CODE': 409
   },
 
 }
