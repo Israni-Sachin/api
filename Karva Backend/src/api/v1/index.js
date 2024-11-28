@@ -9,18 +9,38 @@ const brandRoutes = require('../../module/v1/brand/routes/brand.routes');
 const addressRoutes = require('../../module/v1/address/routes/address.routes');
 const cartRoutes = require('../../module/v1/cart/routes/cart.routes');
 
+const bannerRoutes = require('../../module/v1/homepage/banner/routes/banner.routes');
+const galleryRoutes = require('../../module/v1/homepage/gallery/routes/gallery.routes');
+
+const aboutUsRoutes = require('../../module/v1/footer/about us/routes/about-us.routes');
+const privacyRoutes = require('../../module/v1/footer/privacy/routes/privacy.routes');
+const termRoutes = require('../../module/v1/footer/term-condition/routes/term.routes');
+const followRoutes = require('../../module/v1/footer/follow us/routes/follow.routes');
+const shopAddress = require('../../module/v1/footer/address/routes/shopAddress.routes');
+
 module.exports = () => {
    const api = express.Router();
 
-   authRoutes(api);
+   authRoutes(api); // fe link remaining while forget password
    userRoutes(api); // user main image rakhni hai?
    blogRoutes(api);
    productRoutes(api); // search functionality pending
-   categoryRoutes(api); // update remaining categories and subcategories
+   categoryRoutes(api); // get by id categories and subcategories
    imageUploadRoutes(api);
    brandRoutes(api);
    addressRoutes(api);
    cartRoutes(api);
+
+   // Home-page routes
+   bannerRoutes(api);
+   galleryRoutes(api);
+
+   // Footer routes
+   aboutUsRoutes(api);
+   privacyRoutes(api);
+   termRoutes(api);
+   followRoutes(api);
+   shopAddress(api);
 
    return api;
 }
