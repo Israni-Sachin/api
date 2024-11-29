@@ -8,6 +8,8 @@ const imageUploadRoutes = require('../../module/v1/image upload/routes/imageUplo
 const brandRoutes = require('../../module/v1/brand/routes/brand.routes');
 const addressRoutes = require('../../module/v1/address/routes/address.routes');
 const cartRoutes = require('../../module/v1/cart/routes/cart.routes');
+const OrderRoutes = require('../../module/v1/orders/routes/order.routes');
+
 
 const bannerRoutes = require('../../module/v1/homepage/banner/routes/banner.routes');
 const galleryRoutes = require('../../module/v1/homepage/gallery/routes/gallery.routes');
@@ -30,6 +32,7 @@ module.exports = () => {
    brandRoutes(api);
    addressRoutes(api);
    cartRoutes(api);
+   OrderRoutes(api)
 
    // Home-page routes
    bannerRoutes(api);

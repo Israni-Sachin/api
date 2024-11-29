@@ -28,5 +28,15 @@ const cartDelete = async (req, res) => {
     }
 }
 
+const cartProductSelect = async (req,res)=>{
+    let {productId,isSelected} = req.body
+    try{
+        const cart = await cartServices.updateIsSelected(req.user,productId,isSelected)
+        successResponse({ res, message: 'Success', data: cart });
+    }catch(err){
+        errorResponse(res, err);
+    }
+}
 
-module.exports = { cartGet, cartAdd, cartDelete };
+
+module.exports = { cartGet, cartAdd, cartDelete ,cartProductSelect};
