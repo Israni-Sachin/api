@@ -1,8 +1,8 @@
 const Razorpay = require('razorpay');
-const { v4: uuidv4 } = require('uuid'); 
+const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 const Cart = require("../../../../models/cart.model")
-const Order  = require("../../../../models/orders.model")
+const Order = require("../../../../models/orders.model")
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET
@@ -22,7 +22,7 @@ const createOrder = async (user) => {
 
     if (totalAmount <= 0) throw new Error('INVALID_ORDER_AMOUNT');
 
-   
+
     const razorpayOrder = await razorpay.orders.create({
         amount: totalAmount * 100, // Amount in paise (multiply by 100 for INR)
         currency: 'INR',
@@ -63,7 +63,7 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
         .filter(item => item.isSelected)
         .reduce((sum, item) => sum + item.cartitm_prd_qty * item.cartitm_fk_prd_id.prd_price, 0);
 
- 
+
     const order = await Order.create({
         order_fk_user_id: user.id,
         order_fk_address_id: addressId,
@@ -71,9 +71,9 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
             orderitm_fk_prd_id: item.cartitm_fk_prd_id._id,
             orderitm_prd_qty: item.cartitm_prd_qty,
             orderitm_prd_qty_amount: item.cartitm_prd_qty * item.cartitm_fk_prd_id.prd_price,
-            tracking_id: "coming soon" ,
-            additional_info:item?.additional_info,
-            expected_date:"coming soon"
+            tracking_id: "coming soon",
+            additional_info: item?.additional_info,
+            expected_date: "coming soon"
         })),
         order_total_amount: totalAmount,
         payment_id: razorpayPaymentId,
@@ -90,24 +90,24 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
 const getUserOrders = async (user) => {
     try {
 
-        console.log("this is user",user)
-      const userOrders = await Order.find({ order_fk_user_id: user.id })
-        .populate('order_fk_address_id')
-        .populate('order_items.orderitm_fk_prd_id');
+        console.log("this is user", user)
+        const userOrders = await Order.find({ order_fk_user_id: user.id })
+            .populate('order_fk_address_id')
+            .populate('order_items.orderitm_fk_prd_id');
 
         console.log(userOrders)
 
-      const userAllOrders = userOrders.flatMap(order => 
-        order.order_items.map(item => ({
-          ...item.toObject(),  
-          orderId: order._id,
-          orderDate: order.createdAt,
-          address: order.order_fk_address_id, 
-        }))
-      );
+        const userAllOrders = userOrders.flatMap(order =>
+            order.order_items.map(item => ({
+                ...item.toObject(),
+                orderId: order._id,
+                orderDate: order.createdAt,
+                address: order.order_fk_address_id,
+            }))
+        );
 
-      //below html use for the send invoice mail to the user
-      const htmlContent = `
+        //below html use for the send invoice mail to the user
+        const htmlContent = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
@@ -183,8 +183,8 @@ const getUserOrders = async (user) => {
                       </thead>
                       <tbody>
                           ${selectedItems
-                              .map(
-                                  item => `
+                .map(
+                    item => `
                                   <tr>
                                       <td>${item.cartitm_fk_prd_id.name}</td>
                                       <td>${item.cartitm_prd_qty}</td>
@@ -192,8 +192,8 @@ const getUserOrders = async (user) => {
                                       <td>₹${(item.cartitm_prd_qty * item.cartitm_fk_prd_id.prd_price).toFixed(2)}</td>
                                   </tr>
                                   `
-                              )
-                              .join('')}
+                )
+                .join('')}
                       </tbody>
                       <tfoot>
                           <tr>
@@ -212,15 +212,15 @@ const getUserOrders = async (user) => {
       </body>
       </html>
   `;
-      return userAllOrders;
-  
+        return userAllOrders;
+
     } catch (error) {
-      console.error('Error fetching user orders:', error);
-      throw new Error('Error fetching user orders');
+        console.error('Error fetching user orders:', error);
+        throw new Error('Error fetching user orders');
     }
-  };
-  
+};
 
 
-module.exports={createOrder,handlePaymentSuccess,getUserOrders}
+
+module.exports = { createOrder, handlePaymentSuccess, getUserOrders }
 

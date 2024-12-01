@@ -3,9 +3,13 @@ const { OrderCreate, OrderSuccess, UserOrders } = require('../controllers/order.
 
 
 const OrderRoutes = (app) => {
-   app.post("/order",verifyToken,OrderCreate)
-   app.post("/order/success",verifyToken,OrderSuccess)
-   app.get("/order/user",verifyToken,UserOrders)
+
+   app.post("/order", verifyToken, OrderCreate)
+
+   app.post("/order/success", verifyToken, OrderSuccess)
+
+   app.get("/order/user", verifyToken, UserOrders)
+
 }
 
 module.exports = OrderRoutes;

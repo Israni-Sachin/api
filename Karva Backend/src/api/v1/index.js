@@ -19,6 +19,7 @@ const privacyRoutes = require('../../module/v1/footer/privacy/routes/privacy.rou
 const termRoutes = require('../../module/v1/footer/term-condition/routes/term.routes');
 const followRoutes = require('../../module/v1/footer/follow us/routes/follow.routes');
 const shopAddress = require('../../module/v1/footer/address/routes/shopAddress.routes');
+const wishRoutes = require('../../module/v1/wishlist/routes/wishlist.routes');
 
 module.exports = () => {
    const api = express.Router();
@@ -33,6 +34,7 @@ module.exports = () => {
    addressRoutes(api);
    cartRoutes(api);
    OrderRoutes(api)
+   wishRoutes(api);
 
    // Home-page routes
    bannerRoutes(api);

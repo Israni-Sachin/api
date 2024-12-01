@@ -84,6 +84,16 @@ const ERRORS = {
     'DEFAULT_MESSAGE': 'Title already exists.',
     'HTTP_CODE': 409
   },
+  'WISHLIST_IS_EMPTY': {
+    'CODE': 17,
+    'DEFAULT_MESSAGE': 'Wishlist is empty.',
+    'HTTP_CODE': 409
+  },
+  'WISH_ITEM_ALREADY_EXISTS': {
+    'CODE': 17,
+    'DEFAULT_MESSAGE': 'Wishlist item already exists.',
+    'HTTP_CODE': 409
+  },
 
 }
 
