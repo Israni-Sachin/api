@@ -13,13 +13,13 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const mailer = (email, link) => {
+const mailer = (email, links) => {
 
     const mailOptions = {
         from: 'sachinisrani56@gmail.com',
         to: email,
         subject: 'Reset Password',
-        text: `Reset Password Link - ${link}`
+        html: `<h4> Reset Password Link </h4> <p> Frontend - ${links.fe_link} </p><p> localhost - ${links.local_link}</p>`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {

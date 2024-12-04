@@ -94,6 +94,26 @@ const ERRORS = {
     'DEFAULT_MESSAGE': 'Wishlist item already exists.',
     'HTTP_CODE': 409
   },
+  'CART_EMPTY': {
+    'CODE': 18,
+    'DEFAULT_MESSAGE': 'Cart is empty.',
+    'HTTP_CODE': 409
+  },
+  'INVALID_ORDER_AMOUNT': {
+    'CODE': 19,
+    'DEFAULT_MESSAGE': 'Invalid order amount.',
+    'HTTP_CODE': 409
+  },
+  'PAYMENT_VERIFICATION_FAILED': {
+    'CODE': 20,
+    'DEFAULT_MESSAGE': 'Payment verification failed.',
+    'HTTP_CODE': 409
+  },
+  'Error fetching user orders': {
+    'CODE': 21,
+    'DEFAULT_MESSAGE': 'Error fetching user orders.',
+    'HTTP_CODE': 409
+  },
 
 }
 

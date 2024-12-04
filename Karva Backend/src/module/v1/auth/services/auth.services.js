@@ -49,9 +49,9 @@ const resetPassLinkMailer = async (data) => {
         let user = await Users.findOne({ user_email: data.user_email });
         if (!user) throw new Error("USER_NOT_FOUND")
 
-        let link = await gererateLink({ ...data, iat: Date.now(), exp: Date.now() + 600000 });
+        let links = await gererateLink({ ...data, iat: Date.now(), exp: Date.now() + 600000 });
         //fe link / reset-pass / token
-        mailer(user.user_email, link); // pending front end link will be added and sent
+        mailer(user.user_email, links); // pending front end link will be added and sent
 }
 
 const resetPass = async (data) => {
