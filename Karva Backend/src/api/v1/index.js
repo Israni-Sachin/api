@@ -20,6 +20,8 @@ const termRoutes = require('../../module/v1/footer/term-condition/routes/term.ro
 const followRoutes = require('../../module/v1/footer/follow us/routes/follow.routes');
 const shopAddress = require('../../module/v1/footer/address/routes/shopAddress.routes');
 const wishRoutes = require('../../module/v1/wishlist/routes/wishlist.routes');
+const loginImgRoutes = require('../../module/v1/loginpage/login image/routes/login_img.routes')
+const registerImgRoutes = require('../../module/v1/loginpage/register image/routes/register_img.routes')
 
 module.exports = () => {
    const api = express.Router();
@@ -46,6 +48,10 @@ module.exports = () => {
    termRoutes(api);
    followRoutes(api);
    shopAddress(api);
+
+   // login page images routes
+   loginImgRoutes(api);
+   registerImgRoutes(api);
 
    return api;
 }
