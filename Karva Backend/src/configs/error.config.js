@@ -114,6 +114,11 @@ const ERRORS = {
     'DEFAULT_MESSAGE': 'Error fetching user orders.',
     'HTTP_CODE': 409
   },
+  'Contact email already exists': {
+    'CODE': 22,
+    'DEFAULT_MESSAGE': 'You already sent the contact request.Owner will contact you soon.',
+    'HTTP_CODE': 409
+  },
 
 }
 

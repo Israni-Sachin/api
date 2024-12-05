@@ -1,4 +1,5 @@
 const { Products, updateOverallQuantity } = require("../../../../models/product.model");
+const Ratings = require("../../../../models/ratings.model");
 const Users = require("../../../../models/user.model");
 
 const productGet = async (body, user) => {
@@ -241,6 +242,37 @@ const productDelete = async (data) => {
 
 }
 
+const ratingGet = async (data) => {
+
+    return await Ratings.find({});
+
+}
+
+const ratingGetById = async (data) => {
+
+    return await Ratings.findById(data);
+
+}
+
+const ratingAdd = async (data, user) => {
+
+    // console.log(data);
+    data.rating_all[0].user = user.id;
+    let check = await Ratings.find({ rating_fk_prd_id: data.rating_fk_prd_id });
+    // console.log(check);
+
+
+    if (check && check.length != 0) {
+        console.log(data)
+        check[0].rating_all.push(data.rating_all[0])
+        await Ratings.updateOne({ rating_fk_prd_id: data.rating_fk_prd_id }, { rating_all: check[0].rating_all });
+    }
+    else {
+        await Ratings.create(data);
+    }
+
+}
+
 const productSuggest = async (data) => {
 
     let data2 = await Products.find({
@@ -280,7 +312,7 @@ const productSuggest = async (data) => {
 
 }
 
-module.exports = { productGet, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest };
+module.exports = { productGet, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest, ratingGet, ratingAdd, ratingGetById };
 
 
 // function parseSearchQuery(query) {

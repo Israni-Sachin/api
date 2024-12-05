@@ -24,11 +24,7 @@ const reviewSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-    },
-    created_at: {
-        type: Date,
-        default: Date.now,
-    },
+    }
 }, { timestamps: true });
 
 const sizeSchema = new mongoose.Schema({
