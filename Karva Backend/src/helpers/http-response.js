@@ -11,9 +11,11 @@ const successResponse = ({res, data = undefined, message, token = undefined}) =>
 }
 
 const errorResponse = (res,err) => {
-    console.log(err); 
+    console.log(err.message); 
 
     let error = ERRORS[err.message];
+
+    
 
     if(!error) error = ERRORS['DEFAULT_ERROR'];
 

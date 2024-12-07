@@ -27,67 +27,70 @@ const cartGet = async (user) => {
 
 
 const cartAdd = async (body, user) => {
-
-    // give count of cart based on user id
+    // Get cart count based on user ID
     let count = await Cart.countDocuments({ cart_fk_user_id: user.id });
 
-    // if count is 0 then create new cart
-    if (count == 0)
-
-        // if cart item qty is 0 then throw error
-        if (body.cart_items.some(item => item.cartitm_prd_qty == 0)) {
+    // If cart is empty, create a new cart
+    if (count === 0) {
+        // Check if any item has quantity 0
+        if (body.cart_items.some(item => item.cartitm_prd_qty === 0)) {
             throw new Error('INVALID_DATA');
         }
-        else {
-            body.cart_items.map(item => item.cartitm_prd_qty_amount = item.price * item.cartitm_prd_qty)
-            return await Cart.create({ cart_fk_user_id: user.id, cart_items: body.cart_items });
-        }
 
-    // if count is not 0 then find cart based on user id
+        // Calculate total price for each item
+        body.cart_items.map(item => item.cartitm_prd_qty_amount = item.price * item.cartitm_prd_qty);
+
+        // Create a new cart for the user
+        return await Cart.create({ cart_fk_user_id: user.id, cart_items: body.cart_items });
+    }
+
+
     const cart = await Cart.findOne({ cart_fk_user_id: user.id });
 
-    // loop through each cart item given in body
+  
     body.cart_items.forEach(item => {
+       
+        const existingItem = cart.cart_items.find(i => 
+            i.cartitm_fk_prd_id.toString() === item.cartitm_fk_prd_id.toString() &&
+            JSON.stringify(i.additional_info) === JSON.stringify(item.additional_info)
+        );
 
-        // find if item already exists in cart
-        const existingItem = cart.cart_items.find(i => i.cartitm_fk_prd_id.toString() == item.cartitm_fk_prd_id.toString());
-
-        // if item qty is greater than 5 then throw error
-        // if (item.cartitm_prd_qty > 5)
-        //     throw new Error('MAX_QTY_EXCEEDED');
-
-        // if item exists in cart then update qty
         if (existingItem) {
+           
 
-            // if item qty is 0 then remove item from cart
-            if (item.cartitm_prd_qty == 0)
-                cart.cart_items = cart.cart_items.filter(i => i.cartitm_fk_prd_id.toString() != item.cartitm_fk_prd_id.toString());
-            else {
+           
+            if (item.cartitm_prd_qty === 0) {
+                cart.cart_items = cart.cart_items.filter(i => 
+                    i.cartitm_fk_prd_id.toString() !== item.cartitm_fk_prd_id.toString() ||
+                    JSON.stringify(i.additional_info) !== JSON.stringify(item.additional_info)
+                );
+            } else {
+             
                 existingItem.cartitm_prd_qty += item.cartitm_prd_qty;
-                existingItem.cartitm_prd_qty_amount = item.price * existingItem.cartitm_prd_qty
+                existingItem.cartitm_prd_qty_amount = item.price * existingItem.cartitm_prd_qty;
                 existingItem.isSelected = item.isSelected !== undefined ? item.isSelected : existingItem.isSelected;
             }
-
         } else {
 
-            // if item qty is 0 then throw error
-            if (item.cartitm_prd_qty == 0)
+            if (item.cartitm_prd_qty === 0) {
                 throw new Error('INVALID_DATA');
+            }
 
-            // if item does not exist in cart then add item to cart
+
             cart.cart_items.push({
                 cartitm_fk_prd_id: item.cartitm_fk_prd_id,
                 cartitm_prd_qty: item.cartitm_prd_qty,
                 cartitm_prd_qty_amount: item.price * item.cartitm_prd_qty,
-                additional_info:item.additional_info,
-                isSelected: item.isSelected ?? true
+                additional_info: item.additional_info,
+                isSelected: item.isSelected ?? true,
             });
         }
     });
 
-    // save cart
+    // Save the updated cart
     await cart.save();
-}
+};
+
 
 
 const updateIsSelected = async (user, productId, isSelected) => {

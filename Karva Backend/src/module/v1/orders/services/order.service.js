@@ -2,7 +2,9 @@ const Razorpay = require('razorpay');
 const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 const Cart = require("../../../../models/cart.model")
-const Order = require("../../../../models/orders.model")
+const Order = require("../../../../models/orders.model");
+const Users = require('../../../../models/user.model');
+const { OrderSuccessMail } = require('../../../../common/mailer');
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET
@@ -53,10 +55,18 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
 
 
     const cart = await Cart.findOne({ cart_fk_user_id: user.id })
-        .populate('cart_items.cartitm_fk_prd_id', 'prd_price');
+        .populate('cart_items.cartitm_fk_prd_id', 'prd_price prd_name');
+
+    const UsersDetail = await Users.findOne({_id:user.id})
 
     if (!cart || cart.cart_items.length === 0) {
         throw new Error('CART_EMPTY');
+    }
+
+    const selectedItems = cart.cart_items.filter(item => item.isSelected);
+    console.log("this is selectedItems",selectedItems)
+    if (selectedItems.length === 0) {
+        throw new Error('NO_SELECTED_ITEMS');
     }
 
     const totalAmount = cart.cart_items
@@ -81,33 +91,13 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
         status: 'Completed'
     });
 
-    await Cart.findOneAndDelete({ cart_fk_user_id: user.id });
-
-    return order;
-};
-
-
-const getUserOrders = async (user) => {
-    try {
-
-        console.log("this is user", user)
-        const userOrders = await Order.find({ order_fk_user_id: user.id })
-            .populate('order_fk_address_id')
-            .populate('order_items.orderitm_fk_prd_id');
-
-        console.log(userOrders)
-
-        const userAllOrders = userOrders.flatMap(order =>
-            order.order_items.map(item => ({
-                ...item.toObject(),
-                orderId: order._id,
-                orderDate: order.createdAt,
-                address: order.order_fk_address_id,
-            }))
-        );
-
-        //below html use for the send invoice mail to the user
-        const htmlContent = `
+    cart.cart_items = cart.cart_items.filter(item => !item.isSelected);
+    if (cart.cart_items.length === 0) {
+        await Cart.findOneAndDelete({ cart_fk_user_id: user.id });
+    } else {
+        await cart.save();
+    }
+            const htmlContent = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
@@ -170,7 +160,6 @@ const getUserOrders = async (user) => {
                   Thank You for Your Order!
               </div>
               <div class="email-body">
-                  <p>Dear ${user.name},</p>
                   <p>Your order has been successfully placed. Here are your order details:</p>
                   <table class="order-summary">
                       <thead>
@@ -186,7 +175,7 @@ const getUserOrders = async (user) => {
                 .map(
                     item => `
                                   <tr>
-                                      <td>${item.cartitm_fk_prd_id.name}</td>
+                                      <td>${item.cartitm_fk_prd_id.prd_name}</td>
                                       <td>${item.cartitm_prd_qty}</td>
                                       <td>₹${item.cartitm_fk_prd_id.prd_price.toFixed(2)}</td>
                                       <td>₹${(item.cartitm_prd_qty * item.cartitm_fk_prd_id.prd_price).toFixed(2)}</td>
@@ -206,12 +195,40 @@ const getUserOrders = async (user) => {
                   <p>Payment ID: ${razorpayPaymentId}</p>
               </div>
               <div class="email-footer">
-                  &copy; ${new Date().getFullYear()} Your Company Name. All rights reserved.
+                  &copy; ${new Date().getFullYear()} Karvshop . All rights reserved.
               </div>
           </div>
       </body>
       </html>
   `;
+
+  OrderSuccessMail(UsersDetail.user_email,htmlContent)
+
+    return order;
+};
+
+
+const getUserOrders = async (user) => {
+    try {
+
+        console.log("this is user", user)
+        const userOrders = await Order.find({ order_fk_user_id: user.id })
+            .populate('order_fk_address_id')
+            .populate('order_items.orderitm_fk_prd_id');
+
+        console.log(userOrders)
+
+        const userAllOrders = userOrders.flatMap(order =>
+            order.order_items.map(item => ({
+                ...item.toObject(),
+                orderId: order._id,
+                orderDate: order.createdAt,
+                address: order.order_fk_address_id,
+            }))
+        );
+
+        //below html use for the send invoice mail to the user
+
         return userAllOrders;
 
     } catch (error) {
