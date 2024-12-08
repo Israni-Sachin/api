@@ -379,11 +379,24 @@ const productDelete = async (data) => {
 
 }
 
-const ratingGet = async (data) => {
+const ratingGet = async () => {
 
     return await Ratings.find({});
 
 }
+
+const ratingGetByVisible = async () => {
+
+    return await Ratings.find({ isVisible: true });
+
+}
+
+const ratingUpdateByVisible = async (data) => {
+
+    return await Ratings.updateMany({ _id: { $in: data.ids } }, { isVisible: data.value });
+
+}
+
 
 const ratingGetById = async (data) => {
 
@@ -466,7 +479,7 @@ const productSuggest = async (data) => {
 
 module.exports = {
     productGet, productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest,
-    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete
+    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete, ratingGetByVisible, ratingUpdateByVisible
 };
 
 
