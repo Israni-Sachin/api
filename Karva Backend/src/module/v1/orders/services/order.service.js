@@ -57,14 +57,14 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
     const cart = await Cart.findOne({ cart_fk_user_id: user.id })
         .populate('cart_items.cartitm_fk_prd_id', 'prd_price prd_name');
 
-    const UsersDetail = await Users.findOne({_id:user.id})
+    const UsersDetail = await Users.findOne({ _id: user.id })
 
     if (!cart || cart.cart_items.length === 0) {
         throw new Error('CART_EMPTY');
     }
 
     const selectedItems = cart.cart_items.filter(item => item.isSelected);
-    console.log("this is selectedItems",selectedItems)
+    console.log("this is selectedItems", selectedItems)
     if (selectedItems.length === 0) {
         throw new Error('NO_SELECTED_ITEMS');
     }
@@ -97,7 +97,7 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
     } else {
         await cart.save();
     }
-            const htmlContent = `
+    const htmlContent = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
@@ -172,8 +172,8 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
                       </thead>
                       <tbody>
                           ${selectedItems
-                .map(
-                    item => `
+            .map(
+                item => `
                                   <tr>
                                       <td>${item.cartitm_fk_prd_id.prd_name}</td>
                                       <td>${item.cartitm_prd_qty}</td>
@@ -181,8 +181,8 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
                                       <td>₹${(item.cartitm_prd_qty * item.cartitm_fk_prd_id.prd_price).toFixed(2)}</td>
                                   </tr>
                                   `
-                )
-                .join('')}
+            )
+            .join('')}
                       </tbody>
                       <tfoot>
                           <tr>
@@ -202,7 +202,7 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
       </html>
   `;
 
-  OrderSuccessMail(UsersDetail.user_email,htmlContent)
+    OrderSuccessMail(UsersDetail.user_email, htmlContent)
 
     return order;
 };

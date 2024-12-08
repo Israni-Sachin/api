@@ -31,6 +31,26 @@ const ratingGet = async (req, res) => {
     }
 }
 
+const ratingGetByVisible = async (req, res) => {
+    try {
+        let result = await productsServices.ratingGetByVisible();
+        successResponse({ res, message: 'Ratings fetched successfully', data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
+const ratingUpdateByVisible = async (req, res) => {
+    try {
+        let result = await productsServices.ratingUpdateByVisible(req.body);
+        successResponse({ res, message: 'Ratings visibility updated successfully', data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
 const ratingUpdate = async (req, res) => {
     try {
         let result = await productsServices.ratingUpdate(req.params.id, req.body);
@@ -125,6 +145,6 @@ const productDelete = async (req, res) => {
 }
 
 module.exports = {
-    productGet,productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest,
-    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete
+    productGet, productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest,
+    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete, ratingGetByVisible, ratingUpdateByVisible
 };

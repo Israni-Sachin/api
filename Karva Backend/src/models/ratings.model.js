@@ -24,6 +24,10 @@ const ratingSchema = new mongoose.Schema({
     },
     description: {
         type: String,
+    },
+    isVisible:{
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 

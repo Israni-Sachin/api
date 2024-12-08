@@ -1,5 +1,5 @@
 const { productGet, productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest,
-    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete } = require('../controllers/product.controllers');
+    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete, ratingGetByVisible, ratingUpdateByVisible } = require('../controllers/product.controllers');
 const { verifyToken } = require('../../../../middlewares/token');
 const roleValidator = require('../../../../middlewares/role-validator');
 // const { productGetSchema, productAddSchema, productUpdateSchema, productGetBySlug } = require('../validator/index');
@@ -22,6 +22,10 @@ const productRoutes = async (app) => {
     app.delete('/product/:prd_id', verifyToken, roleValidator(['admin']), productDelete);
 
     app.get('/rating/all', verifyToken, roleValidator(['admin']), ratingGet);
+
+    app.get('/rating/visible', ratingGetByVisible);
+
+    app.put('/rating/visible', verifyToken, roleValidator(['admin']), ratingUpdateByVisible);
 
     app.get('/rating/:id', ratingGetById);
 

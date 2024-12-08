@@ -2,7 +2,7 @@ const address = require('../../../../../models/footer/address.model');
 
 const addressGet = async () => {
 
-    let result = await address.findOneAndDelete({});
+    let result = await address.find({});
     return result;
 
 }
