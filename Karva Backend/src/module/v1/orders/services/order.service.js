@@ -214,7 +214,11 @@ const getUserOrders = async (user) => {
         console.log("this is user", user)
         const userOrders = await Order.find({ order_fk_user_id: user.id })
             .populate('order_fk_address_id')
-            .populate('order_items.orderitm_fk_prd_id');
+            .populate('order_items.orderitm_fk_prd_id')
+            .populate({
+                path:"order_fk_user_id",
+                select:"user_fname user_lname"
+            })
 
         console.log(userOrders)
 
@@ -224,11 +228,9 @@ const getUserOrders = async (user) => {
                 orderId: order._id,
                 orderDate: order.createdAt,
                 address: order.order_fk_address_id,
+                userInformation:order.order_fk_user_id
             }))
         );
-
-        //below html use for the send invoice mail to the user
-
         return userAllOrders;
 
     } catch (error) {
@@ -239,5 +241,27 @@ const getUserOrders = async (user) => {
 
 
 
-module.exports = { createOrder, handlePaymentSuccess, getUserOrders }
+
+const updateOrderItems = async (orderId, trackingId, expectedDate,trackingLink) => {
+   
+    const order = await Order.findById(orderId);
+    if (!order) {
+        throw new Error('Order not found');
+    }
+
+    order.order_items = order.order_items.map(item => {
+        item.tracking_id = trackingId;      
+        item.expected_date = expectedDate;  
+        item.tracking_link = trackingLink
+        return item;
+    });
+
+
+    await order.save();
+    return order;
+};
+
+
+
+module.exports = { createOrder, handlePaymentSuccess, getUserOrders ,updateOrderItems}
 

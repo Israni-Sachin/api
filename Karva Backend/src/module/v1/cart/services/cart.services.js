@@ -37,52 +37,50 @@ const cartAdd = async (body, user) => {
             throw new Error('INVALID_DATA');
         }
 
-        // Calculate total price for each item
-        body.cart_items.map(item => item.cartitm_prd_qty_amount = item.price * item.cartitm_prd_qty);
+        // Calculate total price for each item (MongoDB will auto-generate _id for each item)
+        body.cart_items.map(item => {
+            item.cartitm_prd_qty_amount = item.price * item.cartitm_prd_qty;
+        });
 
         // Create a new cart for the user
         return await Cart.create({ cart_fk_user_id: user.id, cart_items: body.cart_items });
     }
 
-
+    // If the user already has a cart, retrieve it
     const cart = await Cart.findOne({ cart_fk_user_id: user.id });
 
-  
     body.cart_items.forEach(item => {
-       
+        // Find an existing item in the cart with the same product ID and same additional info
         const existingItem = cart.cart_items.find(i => 
             i.cartitm_fk_prd_id.toString() === item.cartitm_fk_prd_id.toString() &&
             JSON.stringify(i.additional_info) === JSON.stringify(item.additional_info)
         );
 
         if (existingItem) {
-           
-
-           
+            // If item exists, update its quantity and other properties
             if (item.cartitm_prd_qty === 0) {
+                // Remove the cart item if qty is 0
                 cart.cart_items = cart.cart_items.filter(i => 
-                    i.cartitm_fk_prd_id.toString() !== item.cartitm_fk_prd_id.toString() ||
-                    JSON.stringify(i.additional_info) !== JSON.stringify(item.additional_info)
+                    i._id.toString() !== existingItem._id.toString()
                 );
             } else {
-             
+                // Update quantity and total amount
                 existingItem.cartitm_prd_qty += item.cartitm_prd_qty;
                 existingItem.cartitm_prd_qty_amount = item.price * existingItem.cartitm_prd_qty;
                 existingItem.isSelected = item.isSelected !== undefined ? item.isSelected : existingItem.isSelected;
             }
         } else {
-
+            // If item does not exist, add it as a new entry in the cart
             if (item.cartitm_prd_qty === 0) {
                 throw new Error('INVALID_DATA');
             }
-
 
             cart.cart_items.push({
                 cartitm_fk_prd_id: item.cartitm_fk_prd_id,
                 cartitm_prd_qty: item.cartitm_prd_qty,
                 cartitm_prd_qty_amount: item.price * item.cartitm_prd_qty,
                 additional_info: item.additional_info,
-                isSelected: item.isSelected ?? true,
+                isSelected: item.isSelected ?? true
             });
         }
     });
@@ -93,11 +91,12 @@ const cartAdd = async (body, user) => {
 
 
 
+
 const updateIsSelected = async (user, productId, isSelected) => {
     const cart = await Cart.findOne({ cart_fk_user_id: user.id });
     if (!cart) throw new Error('CART_NOT_FOUND');
 
-    const cartItem = cart.cart_items.find(item => item.cartitm_fk_prd_id.toString() === productId);
+    const cartItem = cart.cart_items.find(item => item._id.toString() === productId);
     if (!cartItem) throw new Error('ITEM_NOT_FOUND');
 
     cartItem.isSelected = isSelected;

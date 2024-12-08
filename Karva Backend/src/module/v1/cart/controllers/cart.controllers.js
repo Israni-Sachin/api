@@ -29,7 +29,7 @@ const cartDelete = async (req, res) => {
 }
 
 const cartProductSelect = async (req,res)=>{
-    let {productId,isSelected} = req.body
+    let {productId,isSelected,additionalInfo} = req.body
     try{
         const cart = await cartServices.updateIsSelected(req.user,productId,isSelected)
         successResponse({ res, message: 'Success', data: cart });

@@ -28,7 +28,12 @@ const orderItemSchema = new mongoose.Schema({
         default:true
     },
     expected_date:{
-        type:String
+        type:String,
+        default:"coming soon"
+    },
+    tracking_link:{
+        type:String,
+        default:"coming soon"
     }
 }, { _id: false });
 
