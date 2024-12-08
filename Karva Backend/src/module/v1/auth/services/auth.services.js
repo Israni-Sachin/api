@@ -47,6 +47,7 @@ const register = async (data) => {
 const resetPassLinkMailer = async (data) => {
 
         let user = await Users.findOne({ user_email: data.user_email });
+        console.log("this is user",user)
         if (!user) throw new Error("USER_NOT_FOUND")
 
         let links = await gererateLink({ ...data, iat: Date.now(), exp: Date.now() + 600000 });
