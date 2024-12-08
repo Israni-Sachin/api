@@ -27,15 +27,7 @@ const ratingSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-// const ratingSchema = new mongoose.Schema({
-//     rating_fk_prd_id: {
-//         type: mongoose.Schema.Types.ObjectId,
-//         ref: 'Product',
-//         required: true,
-//         unique: true
-//     },
-//     rating_all: [ratingItemSchema]
-// }, { timestamps: true });
+
 
 const Rating = mongoose.model('Rating', ratingSchema);
 

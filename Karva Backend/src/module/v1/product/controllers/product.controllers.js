@@ -67,6 +67,7 @@ const ratingAdd = async (req, res) => {
         successResponse({ res, message: 'Rating added successfully', data: result });
 
     } catch (err) {
+        console.log("this is rating error",err)
         errorResponse(res, err);
     }
 }

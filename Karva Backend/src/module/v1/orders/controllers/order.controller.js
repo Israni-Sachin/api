@@ -1,5 +1,5 @@
 const { errorResponse, successResponse } = require('../../../../helpers/http-response');
-const { createOrder, handlePaymentSuccess, getUserOrders } = require('../services/order.service');
+const { createOrder, handlePaymentSuccess, getUserOrders, updateOrderItems } = require('../services/order.service');
 
 const OrderCreate = async (req, res) => {
     try {
@@ -29,6 +29,16 @@ const UserOrders = async (req, res) => {
     }
 }
 
+const OrderTrackingUpdate = async (req,res)=>{
+    let {orderId, trackingId, expectedDate,trackingLink} = req.body
+    try{
+        const OrderUpdate = await updateOrderItems(orderId, trackingId, expectedDate,trackingLink)
+        successResponse({ res, message: 'Success', data: OrderUpdate });
+    }catch(err){
+        errorResponse(res,err)
+    }
+}
 
 
-module.exports = { OrderCreate, OrderSuccess, UserOrders };
+
+module.exports = { OrderCreate, OrderSuccess, UserOrders ,OrderTrackingUpdate};

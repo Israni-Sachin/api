@@ -6,7 +6,7 @@ const addressRoutes = async (app) => {
 
     app.get('/shop-address', addressGet);
 
-    app.put('/shop-address', verifyToken, roleValidator(['admin']), addressAdd);
+    app.put('/shop-address', addressAdd);
 
 }
 
