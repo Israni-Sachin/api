@@ -2,30 +2,38 @@
 const mongoose = require("mongoose");
 const { imageSchema } = require("../common/common-schemas");
 
-const reviewSchema = new mongoose.Schema({
-    user: {
+const ratingIdSchema = new mongoose.Schema({
+    id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Rating",
         required: true
-    },
-    prd: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-        required: true
-    },
-    rating: {
-        type: Number,
-        min: 1,
-        max: 5,
-        required: true
-    },
-    title: {
-        type: String,
-    },
-    description: {
-        type: String,
     }
-}, { timestamps: true });
+}, { _id: false }, { timestamps: true });
+
+// const reviewSchema = new mongoose.Schema({
+//     user: {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: "User",
+//         required: true
+//     },
+//     prd: {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: "Product",
+//         required: true
+//     },
+//     rating: {
+//         type: Number,
+//         min: 1,
+//         max: 5,
+//         required: true
+//     },
+//     title: {
+//         type: String,
+//     },
+//     description: {
+//         type: String,
+//     }
+// }, { timestamps: true });
 
 const sizeSchema = new mongoose.Schema({
     number: {
@@ -118,9 +126,9 @@ const productsSchema = new mongoose.Schema({
     prd_out_of_stock: {
         type: Boolean
     },
-    // prd_reviews: {
-    //     type: [reviewSchema]
-    // },
+    prd_reviews: {
+        type: [ratingIdSchema]
+    },
     prd_overall_ratings: {
         type: Number,
     }

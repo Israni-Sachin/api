@@ -31,7 +31,8 @@ const productGet = async (body, user) => {
     const products = await Products.find(filters)
         .sort(sort)
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .populate('prd_reviews.id');
 
 
     // Count total documents matching the filters for total pages calculation
@@ -47,86 +48,209 @@ const productGet = async (body, user) => {
 
 }
 
+const productGetById = async (data) => {
+
+    return await Products.findById(data);
+
+}
+
+// async function parseSearchQuery(query) {
+//     const filters = {};
+//     query = query.toLowerCase();
+
+//     // Extract the brand names (nike, puma)
+//     const brandName = await Products.distinct('prd_brand_name');
+//     // console.log(brandName);
+
+//     // const brandRegex = new RegExp(`/(${brandName.join('|')})/`, 'gi')
+//     const brandRegex = new RegExp(`\\b(${brandName.join('|')})\\b`, 'gi');
+//     // console.log(brandRegex);
+//     // const brands = query.match(/(nike|puma|adidas|reebok)/gi); // Add more brands as needed
+//     const brands = query.match(brandRegex);
+//     console.log(brands)
+//     if (brands) {
+//         const brandRegexes = brands.map(name => new RegExp(`^${name}$`, 'i'));
+//         filters.prd_brand_name = { $in: brandRegexes };
+//     }
+//     // filters.prd_brand_name = brandName.filter(v => v.includes(inputValue.toLowerCase()))
+//     // console.log(filters);
+
+//     // Extract the product names
+//     const prdName = await Products.distinct('prd_name');
+//     const prdRegex = new RegExp(`\\b(${prdName.join('|')})\\b`, 'gi')
+//     // const brands = query.match(/(nike|puma|adidas|reebok)/gi); // Add more brands as needed
+//     const prds = query.match(prdRegex);
+//     if (prds) {
+//         const prdRegexes = prds.map(name => new RegExp(`^${name}$`, 'i'));
+//         filters.prd_name = { $in: prdRegexes };
+//     }
+
+//     // Extract the product type category (shoes)
+//     const catName = await Products.distinct('prd_category');
+//     const catRegex = new RegExp(`\\b(${catName.join('|')})\\b`, 'gi')
+//     // const catType = query.match(/shoes|clothing|accessories/gi);
+//     const cats = query.match(catRegex);
+//     if (cats) {
+//         const categoryRegexes = cats.map(category => new RegExp(`^${category}$`, 'i'));
+//         filters.prd_category = { $in: categoryRegexes };
+//     }
+
+//     // Extract the product type sub category
+//     const subcatName = await Products.distinct('prd_sub_category');
+//     // const subcatRegex = new RegExp(subcatName.join('|'), 'gi')
+//     const subcatRegex = new RegExp(`\\b(${subcatName.join('|')})\\b`, 'gi')
+//     // const catType = query.match(/shoes|clothing|accessories/gi);
+//     const subcats = query.match(subcatRegex);
+//     if (subcats) {
+//         const subCategoryRegexes = subcats.map(category => new RegExp(`^${category}$`, 'i'));
+//         filters.prd_sub_category = { $in: subCategoryRegexes };
+//     }
+
+//     // Extract gender (mens or womens)
+//     const gender = query.match(/mens|womens|men|women/gi);
+//     if (gender) {
+//         // filters.prd_gender = gender[0].toLowerCase().includes("mens") ? "mens" : "womens";
+//         const genderR = gender.map(category => new RegExp(`^${category}$`, 'i'));
+//         filters.prd_gender = { $in: genderR };
+//     }
+
+//     //  Get all distinct color names
+//     const colorNames = await Products.distinct('prd_colors.color_name');
+
+//     //  Create a regular expression for matching color names
+//     const colorRegex = new RegExp(`\\b(${colorNames.join('|')})\\b`, 'gi');
+
+//     //  Match query against the color regex
+//     const colors = query.match(colorRegex);
+
+//     //  Apply the color filter if there are any matches
+//     if (colors.length > 0 && (colors.filter(c => c != "")).length > 0) {
+//         const colorR = colors.map(category => new RegExp(`^${category}$`, 'i'));
+//         filters.prd_colors = {
+//             $elemMatch: {
+//                 color_name: { $in: colorR }
+//             }
+//         };
+//     }
+
+
+//     // Extract price range (between 1000 to 8000)
+//     const priceRange = query.match(/(between (\d+) to (\d+))|(under (\d+))|(above (\d+))|(\d+)/gi);
+
+//     if (priceRange) {
+//         let minPrice = null;
+//         let maxPrice = null;
+
+//         // Handle "between X to Y"
+//         if (priceRange[2] && priceRange[3]) {
+//             minPrice = parseInt(priceRange[2], 10);
+//             maxPrice = parseInt(priceRange[3], 10);
+//         }
+//         // Handle "under X"
+//         if (priceRange[5]) {
+//             maxPrice = parseInt(priceRange[4], 10);
+//         }
+//         // Handle "above X"
+//         if (priceRange[7]) {
+//             minPrice = parseInt(priceRange[6], 10);
+//         }
+//         // Handle "X"
+//         if (priceRange[8]) {
+//             maxPrice = parseInt(priceRange[6], 10);
+//         }
+
+//         // Apply the filters based on the parsed price range
+//         if (minPrice !== null && maxPrice !== null) {
+//             filters.prd_price = { $gte: minPrice, $lte: maxPrice };
+//         } else if (minPrice !== null) {
+//             filters.prd_price = { $gte: minPrice };
+//         } else if (maxPrice !== null) {
+//             filters.prd_price = { $lte: maxPrice };
+//         }
+//     }
+
+
+
+//     // const query = "puma shoes for womens and adidas clothing under 3000";
+//     // const brandArray = ['nike', 'puma', 'adidas', 'reebok'];
+//     // const brandRegex = new RegExp(brandArray.join('|'), 'gi');
+//     // const brands = query.match(brandRegex);
+
+//     // Use distinct to get unique category names from the prd_category field
+//     // const categories = await Products.distinct('prd_category');
+
+//     return filters;
+// }
+
 async function parseSearchQuery(query) {
     const filters = {};
     query = query.toLowerCase();
 
-    // Extract the brand names (nike, puma)
-    const brandName = await Products.distinct('prd_brand_name');
-    console.log(brandName);
+    // Get all distinct values needed for filtering in one batch
+    const [brandNames, prdNames, catNames, subcatNames, colorNames] = await Promise.all([
+        Products.distinct('prd_brand_name'),
+        Products.distinct('prd_name'),
+        Products.distinct('prd_category'),
+        Products.distinct('prd_sub_category'),
+        Products.distinct('prd_colors.color_name')
+    ]);
 
-    // const brandRegex = new RegExp(`/(${brandName.join('|')})/`, 'gi')
-    const brandRegex = new RegExp(`\\b(${brandName.join('|')})\\b`, 'gi');
-    console.log(brandRegex);
-    // const brands = query.match(/(nike|puma|adidas|reebok)/gi); // Add more brands as needed
-    const brands = query.match(brandRegex);
-    console.log(brands)
-    if (brands) {
-        const brandRegexes = brands.map(name => new RegExp(`^${name}$`, 'i'));
-        filters.prd_brand_name = { $in: brandRegexes };
-    }
-    // filters.prd_brand_name = brandName.filter(v => v.includes(inputValue.toLowerCase()))
-    // console.log(filters);
+    // Function to create fuzzy regex filters
+    const createFuzzyRegexFilter = (distinctValues, query) => {
+        if (!distinctValues || distinctValues.length === 0) return [];
 
-    // Extract the product names
-    const prdName = await Products.distinct('prd_name');
-    const prdRegex = new RegExp(`\\b(${prdName.join('|')})\\b`, 'gi')
-    // const brands = query.match(/(nike|puma|adidas|reebok)/gi); // Add more brands as needed
-    const prds = query.match(prdRegex);
-    if (prds) {
-        const prdRegexes = prds.map(name => new RegExp(`^${name}$`, 'i'));
-        filters.prd_name = { $in: prdRegexes };
-    }
+        // Handle extra characters: match query with any characters (.*) between the letters
+        const fuzzyQuery = query.split('').join('.*'); // e.g., "nike" => "n.*i.*k.*e"
 
-    // Extract the product type category (shoes)
-    const catName = await Products.distinct('prd_category');
-    const catRegex = new RegExp(`\\b(${catName.join('|')})\\b`, 'gi')
-    // const catType = query.match(/shoes|clothing|accessories/gi);
-    const cats = query.match(catRegex);
-    if (cats) {
-        const categoryRegexes = cats.map(category => new RegExp(`^${category}$`, 'i'));
-        filters.prd_category = { $in: categoryRegexes };
+        // Add an additional ".*" at the end to account for extra characters (e.g., "nikeeee")
+        const regex = new RegExp(fuzzyQuery + '.*', 'gi'); // Case-insensitive, global match
+        console.log(regex);
+
+        const matches = distinctValues.filter(value => value.toLowerCase().match(regex));
+        console.log(matches);
+
+        return matches.map(value => new RegExp(`^${value}$`, 'i')); // Add exact match with case insensitivity
+    };
+
+    // Extract brand names
+    const brands = createFuzzyRegexFilter(brandNames, query);
+    if (brands.length > 0) {
+        filters.prd_brand_name = { $in: brands };
     }
 
-    // Extract the product type sub category
-    const subcatName = await Products.distinct('prd_sub_category');
-    // const subcatRegex = new RegExp(subcatName.join('|'), 'gi')
-    const subcatRegex = new RegExp(`\\b(${subcatName.join('|')})\\b`, 'gi')
-    // const catType = query.match(/shoes|clothing|accessories/gi);
-    const subcats = query.match(subcatRegex);
-    if (subcats) {
+    // Extract product names
+    const prds = createFuzzyRegexFilter(prdNames, query);
+    if (prds.length > 0) {
+        filters.prd_name = { $in: prds };
+    }
+
+    // Extract product categories
+    const cats = createFuzzyRegexFilter(catNames, query);
+    if (cats.length > 0) {
+        filters.prd_category = { $in: cats };
+    }
+
+    // Extract product subcategories
+    const subcats = createFuzzyRegexFilter(subcatNames, query);
+    if (subcats.length > 0) {
         filters.prd_sub_category = { $in: subcats };
     }
 
-    // Extract gender (mens or womens)
+    // Extract gender
     const gender = query.match(/mens|womens|men|women/gi);
     if (gender) {
-        // filters.prd_gender = gender[0].toLowerCase().includes("mens") ? "mens" : "womens";
-        filters.prd_gender = { $in: gender };
+        const genderR = gender.map(category => new RegExp(`^${category}$`, 'i'));
+        filters.prd_gender = { $in: genderR };
     }
 
-    //  Get all distinct color names
-    const colorNames = await Products.distinct('prd_colors.color_name');
-
-    //  Create a regular expression for matching color names
-    const colorRegex = new RegExp(`\\b(${colorNames.join('|')})\\b`, 'gi');
-
-    //  Match query against the color regex
-    const colors = query.match(colorRegex);
-
-    //  Apply the color filter if there are any matches
-    if (colors) {
-        filters.prd_colors = {
-            $elemMatch: {
-                color_name: { $in: colors }
-            }
-        };
+    // Extract colors
+    const colors = createFuzzyRegexFilter(colorNames, query);
+    if (colors.length > 0 && (colors.filter(c => c != "")).length > 0 && colorNames.length > 0) {
+        filters.prd_colors = { $elemMatch: { color_name: { $in: colors } } };
     }
 
-
-    // Extract price range (between 1000 to 8000)
+    // Extract price range (between 1000 to 8000, under 1000, above 500)
     const priceRange = query.match(/(between (\d+) to (\d+))|(under (\d+))|(above (\d+))|(\d+)/gi);
-
     if (priceRange) {
         let minPrice = null;
         let maxPrice = null;
@@ -144,7 +268,7 @@ async function parseSearchQuery(query) {
         if (priceRange[7]) {
             minPrice = parseInt(priceRange[6], 10);
         }
-        // Handle "X"
+        // Handle "X" (single value)
         if (priceRange[8]) {
             maxPrice = parseInt(priceRange[6], 10);
         }
@@ -159,18 +283,12 @@ async function parseSearchQuery(query) {
         }
     }
 
-
-
-    // const query = "puma shoes for womens and adidas clothing under 3000";
-    // const brandArray = ['nike', 'puma', 'adidas', 'reebok'];
-    // const brandRegex = new RegExp(brandArray.join('|'), 'gi');
-    // const brands = query.match(brandRegex);
-
-    // Use distinct to get unique category names from the prd_category field
-    // const categories = await Products.distinct('prd_category');
-
     return filters;
 }
+
+
+
+
 
 const productGetBySearch = async (body) => {
 
@@ -190,12 +308,31 @@ const productGetBySearch = async (body) => {
         throw new Error("DATA_NOT_FOUND");
     }
 
-    let products = await Products.find(filters)
+    // let products = await Promise.all([
+    //     Products.find({ prd_brand_name: filters.prd_brand_name }),
+    //     Products.find({ prd_name: filters.prd_name }),
+    //     Products.find({ prd_category: filters.prd_category }),
+    //     Products.find({ prd_sub_category: filters.prd_sub_category }),
+    //     Products.find({ 'prd_colors.color_name': filters.prd_colors })
+    // ]);
+    // products = products.flat();
+    // const uniqueProducts = products.reduce((acc, product) => {
+    //     // Check if the product with the same _id already exists in the accumulator
+    //     if (!acc.some(existingProduct => existingProduct._id === product._id)) {
+    //         acc.push(product);
+    //     }
+    //     return acc;
+    // }, []); 
+
+
+    // products = products.filter(products => products);
+    let products = await Products.find(filters).populate('prd_reviews');
+
     if (!products) {
         throw new Error("DATA_NOT_FOUND");
     }
 
-    return products;
+    return { products, filters, len: products.length };
 
 }
 
@@ -256,20 +393,35 @@ const ratingGetById = async (data) => {
 
 const ratingAdd = async (data, user) => {
 
-    // console.log(data);
-    data.rating_all[0].user = user.id;
-    let check = await Ratings.find({ rating_fk_prd_id: data.rating_fk_prd_id });
-    // console.log(check);
+    data.user_rating.user = user.id;
 
+    const newRating = await Ratings.create(data.user_rating);
 
-    if (check && check.length != 0) {
-        console.log(data)
-        check[0].rating_all.push(data.rating_all[0])
-        await Ratings.updateOne({ rating_fk_prd_id: data.rating_fk_prd_id }, { rating_all: check[0].rating_all });
-    }
-    else {
-        await Ratings.create(data);
-    }
+    await Products.updateOne(
+        { _id: data.prd_id },
+        { $push: { prd_reviews: { id: newRating._id } } }
+    );
+
+    console.log('New rating added successfully!');
+
+}
+
+const ratingUpdate = async (id, data) => {
+
+    let rating = await Ratings.findOneAndUpdate({ _id: id }, data);
+    // console.log(rating);
+    return rating;
+
+}
+
+const ratingDelete = async (id, data) => {
+
+    let rating = await Ratings.findOneAndDelete({ _id: id });
+    console.log(rating);
+    await Products.findOneAndUpdate({ _id: data.prd_id },
+        { $pull: { prd_reviews: { id: { $in: id } } } },
+        { new: true })
+    return rating;
 
 }
 
@@ -312,7 +464,10 @@ const productSuggest = async (data) => {
 
 }
 
-module.exports = { productGet, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest, ratingGet, ratingAdd, ratingGetById };
+module.exports = {
+    productGet, productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest,
+    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete
+};
 
 
 // function parseSearchQuery(query) {
@@ -352,4 +507,43 @@ module.exports = { productGet, productAdd, productUpdate, productDelete, product
 
 //     // Return the filters
 //     return filters;
+// }
+
+// const ratingAdd = async (data, user) => {
+
+//     data.user_rating.user = user.id;
+//     // const productRating = await Ratings.findOne({ rating_fk_prd_id: data.prd_id });
+//     // const productRating = await Products.findOne({ prd_id: data.prd_id });
+
+//     // if (!productRating) {
+
+//     const newRating = await Ratings.create(data.user_rating);
+//     // const newRating = new Ratings({
+//     //     rating_fk_prd_id: data.prd_id,
+//     //     rating_all: [data.user_rating]
+//     // });
+//     // idget = await newRating.save();
+//     // console.log(idget._id);
+//     // console.log(productRating);
+//     // productRating.prd_reviews.push({ id: newRating._id });
+//     await Products.updateOne(
+//         { _id: data.prd_id },
+//         // { _id: ObjectId("product_id"), prd_reviews: { $size: 0 } },
+//         { $push: { prd_reviews: { id: newRating._id } } }
+//     );
+
+
+//     console.log('New rating created successfully!');
+
+//     // } else {
+
+//     //     productRating.rating_all.push(data.user_rating);
+//     //     const idget = await productRating.save();
+//     //     console.log(idget._id);
+
+//     //     console.log('New user rating added successfully!');
+
+//     // }
+
+
 // }

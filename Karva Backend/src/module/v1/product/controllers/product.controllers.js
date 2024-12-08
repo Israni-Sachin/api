@@ -4,6 +4,16 @@ const { successResponse, errorResponse } = require('../../../../helpers/http-res
 const productGet = async (req, res) => {
     try {
         let result = await productsServices.productGet(req.body, req.user);
+        successResponse({ res, message: 'Products fetched successfully', data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
+const productGetById = async (req, res) => {
+    try {
+        let result = await productsServices.productGetById(req.params.id);
         successResponse({ res, message: 'Product fetched successfully', data: result });
 
     } catch (err) {
@@ -15,6 +25,26 @@ const ratingGet = async (req, res) => {
     try {
         let result = await productsServices.ratingGet();
         successResponse({ res, message: 'Ratings fetched successfully', data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
+const ratingUpdate = async (req, res) => {
+    try {
+        let result = await productsServices.ratingUpdate(req.params.id, req.body);
+        successResponse({ res, message: 'Rating updated successfully', data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
+const ratingDelete = async (req, res) => {
+    try {
+        let result = await productsServices.ratingDelete(req.params.id, req.body);
+        successResponse({ res, message: 'Rating deleted successfully', data: result });
 
     } catch (err) {
         errorResponse(res, err);
@@ -93,4 +123,7 @@ const productDelete = async (req, res) => {
     }
 }
 
-module.exports = { productGet, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest, ratingGet,ratingAdd,ratingGetById };
+module.exports = {
+    productGet,productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest,
+    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete
+};
