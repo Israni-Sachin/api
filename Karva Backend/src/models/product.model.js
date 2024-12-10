@@ -65,9 +65,6 @@ const colorSchema = new mongoose.Schema({
     },
     out_of_stock: {
         type: Boolean,
-    },
-    image: {
-        type: [imageSchema],
     }
 }, { _id: false });
 
@@ -112,7 +109,7 @@ const productsSchema = new mongoose.Schema({
         type: [sizeSchema],
     },
     prd_colors: {
-        type: [colorSchema],
+        type: colorSchema,
     },
     prd_img: {
         type: [imageSchema],
