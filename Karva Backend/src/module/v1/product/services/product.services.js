@@ -344,7 +344,8 @@ const productAdd = async (data) => {
         throw new Error("ALREADY_EXISTS");
 
     data.prd_slug = data.prd_name.toLowerCase().replaceAll(" ", "-");
-
+    // console.log(data);
+    
     data = await updateOverallQuantity(data);
 
     await Products.create(data);
