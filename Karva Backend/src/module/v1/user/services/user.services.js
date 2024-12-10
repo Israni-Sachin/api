@@ -3,7 +3,7 @@ const Users = require('../../../../models/user.model')
 
 const userGetAll = async () => {
 
-    let data = await Users.find({ user_role: { $ne: "admin" } });
+    let data = await Users.find({});
     return data;
 
 }
@@ -11,8 +11,12 @@ const userGetAll = async () => {
 const userGiveAdminAccess = async (data) => {
 
     let check = await Users.findOne({ _id: data.id });
-    if (check.user_role == "admin")
+    
+    if (check.user_role == "admin" && data.role == "admin")
         throw new Error("ALREADY_ADMIN")
+
+    if (check.user_role == "customer" && data.role == "customer")
+        throw new Error("ALREADY_CUSTOMER")
 
     await Users.updateOne({ _id: data.id }, { user_role: data.role });
 

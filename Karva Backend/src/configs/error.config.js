@@ -119,7 +119,12 @@ const ERRORS = {
     'DEFAULT_MESSAGE': 'You already sent the contact request.Owner will contact you soon.',
     'HTTP_CODE': 409
   },
-
+  'ALREADY_CUSTOMER': {
+    'CODE': 5,
+    'DEFAULT_MESSAGE': 'User is already customer.',
+    'HTTP_CODE': 409
+  },
+  
 }
 
 module.exports = { ERRORS };
