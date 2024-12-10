@@ -287,9 +287,6 @@ async function parseSearchQuery(query) {
 }
 
 
-
-
-
 const productGetBySearch = async (body) => {
 
     let filters = await parseSearchQuery(body.query)
@@ -339,9 +336,9 @@ const productGetBySearch = async (body) => {
 
 const productAdd = async (data) => {
 
-    let check = await Products.findOne({ prd_name: data.prd_name });
-    if (check)
-        throw new Error("ALREADY_EXISTS");
+    // let check = await Products.findOne({ prd_name: data.prd_name });
+    // if (check)
+    //     throw new Error("ALREADY_EXISTS");
 
     data.prd_slug = data.prd_name.toLowerCase().replaceAll(" ", "-");
     // console.log(data);
@@ -359,10 +356,10 @@ const productUpdate = async (data, params) => {
         throw new Error("DATA_NOT_FOUND");
     }
 
-    let check = await Products.findOne({ _id: { $ne: params.prd_id }, prd_name: data.prd_name });
-    if (check) {
-        throw new Error("ALREADY_EXISTS");
-    }
+    // let check = await Products.findOne({ _id: { $ne: params.prd_id }, prd_name: data.prd_name });
+    // if (check) {
+    //     throw new Error("ALREADY_EXISTS");
+    // }
 
     if (data.prd_name != details.prd_name) {
         data.prd_slug = data.prd_name.toLowerCase().replaceAll(" ", "-")
