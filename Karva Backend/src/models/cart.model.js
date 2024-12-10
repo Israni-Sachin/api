@@ -21,7 +21,7 @@ const cartItemSchema = new mongoose.Schema({
         type:Boolean,
         default:true
     }
-}, { _id: false });
+}, { _id: true });
 
 const cartSchema = new mongoose.Schema({
     cart_fk_user_id: {

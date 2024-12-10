@@ -408,6 +408,8 @@ const ratingAdd = async (data, user) => {
 
     data.user_rating.user = user.id;
 
+    console.log("this is data",data,"and this is my user",user)
+
     const newRating = await Ratings.create(data.user_rating);
 
     await Products.updateOne(
