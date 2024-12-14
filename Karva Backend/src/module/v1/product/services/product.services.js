@@ -184,7 +184,7 @@ const productGetById = async (data) => {
 
 async function parseSearchQuery(query) {
     const filters = {};
-    query = query.toLowerCase();
+    // query = query.toLowerCase();
 
     // Get all distinct values needed for filtering in one batch
     const [brandNames, prdNames, catNames, subcatNames, colorNames] = await Promise.all([
@@ -213,41 +213,41 @@ async function parseSearchQuery(query) {
     };
 
     // Extract brand names
-    const brands = createFuzzyRegexFilter(brandNames, query);
-    if (brands.length > 0) {
-        filters.prd_brand_name = { $in: brands };
-    }
+    // const brands = createFuzzyRegexFilter(brandNames, query);
+    // if (brands.length > 0) {
+    //     filters.prd_brand_name = { $in: brands };
+    // }
 
     // Extract product names
-    const prds = createFuzzyRegexFilter(prdNames, query);
-    if (prds.length > 0) {
-        filters.prd_name = { $in: prds };
-    }
+    // const prds = createFuzzyRegexFilter(prdNames, query);
+    // if (prds.length > 0) {
+    filters.prd_name = query;
+    // }
 
     // Extract product categories
-    const cats = createFuzzyRegexFilter(catNames, query);
-    if (cats.length > 0) {
-        filters.prd_category = { $in: cats };
-    }
+    // const cats = createFuzzyRegexFilter(catNames, query);
+    // if (cats.length > 0) {
+    //     filters.prd_category = { $in: cats };
+    // }
 
-    // Extract product subcategories
-    const subcats = createFuzzyRegexFilter(subcatNames, query);
-    if (subcats.length > 0) {
-        filters.prd_sub_category = { $in: subcats };
-    }
+    // // Extract product subcategories
+    // const subcats = createFuzzyRegexFilter(subcatNames, query);
+    // if (subcats.length > 0) {
+    //     filters.prd_sub_category = { $in: subcats };
+    // }
 
-    // Extract gender
-    const gender = query.match(/mens|womens|men|women/gi);
-    if (gender) {
-        const genderR = gender.map(category => new RegExp(`^${category}$`, 'i'));
-        filters.prd_gender = { $in: genderR };
-    }
+    // // Extract gender
+    // const gender = query.match(/mens|womens|men|women/gi);
+    // if (gender) {
+    //     const genderR = gender.map(category => new RegExp(`^${category}$`, 'i'));
+    //     filters.prd_gender = { $in: genderR };
+    // }
 
     // Extract colors
-    const colors = createFuzzyRegexFilter(colorNames, query);
-    if (colors.length > 0 && (colors.filter(c => c != "")).length > 0 && colorNames.length > 0) {
-        filters.prd_colors = { $elemMatch: { color_name: { $in: colors } } };
-    }
+    // const colors = createFuzzyRegexFilter(colorNames, query);
+    // if (colors.length > 0 && (colors.filter(c => c != "")).length > 0 && colorNames.length > 0) {
+    //     filters.prd_colors = { $elemMatch: { color_name: { $in: colors } } };
+    // }
 
     // Extract price range (between 1000 to 8000, under 1000, above 500)
     const priceRange = query.match(/(between (\d+) to (\d+))|(under (\d+))|(above (\d+))|(\d+)/gi);
@@ -323,7 +323,11 @@ const productGetBySearch = async (body) => {
 
 
     // products = products.filter(products => products);
-    let products = await Products.find(filters).populate('prd_reviews');
+    // let products = await Products.find(filters).populate('prd_reviews');
+    let products = await Products.find({}).populate('prd_reviews');
+    console.log(filters);
+    products = products.filter(v =>v.prd_name.includes(body.query));
+
 
     if (!products) {
         throw new Error("DATA_NOT_FOUND");
@@ -342,7 +346,7 @@ const productAdd = async (data) => {
 
     data.prd_slug = data.prd_name.toLowerCase().replaceAll(" ", "-");
     // console.log(data);
-    
+
     data = await updateOverallQuantity(data);
 
     await Products.create(data);
@@ -406,7 +410,7 @@ const ratingAdd = async (data, user) => {
 
     data.user_rating.user = user.id;
 
-    console.log("this is data",data,"and this is my user",user)
+    console.log("this is data", data, "and this is my user", user)
 
     const newRating = await Ratings.create(data.user_rating);
 

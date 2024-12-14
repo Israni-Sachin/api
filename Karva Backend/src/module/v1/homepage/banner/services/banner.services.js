@@ -16,9 +16,9 @@ const bannerGetById = async (data) => {
 
 const bannerAdd = async (data) => {
 
-    let check = await banner.findOne({ banner_title: data.banner_title });
-    if (check)
-        throw new Error("ALREADY_EXISTS");
+    // let check = await banner.findOne({ banner_title: data.banner_title });
+    // if (check)
+    //     throw new Error("ALREADY_EXISTS");
 
     await banner.create(data);
 
@@ -30,9 +30,9 @@ const bannerUpdate = async (data, id) => {
     if (!check)
         throw new Error("DATA_NOT_FOUND");
 
-    let check2 = await banner.findOne({ banner_title: id.banner_title });
-    if (!check2)
-        throw new Error("TITLE_ALREADY_EXISTS");
+    // let check2 = await banner.findOne({ banner_title: id.banner_title });
+    // if (!check2)
+    //     throw new Error("TITLE_ALREADY_EXISTS");
 
     await banner.findByIdAndUpdate({ _id: id.banner_id }, data);
 

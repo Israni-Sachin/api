@@ -10,13 +10,13 @@ const bannerSchema = new mongoose.Schema({
     banner_desc: {
         type: String
     },
-    banner_link: {
+    banner_btn_link: {
         type: String
     },
     banner_imageUrl: {
         type: imageSchema
     },
-    banner_inside_imageUrl: {
+    banner_btn_name: {
         type: String
     }
 
