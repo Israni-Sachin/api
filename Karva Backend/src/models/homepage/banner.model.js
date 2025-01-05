@@ -18,6 +18,9 @@ const bannerSchema = new mongoose.Schema({
     },
     banner_btn_name: {
         type: String
+    },
+    banner_position: {
+        type: Number
     }
 
 }, { timestamps: true });

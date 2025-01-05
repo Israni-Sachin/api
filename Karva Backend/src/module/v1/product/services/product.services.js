@@ -8,7 +8,7 @@ const productGet = async (body, user) => {
     const page = parseInt(body.page) || 1; // Default to page 1
     const limit = parseInt(body.limit) || 10; // Default to 10 items per page
     const sort = body.sort || { createdAt: -1 }; // Default sort by creation date descending
-    const filters = body.filters || {}; // Optional filters
+    let filters = body.filters || {}; // Optional filters
 
     // Calculate the number of documents to skip
     const skip = (page - 1) * limit;
@@ -22,12 +22,33 @@ const productGet = async (body, user) => {
         }
 
         if (body.filters.selected_colors) {
-            filters.prd_colors = { $all: body.filters.selected_colors };
+            // filters.prd_colors = {
+            //     color_name: { $all: filters.selected_colors }
+            // }
+            const query = {
+                "prd_colors.color_name": { $in: filters.selected_colors }
+            };
+            filters.query = query
             delete filters.selected_colors
+        }
+
+        if (body.filters.sizes) {
+            // filters.prd_sizes = { $in: body.filters.sizes };
+            filters.prd_sizes = {
+                $elemMatch: {
+                    number: { $in: filters.sizes }
+                }
+            }
+            delete filters.sizes;
         }
     }
 
     // Find and paginate products with optional filters and sorting
+    if (filters.query){
+        query=filters.query;
+        delete filters.query;
+        filters={...filters,...query}
+    }
     const products = await Products.find(filters)
         .sort(sort)
         .skip(skip)
@@ -293,6 +314,7 @@ const productGetBySearch = async (body) => {
     console.log(filters);
 
     if (body.id) {
+
         let user = await Users.find({ _id: body.id });
         if (!user[0].user_srch_history.includes(body.query)) {
             user[0].user_srch_history.push(body.query);
@@ -326,8 +348,8 @@ const productGetBySearch = async (body) => {
     // let products = await Products.find(filters).populate('prd_reviews');
     let products = await Products.find({}).populate('prd_reviews');
     console.log(filters);
-    products = products.filter(v =>v.prd_name.includes(body.query));
-
+    const regex = new RegExp(body.query, 'i');
+    products = products.filter(v => regex.test(v.prd_name));
 
     if (!products) {
         throw new Error("DATA_NOT_FOUND");

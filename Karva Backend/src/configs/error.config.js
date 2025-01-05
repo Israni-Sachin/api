@@ -124,6 +124,16 @@ const ERRORS = {
     'DEFAULT_MESSAGE': 'User is already customer.',
     'HTTP_CODE': 409
   },
+  'ALREADY_EXISTS_CODE': {
+    'CODE': 35,
+    'DEFAULT_MESSAGE': 'Promo Code already exists.',
+    'HTTP_CODE': 409
+  },
+  'TWICE_APPLY': {
+    'CODE': 36,
+    'DEFAULT_MESSAGE': 'You cannot use the same promo code twice.',
+    'HTTP_CODE': 409
+  },
   
 }
 

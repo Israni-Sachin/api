@@ -1,5 +1,5 @@
 const { errorResponse, successResponse } = require('../../../../helpers/http-response');
-const { createOrder, handlePaymentSuccess, getUserOrders, updateOrderItems } = require('../services/order.service');
+const { createOrder, handlePaymentSuccess, getUserOrders, updateOrderItems, buyNow, verifyPayment, getAllOrders, BulkOrderExcel, getYearlySalesOverviewService, getTopProductsService } = require('../services/order.service');
 
 const OrderCreate = async (req, res) => {
     try {
@@ -39,6 +39,68 @@ const OrderTrackingUpdate = async (req,res)=>{
     }
 }
 
+const OrderBuyNow = async (req,res)=>{
+    try{
+        const user = req.user; 
+        const orderData = req.body;
+        const OrderUpdate = await buyNow(user,orderData)
+        successResponse({ res, message: 'Success', data: OrderUpdate });
+    }catch(err){
+        errorResponse(res,err)
+    }
+}
+
+const OrderBuyNowVerify = async (req,res)=>{
+    try{
+        const user = req.user; 
+        let {razorpayOrderId,razorpayPaymentId,razorpaySignature}  = req.body
+        const paymentData = {razorpay_order_id:razorpayOrderId,razorpay_payment_id:razorpayPaymentId,razorpay_signature:razorpaySignature}
+        const OrderUpdate = await verifyPayment(paymentData,user)
+        successResponse({ res, message: 'Success', data: OrderUpdate });
+    }catch(err){
+        errorResponse(res,err)
+    }
+}
+
+const OrderAll = async (req,res)=>{
+    try{
+        const OrderUpdate = await getAllOrders()
+        successResponse({ res, message: 'Success', data: OrderUpdate });
+    }catch(err){
+        errorResponse(res,err)
+    }
+}
+
+const OrderCsv = async (req,res)=>{
+    try{
+        const OrderUpdate = await BulkOrderExcel()
+        successResponse({ res, message: 'Success', data: OrderUpdate });
+    }catch(err){
+        errorResponse(res,err)
+    }
+}
+
+const OrderSalesOverview = async (req,res)=>{
+    try{
+        let {year} = req.body
+        const OrderUpdate = await getYearlySalesOverviewService(year)
+        successResponse({ res, message: 'Success', data: OrderUpdate });
+    }catch(err){
+        errorResponse(res,err)
+    }
+}
+
+const OrderTopProduct = async (req,res)=>{
+    try{
+        let {month,year} = req.body
+        const OrderUpdate = await getTopProductsService(month,year)
+        successResponse({ res, message: 'Success', data: OrderUpdate });
+    }catch(err){
+        errorResponse(res,err)
+    }
+}
 
 
-module.exports = { OrderCreate, OrderSuccess, UserOrders ,OrderTrackingUpdate};
+
+
+module.exports = { OrderCreate, OrderSuccess, UserOrders ,OrderTrackingUpdate,OrderBuyNow,OrderBuyNowVerify,OrderAll,OrderCsv,OrderSalesOverview,OrderTopProduct};

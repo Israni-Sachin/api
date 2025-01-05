@@ -11,6 +11,8 @@ const addressAdd = async (data) => {
 
     let check = await address.find({});
 
+    console.log("this is check",check)
+
     if (check.length != 0)
         await address.findByIdAndUpdate({ _id: check[0]._id }, data);
     else

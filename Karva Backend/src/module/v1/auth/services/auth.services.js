@@ -79,4 +79,21 @@ const changePass = async (data) => {
 
 }
 
-module.exports = { login, register, resetPassLinkMailer, resetPass, changePass };
+const fetchNewCustomers = async (days, startDate, endDate) => {
+        const query = {};
+    
+        if (days) {
+            const dateFrom = new Date();
+            dateFrom.setDate(dateFrom.getDate() - parseInt(days, 10));
+            query.createdAt = { $gte: dateFrom };
+        } else if (startDate && endDate) {
+            query.createdAt = {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate),
+            };
+        }
+      let AllUsers = await Users.find(query)
+        return AllUsers.length;
+    };
+
+module.exports = { login, register, resetPassLinkMailer, resetPass, changePass ,fetchNewCustomers};

@@ -1,4 +1,4 @@
-const { bannerGet, bannerGetById, bannerAdd, bannerUpdate, bannerDelete } = require('../controllers/banner.controllers');
+const { bannerGet, bannerGetById, bannerAdd, bannerPlace, bannerUpdate, bannerDelete } = require('../controllers/banner.controllers');
 const { verifyToken } = require('../../../../../middlewares/token');
 const roleValidator = require('../../../../../middlewares/role-validator');
 
@@ -11,6 +11,8 @@ const bannerRoutes = async (app) => {
     app.post('/banner', verifyToken, roleValidator(['admin']), bannerAdd);
 
     app.put('/banner/:banner_id', verifyToken, roleValidator(['admin']), bannerUpdate);
+
+    app.put('/banners/place', verifyToken, roleValidator(['admin']), bannerPlace);
 
     app.delete('/banner/:banner_id', verifyToken, roleValidator(['admin']), bannerDelete);
 }

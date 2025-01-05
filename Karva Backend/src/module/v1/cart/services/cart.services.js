@@ -5,7 +5,7 @@ const cartGet = async (user) => {
 
     // find cart based on user id and populate cart items
     let cart = await Cart.findOne({ cart_fk_user_id: user.id })
-        .populate('cart_items.cartitm_fk_prd_id', 'prd_name prd_price prd_img prd_colors')
+        .populate('cart_items.cartitm_fk_prd_id')
 
     // if cart does not exist then return
     if (!cart) throw new Error("CART_NOT_FOUND");

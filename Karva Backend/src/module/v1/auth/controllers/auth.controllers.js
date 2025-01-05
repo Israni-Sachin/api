@@ -73,4 +73,19 @@ const changePass = async (req, res) => {
     }
 }
 
-module.exports = { register, login, resetPassLinkMailer, resetPass, changePass };
+const TotalUser = async (req, res) => {
+    try {
+        if (!req.body) return errorResponse({ res, message: "Request body is required", status: 400 });
+      
+        const { days, startDate, endDate } = req.body;
+        const result = await authServices.fetchNewCustomers(days, startDate, endDate);
+
+        successResponse({ res, message: "Success",data:result });
+
+    } catch (err) {
+
+        errorResponse(res, err);
+    }
+}
+
+module.exports = { register, login, resetPassLinkMailer, resetPass, changePass ,TotalUser};

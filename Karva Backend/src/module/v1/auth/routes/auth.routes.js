@@ -1,7 +1,8 @@
-const { register, login, resetPassLinkMailer, resetPass, changePass } = require('../controllers/auth.controllers');
+const { register, login, resetPassLinkMailer, resetPass, changePass, TotalUser } = require('../controllers/auth.controllers');
 const validator = require('../../../../middlewares/validator');
 const { loginSchema, registerSchema } = require('../validator');
 const { verifyToken } = require('../../../../middlewares/token');
+const roleValidator = require('../../../../middlewares/role-validator');
 
 const registerRoutes = async (app) => {
 
@@ -14,5 +15,7 @@ const registerRoutes = async (app) => {
     app.post('/reset-pass/:token', resetPass)
 
     app.post('/change-pass', verifyToken, changePass)
+
+    app.post("/new-customer",verifyToken,roleValidator(['admin']),TotalUser)
 }
 module.exports = registerRoutes;

@@ -23,6 +23,7 @@ const wishRoutes = require('../../module/v1/wishlist/routes/wishlist.routes');
 const loginImgRoutes = require('../../module/v1/loginpage/login image/routes/login_img.routes')
 const registerImgRoutes = require('../../module/v1/loginpage/register image/routes/register_img.routes');
 const contactRoutes = require('../../module/v1/footer/contact us/router/contact.router');
+const promoRoutes = require('../../module/v1/promo code/routes/promo.routes');
 
 module.exports = () => {
    const api = express.Router();
@@ -54,6 +55,8 @@ module.exports = () => {
    // login page images routes
    loginImgRoutes(api);
    registerImgRoutes(api);
+
+   promoRoutes(api);
 
    return api;
 }

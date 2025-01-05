@@ -33,6 +33,10 @@ const addressUpdate = async (body, user) => {
     if (!check)
         throw new Error("USER_NOT_FOUND")
 
+
+    console.log("this is body.address_details[0",body.address_details[0])
+
+
     const updatePayload = {
         _id: body._id,
         pincode: body.address_details[0].pincode,
@@ -43,7 +47,13 @@ const addressUpdate = async (body, user) => {
         flat_no: body.address_details[0].flat_no,
         landmark: body.address_details[0].landmark,
         type_of_address: body.address_details[0].type_of_address,
-        default_address: body.address_details[0].default_address
+        default_address: body.address_details[0].default_address,
+        first_name:body.address_details[0].first_name,
+        last_name:body.address_details[0].last_name,
+        email:body.address_details[0].email,
+        mobile_number:body.address_details[0].mobile_number,
+        street_area:  body.address_details[0].street_area,
+        
     };
 
     // Using the payload in a Mongoose update query

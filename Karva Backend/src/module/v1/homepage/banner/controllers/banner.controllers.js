@@ -37,6 +37,15 @@ const bannerUpdate = async (req, res) => {
     }
 }
 
+const bannerPlace = async (req, res) => {
+    try {
+        await bannerServices.bannerPlace(req.body);
+        successResponse({ res, message: "Banners place updated successfully" });
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
 const bannerDelete = async (req, res) => {
     try {
         await bannerServices.bannerDelete(req.params);
@@ -46,4 +55,4 @@ const bannerDelete = async (req, res) => {
     }
 }
 
-module.exports = { bannerGet, bannerGetById, bannerAdd, bannerUpdate, bannerDelete };
+module.exports = { bannerGet, bannerGetById, bannerAdd, bannerUpdate, bannerDelete, bannerPlace };

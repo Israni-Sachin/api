@@ -2,7 +2,23 @@ const banner = require('../../../../../models/homepage/banner.model');
 
 const bannerGet = async () => {
 
-    let result = await banner.find({});
+    let result = await banner.find({}).sort({ banner_position: 1 });
+    return result;
+
+}
+
+const bannerPlace = async (data) => {
+
+    // for (ban in data) {\
+    let result = data.banners.map(async ban=>{
+        try {
+            await banner.findOneAndUpdate({ _id: ban.id }, { banner_position: ban.position })
+        } catch (err) {
+            return { error: err };
+        }
+    })
+    // }
+    // let result = await banner.find({}).sort({ banner_position: 1 });
     return result;
 
 }
@@ -44,4 +60,4 @@ const bannerDelete = async (data) => {
 
 }
 
-module.exports = { bannerGet, bannerGetById, bannerAdd, bannerUpdate, bannerDelete };
+module.exports = { bannerGet, bannerGetById, bannerAdd, bannerUpdate, bannerDelete, bannerPlace };
