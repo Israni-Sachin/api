@@ -74,15 +74,14 @@ const productsSchema = new mongoose.Schema({
         required: true
     },
     prd_brand_name: {
-        type: String,
-        required: true
+        type: String
     },
     prd_slug: {
         type: String,
     },
     prd_desc: {
         type: String,
-        required: true
+        // required: true
     },
     prd_category: {
         type: String,
