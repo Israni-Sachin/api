@@ -18,4 +18,17 @@ const contactAdd = async (data) => {
 
 }
 
-module.exports = { contactGet, contactAdd };
+const contactUpdate = async (data) => {
+
+    let check = await contact.findOneAndUpdate({ contactUs_email: data.email }, { contactUs_resolved: data.resolved });
+    console.log(check);
+    
+    return check
+    // if (check.length != 0)
+    //     throw new Error(`Contact email already exists`);
+    // else
+    //     await contact.create(data);
+
+}
+
+module.exports = { contactGet, contactAdd,contactUpdate };

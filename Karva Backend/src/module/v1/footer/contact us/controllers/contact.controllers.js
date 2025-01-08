@@ -19,4 +19,13 @@ const contactAdd = async (req, res) => {
     }
 }
 
-module.exports = { contactGet, contactAdd };
+const contactUpdate = async (req, res) => {
+    try {
+        await contactServices.contactUpdate(req.body);
+        successResponse({ res, message: "Contact us form updated successfully" });
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
+module.exports = { contactGet, contactAdd, contactUpdate };
