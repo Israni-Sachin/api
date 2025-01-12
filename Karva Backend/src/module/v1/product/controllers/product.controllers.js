@@ -87,7 +87,7 @@ const ratingAdd = async (req, res) => {
         successResponse({ res, message: 'Rating added successfully', data: result });
 
     } catch (err) {
-        console.log("this is rating error",err)
+        console.log("this is rating error", err)
         errorResponse(res, err);
     }
 }
@@ -144,7 +144,17 @@ const productDelete = async (req, res) => {
     }
 }
 
+const productBulkDelete = async (req, res) => {
+    try {
+        let result = await productsServices.productBulkDelete(req.body);
+        successResponse({ res, message: "Products deleted successfully", data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
 module.exports = {
-    productGet, productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest,
+    productGet, productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest, productBulkDelete,
     ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete, ratingGetByVisible, ratingUpdateByVisible
 };
