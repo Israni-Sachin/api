@@ -42,15 +42,15 @@ const sizeSchema = new mongoose.Schema({
     quantity: {
         type: Number,
     },
-    // price: {
-    //     type: Number,
-    // },
-    // discount_percentage: {
-    //     type: String,
-    // },
-    // discount_price: {
-    //     type: Number,
-    // },
+    price: {
+        type: Number,
+    },
+    discount_percentage: {
+        type: String,
+    },
+    discount_price: {
+        type: Number,
+    },
     out_of_stock: {
         type: Boolean
     }

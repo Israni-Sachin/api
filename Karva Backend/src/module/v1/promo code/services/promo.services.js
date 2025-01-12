@@ -135,12 +135,12 @@ const applyPromo = async (body) => {
     discountAmount = Math.round(discountAmount)
 
     // Update the promo code usage count
-    promoCode.timesUsed += 1;
+    // promoCode.timesUsed += 1;
     await promoCode.save();
-    await PromoCodeUsed.create({
-        userId,
-        code: promoCode.code._id
-    })
+    // await PromoCodeUsed.create({
+    //     userId,
+    //     code: promoCode.code._id
+    // })
     return { discountAmount, finalAmount }
 }
 module.exports = { promoUpdate, promoGet, promoGetById, promoAdd, promoDelete, applyPromo }

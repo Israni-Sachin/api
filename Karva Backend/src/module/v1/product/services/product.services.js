@@ -44,10 +44,10 @@ const productGet = async (body, user) => {
     }
 
     // Find and paginate products with optional filters and sorting
-    if (filters.query){
-        query=filters.query;
+    if (filters.query) {
+        query = filters.query;
         delete filters.query;
-        filters={...filters,...query}
+        filters = { ...filters, ...query }
     }
     const products = await Products.find(filters)
         .sort(sort)
@@ -503,8 +503,19 @@ const productSuggest = async (data) => {
 
 }
 
+const productBulkDelete = async (data) => {
+    return await Products.deleteMany({ _id: { $in: data.ids } });
+}
+
+const productDiscountAdd = async (data) => {
+    let filters={};
+    if(data.category) filters.category = data.category
+    if(data.sub_category) filters.sub_category = data.sub_category
+    
+}
+
 module.exports = {
-    productGet, productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest,
+    productGet, productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest, productBulkDelete,
     ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete, ratingGetByVisible, ratingUpdateByVisible
 };
 
