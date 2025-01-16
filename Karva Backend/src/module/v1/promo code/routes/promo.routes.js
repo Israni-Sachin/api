@@ -4,7 +4,7 @@ const roleValidator = require('../../../../middlewares/role-validator');
 
 const promoRoutes = async (app) => {
 
-    app.get('/promo', verifyToken, promoGet);
+    app.get('/promo', promoGet);
 
     app.get('/promo/:id', verifyToken, promoGetById);
 

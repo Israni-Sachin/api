@@ -21,6 +21,8 @@ const createOrder = async (user) => {
     const cart = await Cart.findOne({ cart_fk_user_id: user.id })
         .populate('cart_items.cartitm_fk_prd_id', 'prd_price');
 
+    console.log("this is cart",cart.cart_items)
+
     if (!cart || cart.cart_items.length === 0) {
         throw new Error('CART_EMPTY');
     }

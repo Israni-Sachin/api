@@ -41,8 +41,10 @@ const promoUpdate = async (req, res) => {
 const applyPromo = async (req, res) => {
     try {
 
-        await promoServices.applyPromo(req.body);
-        successResponse({ res, message: "Promo Code applied successfully" });
+      const response =   await promoServices.applyPromo(req.body);
+      console.log("this is response",response)
+      
+        successResponse({ res, message:response });
 
     } catch (err) {
         errorResponse(res, err);

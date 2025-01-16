@@ -1,5 +1,6 @@
 const promo = require('../../../../models/promo.model');
 const PromoCodeUsed = require('../../../../models/promoUsed.model');
+const PromoCart = require("../../../../models/PromoCart.model")
 const Users = require('../../../../models/user.model');
 
 
@@ -81,9 +82,12 @@ const promoDelete = async (body) => {
 const applyPromo = async (body) => {
     const { code, orderTotal, products, userId } = body;
 
-    let user = await PromoCodeUsed.find({ userId });
 
-    if (user.length > 0) {
+
+    let user = await PromoCodeUsed.find({ userId });
+    let userCart = await PromoCart.find({userId})
+
+    if (user.length > 0 || userCart.length>0) {
         throw new Error("TWICE_APPLY");
         //  ({ error: 'You cannot use the same promo code twice.' });
         // return ({ error: 'Promo code usage limit reached.' });
@@ -118,10 +122,10 @@ const applyPromo = async (body) => {
     }
 
     // Check if the promo code is applicable to the products in the cart
-    const isValidProduct = products.some(product => promoCode.applicableProducts.includes(product.productId));
-    if (!isValidProduct) {
-        return res.status(400).json({ error: 'Promo code is not applicable to the selected products.' });
-    }
+    // const isValidProduct = products.some(product => promoCode.applicableProducts.includes(product.productId));
+    // if (!isValidProduct) {
+    //     return res.status(400).json({ error: 'Promo code is not applicable to the selected products.' });
+    // }
 
     // Apply discount
     let discountAmount = 0;
@@ -136,7 +140,14 @@ const applyPromo = async (body) => {
 
     // Update the promo code usage count
     // promoCode.timesUsed += 1;
+
+
     await promoCode.save();
+    await PromoCart.create({
+        userId,
+         code: promoCode._id
+    })
+
     // await PromoCodeUsed.create({
     //     userId,
     //     code: promoCode.code._id

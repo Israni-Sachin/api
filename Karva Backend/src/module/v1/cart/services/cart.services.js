@@ -1,29 +1,55 @@
 const Cart = require('../../../../models/cart.model');
 const { Products } = require('../../../../models/product.model');
+const PromoCodeCart = require('../../../../models/PromoCart.model');
 
 const cartGet = async (user) => {
 
-    // find cart based on user id and populate cart items
     let cart = await Cart.findOne({ cart_fk_user_id: user.id })
-        .populate('cart_items.cartitm_fk_prd_id')
+        .populate('cart_items.cartitm_fk_prd_id');
 
-    // if cart does not exist then return
     if (!cart) throw new Error("CART_NOT_FOUND");
 
-    // convert cart to json so that we can modify it without using _doc
+
     cart = cart.toJSON();
+    cart.cart_items = cart.cart_items.filter(item => item.cartitm_fk_prd_id && item.cartitm_prd_qty > 0);
 
-    // filter cart items which are not null
-    cart.cart_items = cart.cart_items.filter(item => item.cartitm_fk_prd_id != null);
-    cart.cart_items = cart.cart_items.filter(item => item.cartitm_prd_qty != 0);
 
-    // giving cart total amount
     cart.cart_total_amount = cart.cart_items
-    .filter(item => item.isSelected)
-    .reduce((total, cartItem) => total + cartItem.cartitm_prd_qty * cartItem.cartitm_fk_prd_id.prd_price, 0);
+        .filter(item => item.isSelected)
+        .reduce((total, cartItem) => {
+            let price = cartItem.cartitm_fk_prd_id.prd_price || 0;
+            let qty = cartItem.cartitm_prd_qty || 0;
+            return total + (price * qty);
+        }, 0);
 
+
+    let cartPromo = await PromoCodeCart.find({ userId: user?.id }).populate("code");
+
+    console.log("this is cartPromo", cartPromo);
+    if (cart && cart?.cart_items?.length === 0) {
+        await PromoCodeCart.deleteMany({ userId });
+      }
+      
+
+    let discountAmount = 0;
+    if (cartPromo?.length > 0) {
+        let latestPromo = cartPromo[cartPromo.length - 1]?.code;
+        if (latestPromo.discountType === 'percentage') {
+            discountAmount = (cart.cart_total_amount * latestPromo.discountValue) / 100;
+        } else if (latestPromo.discountType === 'fixed') {
+            discountAmount = latestPromo.discountValue || 0;
+        }
+    }
+    cart.cart_total_amount -= discountAmount;
+    cart.promo = discountAmount
+    cart.promoOther = cartPromo[cartPromo.length - 1]?.code
+
+    console.log("this is cart", cart);
+    console.log("this is discountAmount", discountAmount);
+    console.log("this is cartPromo", cartPromo[cartPromo.length - 1]);
     return cart;
-}
+};
+
 
 
 const cartAdd = async (body, user) => {

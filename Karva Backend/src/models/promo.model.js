@@ -32,10 +32,10 @@ const promoCodeSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    applicableProducts: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-    }],
+    // applicableProducts: [{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Product',
+    // }],
     status: {
         type: String,
         enum: ['active', 'inactive'],
