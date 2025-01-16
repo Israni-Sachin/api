@@ -508,15 +508,166 @@ const productBulkDelete = async (data) => {
 }
 
 const productDiscountAdd = async (data) => {
-    let filters={};
-    if(data.category) filters.category = data.category
-    if(data.sub_category) filters.sub_category = data.sub_category
-    
+    let filters = {};
+    if (data.prd_category) filters.prd_category = data.prd_category
+    if (data.prd_sub_category) filters.prd_sub_category = data.prd_sub_category
+    console.log(data);
+    console.log("filters");
+    console.log(filters);
+
+    // let result = await Products.updateMany(filters,
+    //     [
+    //         {
+    //             $set: {
+    //                 prd_discount_price: {
+    //                     $multiply: [
+    //                         "$prd_price", // Original price
+    //                         { $subtract: [1, data.prd_discount_percentage / 100] } // Apply discount
+    //                     ]
+    //                 },
+    //                 prd_discount_percentage: data.prd_discount_percentage // Add discount info
+    //             }
+    //         }
+    //     ]
+    // )
+
+    const result = await Products.updateMany(
+        filters, // Filter: Products in the specified category
+        [
+            {
+                $set: {
+                    // Update the main product price if it exists
+                    prd_discount_price: {
+                        $cond: {
+                            if: { $gt: ["$prd_price", 0] }, // Check if prd_price exists and is greater than 0
+                            then: {
+                                $multiply: [
+                                    "$prd_price", // Original price
+                                    { $subtract: [1, data.prd_discount_percentage / 100] } // Apply discount
+                                ]
+                            },
+                            else: "$prd_discount_price" // Leave unchanged if prd_price does not exist
+                        }
+                    },
+                    // Update prices in the prd_sizes array if they exist
+                    prd_sizes: {
+                        $cond: {
+                            if: { $gt: [{ $size: "$prd_sizes" }, 0] }, // Check if prd_sizes array exists and is not empty
+                            then: {
+                                $map: {
+                                    input: "$prd_sizes",
+                                    as: "size",
+                                    in: {
+                                        $mergeObjects: [
+                                            "$$size",
+                                            {
+                                                discount_price: {
+                                                    $multiply: [
+                                                        "$$size.price", // Original price in the size object
+                                                        { $subtract: [1, data.prd_discount_percentage / 100] } // Apply discount
+                                                    ]
+                                                },
+                                                discount_percentage: data.prd_discount_percentage
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            else: "$prd_sizes" // Leave unchanged if prd_sizes does not exist
+                        },
+                    },
+                    prd_discount_percentage: data.prd_discount_percentage // Add discount info at the product level
+                }
+            }
+        ]
+    );
+
+    return result;
 }
+
+const productDiscountRemove = async (data) => {
+    let filters = {};
+    if (data.prd_category) filters.prd_category = data.prd_category
+    if (data.prd_sub_category) filters.prd_sub_category = data.prd_sub_category
+
+
+    const result = await Products.updateMany(
+        filters,
+        [
+            {
+                $set: {
+                    // Reset the main product discount price
+                    prd_discount_price: null, // Clear discount price
+                    // Reset the discount prices in the prd_sizes array if they exist
+                    prd_sizes: {
+                        $cond: {
+                            if: { $gt: [{ $size: "$prd_sizes" }, 0] }, // Check if prd_sizes array exists and is not empty
+                            then: {
+                                $map: {
+                                    input: "$prd_sizes",
+                                    as: "size",
+                                    in: {
+                                        $mergeObjects: [
+                                            "$$size",
+                                            {
+                                                discount_price: null // Clear discount price in sizes
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            else: "$prd_sizes" // Leave unchanged if prd_sizes does not exist
+                        }
+                    },
+                    prd_discount_percentage: null // Clear the discount percentage
+                }
+            }
+        ]
+    );
+    return result;
+}
+
+const getDiscountedProducts = async () => {
+
+    const result = await Products.aggregate([
+        {
+            $match: {
+                $or: [
+                    { prd_discount_price: { $exists: true, $ne: null } }, // Products with discount at main level
+                    {
+                        prd_sizes: {
+                            $elemMatch: { discount_price: { $exists: true, $ne: null } } // Products with discount at size level
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $group: {
+                _id: "$prd_sub_category",
+                totalProducts: { $sum: 1 }, // Count of products in each group
+                products: { $push: "$$ROOT" } // Push the products into the group
+            }
+        },
+        {
+            $project: {
+                _id: 0, // Exclude the default _id field
+                sub_category: "$_id",
+                totalProducts: 1,
+                products: 1
+            }
+        }
+    ]).sort({createdAt: 1});
+
+    console.log(`${result.length} discounted products found.`);
+    return result;
+};
+
 
 module.exports = {
     productGet, productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest, productBulkDelete,
-    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete, ratingGetByVisible, ratingUpdateByVisible
+    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete, ratingGetByVisible, ratingUpdateByVisible,
+    getDiscountedProducts, productDiscountAdd, productDiscountRemove
 };
 
 

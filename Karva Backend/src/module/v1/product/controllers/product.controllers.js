@@ -133,6 +133,39 @@ const productUpdate = async (req, res) => {
     }
 }
 
+const productDiscountAdd = async (req, res) => {
+    try {
+        let body = req.body;
+        let result = await productsServices.productDiscountAdd(body);
+        successResponse({ res, message: "Product discount updated successfully", data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
+const productDiscountRemove = async (req, res) => {
+    try {
+        let body = req.body;
+        let result = await productsServices.productDiscountRemove(body);
+        successResponse({ res, message: "Product discount removed successfully", data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
+const getDiscountedProducts = async (req, res) => {
+    try {
+        let body = req.body;
+        let result = await productsServices.getDiscountedProducts();
+        successResponse({ res, message: "Discounted products fetched successfully", data: result });
+
+    } catch (err) {
+        errorResponse(res, err);
+    }
+}
+
 const productDelete = async (req, res) => {
     try {
         let body = req.params;
@@ -156,5 +189,6 @@ const productBulkDelete = async (req, res) => {
 
 module.exports = {
     productGet, productGetById, productAdd, productUpdate, productDelete, productGetBySearch, productSuggest, productBulkDelete,
-    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete, ratingGetByVisible, ratingUpdateByVisible
+    ratingGet, ratingAdd, ratingGetById, ratingUpdate, ratingDelete, ratingGetByVisible, ratingUpdateByVisible,
+    getDiscountedProducts, productDiscountAdd, productDiscountRemove
 };
