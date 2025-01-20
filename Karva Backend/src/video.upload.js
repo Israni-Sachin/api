@@ -87,71 +87,71 @@
 // });
 
 
-const express = require("express");
-const multer = require("multer");
-const { cloudinary } = require("./helpers/upload");
+// const express = require("express");
+// const multer = require("multer");
+// const { cloudinary } = require("./helpers/upload");
 // const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-const router = express.Router();
+// const router = express.Router();
 
-// Configure Multer storage with Cloudinary
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        resource_type: "video"  // Resource type: video
-    },
-});
+// // Configure Multer storage with Cloudinary
+// const storage = new CloudinaryStorage({
+//     cloudinary: cloudinary,
+//     params: {
+//         resource_type: "video"  // Resource type: video
+//     },
+// });
 
-// Multer middleware for handling video uploads
-const upload = multer({ storage });
+// // Multer middleware for handling video uploads
+// const upload = multer({ storage });
 
-// Video upload endpoint
-const routess = async (app) => {
-    app.post("/upload-video", upload.single("video"), async (req, res) => {
-        try {
-            const file = req.file;
+// // Video upload endpoint
+// const routess = async (app) => {
+//     app.post("/upload-video", upload.single("video"), async (req, res) => {
+//         try {
+//             const file = req.file;
 
-            if (!file) {
-                return res.status(400).json({ message: "No video file uploaded" });
-            }
+//             if (!file) {
+//                 return res.status(400).json({ message: "No video file uploaded" });
+//             }
 
-            res.status(200).json({
-                message: "Video uploaded successfully",
-                url: file.path, // The URL of the uploaded video
-                public_id: file.filename, // Public ID of the uploaded video
-            });
-        } catch (error) {
-            console.error("Error uploading video:", error);
-            res.status(500).json({ message: "Error uploading video", error });
-        }
-    });
+//             res.status(200).json({
+//                 message: "Video uploaded successfully",
+//                 url: file.path, // The URL of the uploaded video
+//                 public_id: file.filename, // Public ID of the uploaded video
+//             });
+//         } catch (error) {
+//             console.error("Error uploading video:", error);
+//             res.status(500).json({ message: "Error uploading video", error });
+//         }
+//     });
 
-    app.delete("/delete-video/:public_id", async (req, res) => {
-        try {
-            const { public_id } = req.params;
+//     app.delete("/delete-video/:public_id", async (req, res) => {
+//         try {
+//             const { public_id } = req.params;
 
-            if (!public_id) {
-                return res.status(400).json({ message: "Public ID is required." });
-            }
+//             if (!public_id) {
+//                 return res.status(400).json({ message: "Public ID is required." });
+//             }
 
-            // Use Cloudinary's `destroy` method to delete the video
-            const result = await cloudinary.uploader.destroy(public_id, { resource_type: "video" });
-            console.log(result);
+//             // Use Cloudinary's `destroy` method to delete the video
+//             const result = await cloudinary.uploader.destroy(public_id, { resource_type: "video" });
+//             console.log(result);
 
 
-            if (result.result === "not found") {
-                return res.status(404).json({ message: "Video not found." });
-            }
+//             if (result.result === "not found") {
+//                 return res.status(404).json({ message: "Video not found." });
+//             }
 
-            res.status(200).json({
-                message: "Video deleted successfully.",
-                result,
-            });
-        } catch (error) {
-            console.error("Error deleting video:", error.message);
-            res.status(500).json({ message: "Error deleting video.", error });
-        }
-    });
-}
+//             res.status(200).json({
+//                 message: "Video deleted successfully.",
+//                 result,
+//             });
+//         } catch (error) {
+//             console.error("Error deleting video:", error.message);
+//             res.status(500).json({ message: "Error deleting video.", error });
+//         }
+//     });
+// }
 
-module.exports = routess;
+// module.exports = routess;
