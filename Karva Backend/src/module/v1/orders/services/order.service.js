@@ -6,6 +6,7 @@ const Order = require("../../../../models/orders.model");
 const Users = require('../../../../models/user.model');
 const { OrderSuccessMail } = require('../../../../common/mailer');
 const { Products } = require('../../../../models/product.model');
+const PromoCodeUsed = require("../../../../models/promoUsed.model")
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -17,9 +18,8 @@ const path = require('path');
 const Address = require('../../../../models/address.model');
 const csvWriter = require('csv-writer').createObjectCsvWriter;
 
-const createOrder = async (user) => {
+const createOrder = async (user,total_amount) => {
     const cart = await Cart.findOne({ cart_fk_user_id: user.id })
-        .populate('cart_items.cartitm_fk_prd_id', 'prd_price');
 
     console.log("this is cart",cart.cart_items)
 
@@ -27,15 +27,12 @@ const createOrder = async (user) => {
         throw new Error('CART_EMPTY');
     }
 
-    const totalAmount = cart.cart_items
-        .filter(item => item.isSelected)
-        .reduce((sum, item) => sum + item.cartitm_prd_qty * item.cartitm_fk_prd_id.prd_price, 0);
 
-    if (totalAmount <= 0) throw new Error('INVALID_ORDER_AMOUNT');
+    if (total_amount <= 0) throw new Error('INVALID_ORDER_AMOUNT');
 
 
     const razorpayOrder = await razorpay.orders.create({
-        amount: totalAmount * 100, // Amount in paise (multiply by 100 for INR)
+        amount: total_amount * 100, // Amount in paise (multiply by 100 for INR)
         currency: 'INR',
         receipt: `receipt_${uuidv4().slice(0, 8)}`,
         notes: {
@@ -51,7 +48,10 @@ const createOrder = async (user) => {
     };
 };
 
-const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, razorpaySignature, addressId) => {
+const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, razorpaySignature, addressId,promo_code) => {
+
+
+    console.log("thi is  -> ",user, razorpayPaymentId, razorpayOrderId, razorpaySignature, addressId,promo_code)
 
     const generatedSignature = crypto
         .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
@@ -86,7 +86,7 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
     const order = await Order.create({
         order_fk_user_id: user.id,
         order_fk_address_id: addressId,
-        order_items: cart.cart_items.map(item => ({
+        order_items: selectedItems?.map(item => ({
             orderitm_fk_prd_id: item.cartitm_fk_prd_id._id,
             orderitm_prd_qty: item.cartitm_prd_qty,
             orderitm_prd_qty_amount: item.cartitm_prd_qty * item.cartitm_fk_prd_id.prd_price,
@@ -106,6 +106,14 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
     } else {
         await cart.save();
     }
+
+    if(promo_code){
+        await PromoCodeUsed.create({
+            userId:user?.id,
+            code: promo_code
+        })
+    }
+      
     const htmlContent = `
       <!DOCTYPE html>
       <html lang="en">
@@ -211,13 +219,21 @@ const handlePaymentSuccess = async (user, razorpayPaymentId, razorpayOrderId, ra
       </html>
   `;
 
+  console.log("this is selectedItems selectedItems",selectedItems)
+
+ 
+
   for (const item of selectedItems) {
-    const product = await Products.findById(item.cartitm_fk_prd_id._id);
-    const sizes = item?.additional_info?.sizes;
+    let product = await Products.findById(item.cartitm_fk_prd_id._id);
+    const sizes = item.additional_info instanceof Map ? item.additional_info.get('sizes') : undefined;
+    console.log("this is sizes", sizes);
     if (sizes) {
         const sizeIndex = product.prd_sizes.findIndex(size => size.number === sizes);
+        console.log("this is working",sizes)
         if (sizeIndex >= 0) {
             product.prd_sizes[sizeIndex].quantity -= item.cartitm_prd_qty;
+
+            console.log("this is working also minus")
             if (product.prd_sizes[sizeIndex].quantity < 0) {
                 throw new Error(`Insufficient quantity for size ${sizes}`);
             }
@@ -488,7 +504,7 @@ const verifyPayment = async (paymentData,user) => {
 
     for (const item of selectedItems) {
         const product = await Products.findById(item.orderitm_fk_prd_id._id);
-        const sizes = item?.additional_info?.sizes;
+        const sizes = item.additional_info instanceof Map ? item.additional_info.get('sizes') : undefined;
         if (sizes) {
             const sizeIndex = product.prd_sizes.findIndex(size => size.number === sizes);
             if (sizeIndex >= 0) {
@@ -717,11 +733,51 @@ const getTopProductsService = async (month, year) => {
     }));
 };
 
+const getTopProductsService2 = async (month, year) => {
+    // const startDate = new Date(year, month - 1, 1);
+    // const endDate = new Date(year, month, 0, 23, 59, 59, 999);
+
+    const topProducts = await Order.aggregate([
+        { 
+            $match: { 
+                status: 'Completed', 
+                // createdAt: { $gte: startDate, $lte: endDate } 
+            } 
+        },
+        { $unwind: '$order_items' },
+        { 
+            $group: {
+                _id: '$order_items.orderitm_fk_prd_id',
+                totalSales: { $sum: '$order_items.orderitm_prd_qty_amount' }
+            } 
+        },
+        { 
+            $lookup: {
+                from: 'products', 
+                localField: '_id', 
+                foreignField: '_id', 
+                as: 'productInfo' 
+            } 
+        },
+        { $unwind: '$productInfo' },
+        { 
+            $project: {
+                productInfo: 1, 
+                sales: '$totalSales',
+            } 
+        },
+        { $sort: { sales: -1 } },
+        { $limit: 5 }
+    ]);
+
+    return topProducts
+};
 
 
 
 
 
 
-module.exports = { createOrder, handlePaymentSuccess, getUserOrders ,updateOrderItems,buyNow,verifyPayment,getAllOrders,BulkOrderExcel,getYearlySalesOverviewService,getTopProductsService}
+
+module.exports = { createOrder, handlePaymentSuccess, getUserOrders ,updateOrderItems,buyNow,verifyPayment,getAllOrders,BulkOrderExcel,getYearlySalesOverviewService,getTopProductsService,getTopProductsService2}
 

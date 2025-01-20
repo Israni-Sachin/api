@@ -1,6 +1,6 @@
 const roleValidator = require('../../../../middlewares/role-validator');
 const { verifyToken } = require('../../../../middlewares/token');
-const { OrderCreate, OrderSuccess, UserOrders, OrderTrackingUpdate, OrderBuyNow, OrderBuyNowVerify, OrderAll, OrderCsv, OrderSalesOverview, OrderTopProduct } = require('../controllers/order.controller');
+const { OrderCreate, OrderSuccess, UserOrders, OrderTrackingUpdate, OrderBuyNow, OrderBuyNowVerify, OrderAll, OrderCsv, OrderSalesOverview, OrderTopProduct, OrderTopProduct2 } = require('../controllers/order.controller');
 
 
 const OrderRoutes = (app) => {
@@ -25,6 +25,8 @@ const OrderRoutes = (app) => {
    app.get("/order/csv",verifyToken, roleValidator(['admin']),OrderCsv)
 
    app.post("/order/top",verifyToken, roleValidator(['admin']),OrderTopProduct)
+
+   app.post("/order/tops",OrderTopProduct2)
 
 
 }

@@ -1,21 +1,24 @@
 const { errorResponse, successResponse } = require('../../../../helpers/http-response');
-const { createOrder, handlePaymentSuccess, getUserOrders, updateOrderItems, buyNow, verifyPayment, getAllOrders, BulkOrderExcel, getYearlySalesOverviewService, getTopProductsService } = require('../services/order.service');
+const { createOrder, handlePaymentSuccess, getUserOrders, updateOrderItems, buyNow, verifyPayment, getAllOrders, BulkOrderExcel, getYearlySalesOverviewService, getTopProductsService, getTopProductsService2 } = require('../services/order.service');
 
 const OrderCreate = async (req, res) => {
+    let {total_amount}=req.body
     try {
-        const Order = await createOrder(req.user);
+        const Order = await createOrder(req.user,total_amount);
         successResponse({ res, message: 'Success', data: Order });
     } catch (err) {
+        console.error(err)
         errorResponse(res, err);
     }
 }
 
 const OrderSuccess = async (req, res) => {
-    let { razorpayPaymentId, razorpayOrderId, razorpaySignature, addressId } = req.body
+    let { razorpayPaymentId, razorpayOrderId, razorpaySignature, addressId, promo_code } = req.body
     try {
-        const Order = await handlePaymentSuccess(req.user, razorpayPaymentId, razorpayOrderId, razorpaySignature, addressId);
+        const Order = await handlePaymentSuccess(req.user, razorpayPaymentId, razorpayOrderId, razorpaySignature, addressId,promo_code);
         successResponse({ res, message: 'Success', data: Order });
     } catch (err) {
+        console.error(err)
         errorResponse(res, err);
     }
 }
@@ -100,7 +103,18 @@ const OrderTopProduct = async (req,res)=>{
     }
 }
 
+const OrderTopProduct2 = async (req,res)=>{
+    try{
+        let {month,year} = req.body
+        const OrderUpdate = await getTopProductsService2(month,year)
+        successResponse({ res, message: 'Success', data: OrderUpdate });
+    }catch(err){
+        errorResponse(res,err)
+    }
+}
 
 
 
-module.exports = { OrderCreate, OrderSuccess, UserOrders ,OrderTrackingUpdate,OrderBuyNow,OrderBuyNowVerify,OrderAll,OrderCsv,OrderSalesOverview,OrderTopProduct};
+
+
+module.exports = { OrderCreate, OrderSuccess, UserOrders ,OrderTrackingUpdate,OrderBuyNow,OrderBuyNowVerify,OrderAll,OrderCsv,OrderSalesOverview,OrderTopProduct,OrderTopProduct2};

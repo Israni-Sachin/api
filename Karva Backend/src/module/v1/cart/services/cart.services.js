@@ -1,6 +1,8 @@
+const { Mongoose, default: mongoose } = require('mongoose');
 const Cart = require('../../../../models/cart.model');
 const { Products } = require('../../../../models/product.model');
 const PromoCodeCart = require('../../../../models/PromoCart.model');
+const PromoCodeUsage = require("../../../../models/promoUsed.model")
 
 const cartGet = async (user) => {
 
@@ -24,29 +26,33 @@ const cartGet = async (user) => {
 
 
     let cartPromo = await PromoCodeCart.find({ userId: user?.id }).populate("code");
+    let promoUsed = await PromoCodeUsage.find({userId:user?.id})
+    let userId = user?.id
 
-    console.log("this is cartPromo", cartPromo);
     if (cart && cart?.cart_items?.length === 0) {
         await PromoCodeCart.deleteMany({ userId });
       }
-      
+      promoUsed.forEach(item => console.log("PromoUsed code:", item.code));
+      let promoCheckResults = cartPromo.map((promo) => {
+        let promoCodeId = promo.code?._id; 
+        return promoUsed.some((item) => item.code.equals(promoCodeId));
+    });
+    let mainPromoUsedOrNot = promoCheckResults.includes(true);
+      console.log("this is mainPromoUsedOrNot",mainPromoUsedOrNot)
 
     let discountAmount = 0;
-    if (cartPromo?.length > 0) {
-        let latestPromo = cartPromo[cartPromo.length - 1]?.code;
+    if (cartPromo?.length > 0 && mainPromoUsedOrNot!==true) {
+        let latestPromo = cartPromo?.[cartPromo.length - 1]?.code;
         if (latestPromo.discountType === 'percentage') {
             discountAmount = (cart.cart_total_amount * latestPromo.discountValue) / 100;
         } else if (latestPromo.discountType === 'fixed') {
             discountAmount = latestPromo.discountValue || 0;
         }
+        cart.cart_total_amount -= discountAmount;
+        cart.promo = discountAmount
+        cart.promoOther = cartPromo?.[cartPromo.length - 1]?.code
     }
-    cart.cart_total_amount -= discountAmount;
-    cart.promo = discountAmount
-    cart.promoOther = cartPromo[cartPromo.length - 1]?.code
-
-    console.log("this is cart", cart);
-    console.log("this is discountAmount", discountAmount);
-    console.log("this is cartPromo", cartPromo[cartPromo.length - 1]);
+   
     return cart;
 };
 
@@ -106,7 +112,7 @@ const cartAdd = async (body, user) => {
                 cartitm_prd_qty: item.cartitm_prd_qty,
                 cartitm_prd_qty_amount: item.price * item.cartitm_prd_qty,
                 additional_info: item.additional_info,
-                isSelected: item.isSelected ?? true
+                isSelected: item.isSelected ?? true,
             });
         }
     });
@@ -133,7 +139,7 @@ const cartDelete = async (user, data) => {
 
     // find cart based on user id and remove cart items
     return await Cart.findOneAndUpdate({ cart_fk_user_id: user.id },
-        { $pull: { cart_items: { cartitm_fk_prd_id: { $in: data.cart_items } } } },
+        { $pull: { cart_items: { _id: { $in: data.cart_items } } } },
         { new: true })
         .populate('cart_items.cartitm_fk_prd_id', 'prd_name prd_price prd_img prd_colors');
 

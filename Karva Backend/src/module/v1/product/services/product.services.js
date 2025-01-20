@@ -649,6 +649,7 @@ const getDiscountedProducts = async () => {
                 products: { $push: "$$ROOT" } // Push the products into the group
             }
         },
+        
         {
             $project: {
                 _id: 0, // Exclude the default _id field
