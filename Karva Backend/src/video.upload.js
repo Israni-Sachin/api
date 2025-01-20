@@ -90,7 +90,7 @@
 const express = require("express");
 const multer = require("multer");
 const { cloudinary } = require("./helpers/upload");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+// const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const router = express.Router();
 

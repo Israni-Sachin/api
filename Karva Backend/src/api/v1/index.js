@@ -58,7 +58,7 @@ module.exports = () => {
    registerImgRoutes(api);
 
    promoRoutes(api);
-   routess(api);
+   // routess(api);
    return api;
 }
 
