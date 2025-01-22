@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="new.css">
+    <style>
+        /* Popup styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+        }
+
+        .modal-content ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
+
+        .modal-content ul li {
+            margin-bottom: 5px;
+        }
+
+        .modal-content .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff5e57;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content .close-btn:hover {
+            background-color: #e0524f;
+        }
+
+        /* Home Button styles */
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .home-btn:hover {
+            background-color: green;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Home Button -->
+    <a href="new.html" class="home-btn">Home</a>
+
+    <!-- Prediction Model Section -->
+    <section id="prediction-model">
+        <div class="prediction-form">
+            <h2>Predict Medicine</h2>
+
+            <label for="indications">Indications:</label>
+            <input type="text" id="indications" placeholder="Enter Indications">
+
+            <label for="storage-conditions">Storage Conditions:</label>
+            <input type="text" id="storage-conditions" placeholder="Enter Storage Conditions">
+
+            <!-- <label for="formula">Formula:</label>
+            <input type="text" id="formula" placeholder="Enter Formula"> -->
+
+            <button id="predict-button">Predict</button>
+        </div>
+
+        <!-- Predictions Template -->
+        <div id="prediction-results" class="prediction-results" style="display: none;">
+            <h3>Predicted Medicines:</h3>
+            <div id="medicine-templates"></div>
+        </div>
+    </section>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="close-btn">&times;</button>
+            <h3 id="modal-title">Drug Name</h3>
+            <p id="modal-class"><strong>Class:</strong> </p>
+            <p id="modal-generic-name"><strong>Generic Name:</strong> </p>
+            <p><strong>Indications:</strong></p>
+            <ul id="modal-indications"></ul>
+            <p><strong>Side Effects:</strong></p>
+            <ul id="modal-side-effects"></ul>
+            <p id="modal-strength"><strong>Strength:</strong> </p>
+            <p id="modal-storage"><strong>Storage Conditions:</strong> </p>
+        </div>
+    </div>
+
+    <script>
+        // Handle the click on the "Predict" button
+        document.getElementById('predict-button').addEventListener('click', async function () {
+            // Collect the input values from the user
+            let array = document.getElementById('indications').value;
+            let Indications = array.trim().split(',');
+            const storageConditions = document.getElementById('storage-conditions').value;
+
+            if (!Indications || !storageConditions) {
+                alert('Please fill in all fields!');
+                return;
+            }
+
+            const inputData = {
+                Indications,
+                Storage_Conditions: storageConditions
+            };
+
+            // Call the API to get predictions (assuming the API endpoint is `/api/predict`)
+            const response = await fetch('http://localhost:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(inputData),
+            });
+
+            const result = await response.json();
+
+            // If no predictions found, show a message
+            if (result.message == "No matching medicines found") {
+                document.getElementById('prediction-results').style.display = 'none';
+                alert('No predictions found!');
+                return;
+            }
+
+            // Show the predictions and display them in a template
+            document.getElementById('prediction-results').style.display = 'block';
+            const medicineTemplates = document.getElementById('medicine-templates');
+            medicineTemplates.innerHTML = ''; // Clear previous results
+
+            result.predicted_medicines.forEach(prediction => {
+                const template = document.createElement('div');
+                template.classList.add('medicine-template');
+                template.innerHTML = `
+                        <h3>${prediction.Medicine || 'Unknown Medicine'}</h3>
+                        <p><strong>Class:</strong> ${prediction.Class || 'N/A'}</p>
+                        <p><strong>Generic Name:</strong> ${prediction.Generic_Name || 'N/A'}</p>
+                        <button class="read-more" data-drug='${JSON.stringify(prediction)}'>Read More</button>
+            `;
+                medicineTemplates.appendChild(template);
+            });
+            attachReadMoreHandlers();
+        });
+
+        const modal = document.getElementById("modal");
+        const modalTitle = document.getElementById("modal-title");
+        const modalClass = document.getElementById("modal-class");
+        const modalGenericName = document.getElementById("modal-generic-name");
+        const modalIndications = document.getElementById("modal-indications");
+        const modalSideEffects = document.getElementById("modal-side-effects");
+        const modalStrength = document.getElementById("modal-strength");
+        const modalStorage = document.getElementById("modal-storage");
+
+        function attachReadMoreHandlers() {
+            document.querySelectorAll(".read-more").forEach(button => {
+                button.addEventListener("click", () => {
+                    const drug = JSON.parse(button.getAttribute("data-drug"));
+
+                    modalTitle.textContent = drug.Medicine || "N/A";
+                    modalClass.innerHTML = `<strong>Class:</strong> ${drug.Class || "N/A"}`;
+                    modalGenericName.innerHTML = `<strong>Generic Name:</strong> ${drug.Generic_Name || "N/A"}`;
+
+                    modalIndications.innerHTML = (drug.Indications && drug.Indications.length > 0)
+                        ? drug.Indications.map(indication => `<li>${indication}</li>`).join("")
+                        : "<li>No indications available</li>";
+
+                    modalSideEffects.innerHTML = (drug.Side_Effects && drug.Side_Effects.length > 0)
+                        ? drug.Side_Effects.map(effect => `<li>${effect}</li>`).join("")
+                        : "<li>No side effects available</li>";
+
+                    modalStrength.innerHTML = `<strong>Strength:</strong> ${drug.Strength || "N/A"}`;
+                    modalStorage.innerHTML = `<strong>Storage Conditions:</strong> ${drug.Storage_Conditions || "N/A"}`;
+
+                    modal.style.display = "flex";
+                });
+            });
+        }
+
+        document.querySelector(".close-btn").addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        modal.addEventListener("click", event => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+    </script>
+</body>
+
+</html>

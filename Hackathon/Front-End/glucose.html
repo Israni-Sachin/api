@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="new.css">
+    <style>
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        /* Popup styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+        }
+
+        .modal-content ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
+
+        .modal-content ul li {
+            margin-bottom: 5px;
+        }
+
+        .modal-content .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff5e57;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content .close-btn:hover {
+            background-color: #e0524f;
+        }
+
+        img {
+            width: 60%;
+            margin-top: 16px;
+            height: auto;
+        }
+
+        /* Home button styles */
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .home-btn:hover {
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Home Button -->
+    <a href="new.html" class="home-btn">Home</a>
+
+    <!-- Prediction Model Section -->
+    <section id="prediction-model">
+        <div class="prediction-form">
+            <h2>Predict Blood Glucose</h2>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" placeholder="Enter Age" min="0">
+
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" placeholder="Enter Weight" min="0">
+
+            <label for="diet">Diet (0 = Low Carb, 1 = High Carb):</label>
+            <input type="number" id="diet" placeholder="Enter Diet" min="0" max="1">
+
+            <label for="exercise">Exercise Level (0 = None, 1 = Low, 2 = High):</label>
+            <input type="number" id="exercise" placeholder="Enter Exercise Level" min="0" max="2">
+
+            <button id="predict-button">Predict</button>
+        </div>
+
+        <!-- Predictions Table -->
+        <div id="prediction-results" class="prediction-results" style="display: none;">
+            <h3>Predicted Blood Glucose</h3>
+            <table id="predicted-glucose-table">
+                <thead>
+                    <tr>
+                        <th>Age</th>
+                        <th>Weight (kg)</th>
+                        <th>Diet</th>
+                        <th>Exercise Level</th>
+                        <th>Predicted Glucose (mg/dL)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="prediction-image" style="display: none; margin-top: 20px; text-align: center;">
+                <h3>Prediction Image</h3>
+                <img id="predicted-image" src="" alt="Prediction" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);">
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('predict-button').addEventListener('click', async function () {
+            // Collect the input values from the user
+            const age = document.getElementById('age').value;
+            const weight = document.getElementById('weight').value;
+            const diet = document.getElementById('diet').value;
+            const exercise = document.getElementById('exercise').value;
+
+            // Validate the inputs
+            if (!age || !weight || !diet || !exercise) {
+                alert('Please fill in all fields!');
+                return;
+            }
+
+            // Prepare the input data to be sent to the API
+            const inputData = {
+                age: parseInt(age),
+                weight: parseInt(weight),
+                diet: parseInt(diet),
+                exercise: parseInt(exercise)
+            };
+
+            // Call the API to get predictions (assuming the API endpoint is `/api/predict`)
+            const response = await fetch('http://localhost:5000/glucose', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(inputData),
+            });
+
+            const result = await response.json();
+
+            // If no predictions found, show a message
+            if (result.message === "No matching predictions found") {
+                document.getElementById('prediction-results').style.display = 'none';
+                document.getElementById('prediction-image').style.display = 'none';
+                alert('No predictions found!');
+                return;
+            }
+
+            // Show the predictions table
+            document.getElementById('prediction-results').style.display = 'block';
+            const tableBody = document.querySelector("#predicted-glucose-table tbody");
+            tableBody.innerHTML = ''; // Clear previous results
+
+            // Add a row for the predicted glucose
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${age}</td>
+                <td>${weight}</td>
+                <td>${diet === '0' ? 'Low Carb' : diet === '1' ? 'High Carb' : 'N/A'}</td>
+                <td>${exercise === '0' ? 'None' : exercise === '1' ? 'Low' : exercise === '2' ? 'High' : 'N/A'}</td>
+                <td>${result.predicted_glucose} mg/dL</td>
+            `;
+            tableBody.appendChild(row);
+
+            // Show the prediction image
+            const predictionImage = document.getElementById('prediction-image');
+            const predictedImage = document.getElementById('predicted-image');
+            predictedImage.src = 'chart.jpg'; // Set the image URL
+            predictionImage.style.display = 'block'; // Show the image container
+        });
+    </script>
+</body>
+
+</html>

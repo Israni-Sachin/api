@@ -19,7 +19,7 @@ const upload = multer({
 
 const imageUploadRoutes = async (app) => {
 
-    app.post('/image', verifyToken, upload.single("file"), imageUploadController.uploadImage);
+    app.post('/image', verifyToken, upload.array("files",10), imageUploadController.uploadImage);
 
     // app.post('/images/upload',  imageUploadController.uploadImage);
     // app.get('/image/upload',  imageUploadController.uploadImage);
