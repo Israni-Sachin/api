@@ -19,29 +19,29 @@ const cartGet = async (user) => {
     cart.cart_total_amount = cart.cart_items
         .filter(item => item.isSelected)
         .reduce((total, cartItem) => {
-            let price = cartItem.cartitm_fk_prd_id.prd_price || 0;
+            let price = cartItem.cartitm_prd_qty_amount || cartItem.cartitm_fk_prd_id.prd_price || 0;
             let qty = cartItem.cartitm_prd_qty || 0;
             return total + (price * qty);
         }, 0);
 
 
     let cartPromo = await PromoCodeCart.find({ userId: user?.id }).populate("code");
-    let promoUsed = await PromoCodeUsage.find({userId:user?.id})
+    let promoUsed = await PromoCodeUsage.find({ userId: user?.id })
     let userId = user?.id
 
     if (cart && cart?.cart_items?.length === 0) {
         await PromoCodeCart.deleteMany({ userId });
-      }
-      promoUsed.forEach(item => console.log("PromoUsed code:", item.code));
-      let promoCheckResults = cartPromo.map((promo) => {
-        let promoCodeId = promo.code?._id; 
+    }
+    promoUsed.forEach(item => console.log("PromoUsed code:", item.code));
+    let promoCheckResults = cartPromo.map((promo) => {
+        let promoCodeId = promo.code?._id;
         return promoUsed.some((item) => item.code.equals(promoCodeId));
     });
     let mainPromoUsedOrNot = promoCheckResults.includes(true);
-      console.log("this is mainPromoUsedOrNot",mainPromoUsedOrNot)
+    console.log("this is mainPromoUsedOrNot", mainPromoUsedOrNot)
 
     let discountAmount = 0;
-    if (cartPromo?.length > 0 && mainPromoUsedOrNot!==true) {
+    if (cartPromo?.length > 0 && mainPromoUsedOrNot !== true) {
         let latestPromo = cartPromo?.[cartPromo.length - 1]?.code;
         if (latestPromo.discountType === 'percentage') {
             discountAmount = (cart.cart_total_amount * latestPromo.discountValue) / 100;
@@ -52,7 +52,7 @@ const cartGet = async (user) => {
         cart.promo = discountAmount
         cart.promoOther = cartPromo?.[cartPromo.length - 1]?.code
     }
-   
+
     return cart;
 };
 
@@ -83,7 +83,7 @@ const cartAdd = async (body, user) => {
 
     body.cart_items.forEach(item => {
         // Find an existing item in the cart with the same product ID and same additional info
-        const existingItem = cart.cart_items.find(i => 
+        const existingItem = cart.cart_items.find(i =>
             i.cartitm_fk_prd_id.toString() === item.cartitm_fk_prd_id.toString() &&
             JSON.stringify(i.additional_info) === JSON.stringify(item.additional_info)
         );
@@ -92,12 +92,12 @@ const cartAdd = async (body, user) => {
             // If item exists, update its quantity and other properties
             if (item.cartitm_prd_qty === 0) {
                 // Remove the cart item if qty is 0
-                cart.cart_items = cart.cart_items.filter(i => 
+                cart.cart_items = cart.cart_items.filter(i =>
                     i._id.toString() !== existingItem._id.toString()
                 );
             } else {
                 // Update quantity and total amount
-                existingItem.cartitm_prd_qty += item.cartitm_prd_qty;
+                existingItem.cartitm_prd_qty = item.cartitm_prd_qty;
                 existingItem.cartitm_prd_qty_amount = item.price * existingItem.cartitm_prd_qty;
                 existingItem.isSelected = item.isSelected !== undefined ? item.isSelected : existingItem.isSelected;
             }
@@ -144,7 +144,7 @@ const cartDelete = async (user, data) => {
         .populate('cart_items.cartitm_fk_prd_id', 'prd_name prd_price prd_img prd_colors');
 
 }
-module.exports = { cartGet, cartAdd, cartDelete ,updateIsSelected};
+module.exports = { cartGet, cartAdd, cartDelete, updateIsSelected };
 
 
 
