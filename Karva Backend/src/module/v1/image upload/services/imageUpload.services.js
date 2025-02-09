@@ -18,21 +18,10 @@ const uploadImage = async (req) => {
     else if (req.user.role != 'admin')
         throw new Error("UNAUTHORIZED");
 
-    // const result = await uploadFile(req.file.path)
-    // console.log(result);
-    const files = req.files; // Array of files uploaded
-    console.log(files);
-    
-    if (!files || files.length === 0) {
-        return { message: 'No files uploaded!' };
-    }
-
-    // Upload all files to Cloudinary
-    const uploadResults = await Promise.all(
-        files.map((file) => uploadFile(file.path))
-    );
+    const result = await uploadFile(req.file.path)
+    console.log(result);
     // console.log(req.file);
-    return uploadResults;
+    return result;
 
 }
 
