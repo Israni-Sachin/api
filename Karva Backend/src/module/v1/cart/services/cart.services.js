@@ -21,7 +21,7 @@ const cartGet = async (user) => {
         .reduce((total, cartItem) => {
             let price = cartItem.cartitm_prd_qty_amount || cartItem.cartitm_fk_prd_id.prd_price || 0;
             let qty = cartItem.cartitm_prd_qty || 0;
-            return total + (price * qty);
+            return total + price;
         }, 0);
 
 
