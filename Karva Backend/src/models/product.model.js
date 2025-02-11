@@ -37,7 +37,7 @@ const ratingIdSchema = new mongoose.Schema({
 
 const sizeSchema = new mongoose.Schema({
     number: {
-        type: Number,
+        type: String,
     },
     quantity: {
         type: Number,
