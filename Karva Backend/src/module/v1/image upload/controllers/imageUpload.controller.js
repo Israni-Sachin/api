@@ -13,8 +13,8 @@ const uploadImage = async (req, res) => {
 
 const deleteImage = async (req, res) => {
     try {
-        let result = await image.deleteImage(req.body.public_id);
-        successResponse({ res, message: 'Image deleted successfully', data: result });
+        let result = await image.deleteImage(req.body.public_id,req.body.type);
+        successResponse({ res, message: result.msg, data: result.cloudi.result });
 
     } catch (err) {
         errorResponse(res, err);

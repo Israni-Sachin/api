@@ -22,7 +22,7 @@ const uploadImage = async (req) => {
     // console.log(result);
     const files = req.files; // Array of files uploaded
     console.log(files);
-    
+
     if (!files || files.length === 0) {
         return { message: 'No files uploaded!' };
     }
@@ -36,11 +36,18 @@ const uploadImage = async (req) => {
 
 }
 
-const deleteImage = async (publicId) => {
+const deleteImage = async (publicId, type) => {
     try {
-        const cloudi = await cloudinary.api.delete_resources(publicId)
-        // const chatgpt = await cloudinary.uploader.destroy(publicId);
-        console.log('Image deleted successfully:', cloudi);
+        if (type == 'image') {
+            const cloudi = await cloudinary.api.delete_resources(publicId)
+            return { msg: 'Image deleted successfully', cloudi };
+        }
+        if (type == "video") {
+            const cloudi = await cloudinary.uploader.destroy(publicId, {
+                resource_type: "video"
+            });
+            return { msg: 'Video deleted successfully', cloudi };
+        }
     } catch (error) {
         console.error('Error deleting image:', error);
     }
