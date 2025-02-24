@@ -2,6 +2,17 @@
 const mongoose = require("mongoose");
 const { imageSchema } = require("../common/common-schemas");
 
+const videoSchema = new mongoose.Schema({
+    public_id: {
+        type: String,
+        required: true
+    },
+    url: {
+        type: String,
+        required: true
+    }
+}, { _id: false });
+
 const ratingIdSchema = new mongoose.Schema({
     id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -112,6 +123,9 @@ const productsSchema = new mongoose.Schema({
     },
     prd_img: {
         type: [imageSchema],
+    },
+    prd_video: {
+        type: videoSchema,
     },
     prd_gst_charges: {
         type: String,

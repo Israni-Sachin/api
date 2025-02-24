@@ -18,7 +18,7 @@ const routess = async (app) => {
         if (!req.file) {
             return res.status(400).json({ error: "No file uploaded" });
         }
-        console.log(req.file);
+        // console.log(req.file);
 
         try {
             // Upload to Cloudinary
@@ -30,9 +30,12 @@ const routess = async (app) => {
             fs.unlinkSync(req.file.path);
 
             res.json({
+                status: 200,
                 message: "Video uploaded successfully",
-                url: result.secure_url,  // Cloudinary URL
-                public_id: result.public_id // Cloudinary Public ID
+                data: {
+                    url: result.secure_url,  // Cloudinary URL
+                    public_id: result.public_id // Cloudinary Public ID
+                }
             });
 
         } catch (error) {
