@@ -24,7 +24,7 @@ const loginImgRoutes = require('../../module/v1/loginpage/login image/routes/log
 const registerImgRoutes = require('../../module/v1/loginpage/register image/routes/register_img.routes');
 const contactRoutes = require('../../module/v1/footer/contact us/router/contact.router');
 const promoRoutes = require('../../module/v1/promo code/routes/promo.routes');
-const routess = require('../../video.upload');
+const routess = require('../../module/v1/video upload/routes/videoUpload.routes');
 
 module.exports = () => {
    const api = express.Router();
@@ -58,7 +58,7 @@ module.exports = () => {
    registerImgRoutes(api);
 
    promoRoutes(api);
-   // routess(api);
+   routess(api);
    return api;
 }
 
