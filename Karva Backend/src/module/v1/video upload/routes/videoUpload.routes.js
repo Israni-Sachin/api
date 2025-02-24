@@ -1,43 +1,44 @@
-require('dotenv').config();
-const express = require('express');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-
+const fs = require('fs'); // File system module for temporary files
+const express = require('express')
 const app = express();
-
 // Cloudinary Config
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
-
-// Multer storage for direct Cloudinary upload (No Folder)
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        resource_type: "video", // Set resource type to video
-    }
-});
-
-const upload = multer({ storage: storage });
+const upload = multer({ dest: 'uploads/' });
 
 // API Route to Upload Video
-const asisehi = async (app) => {
+const routess = async (app) => {
 
-    app.post('/upload', upload.single('video'), (req, res) => {
+    app.post('/upload', upload.single('video'), async (req, res) => {
         if (!req.file) {
             return res.status(400).json({ error: "No file uploaded" });
         }
-        
-        res.json({
-            message: "Video uploaded successfully",
-            url: req.file.path, // Cloudinary URL
-            id: req.file.filename // Cloudinary URL
-        });
+        console.log(req.file);
+
+        try {
+            // Upload to Cloudinary
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                resource_type: "video"
+            });
+
+            // Delete local file after upload
+            fs.unlinkSync(req.file.path);
+
+            res.json({
+                message: "Video uploaded successfully",
+                url: result.secure_url,  // Cloudinary URL
+                public_id: result.public_id // Cloudinary Public ID
+            });
+
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
     });
-    
 }
 
-module.exports = asisehi;
+module.exports = routess;
