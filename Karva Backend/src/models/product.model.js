@@ -5,11 +5,11 @@ const { imageSchema } = require("../common/common-schemas");
 const videoSchema = new mongoose.Schema({
     public_id: {
         type: String,
-        required: true
+        required: false
     },
     url: {
         type: String,
-        required: true
+        required: false
     }
 }, { _id: false });
 
